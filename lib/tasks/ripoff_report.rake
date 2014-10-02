@@ -25,7 +25,7 @@ namespace :ripoff_report do
 		{ ip: "217.174.254.186", port: 8080 }
 	]
 
-	task :run do
+	task :run => :environment do
 		run
 	end
 
