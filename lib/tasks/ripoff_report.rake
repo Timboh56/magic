@@ -1,8 +1,3 @@
-require 'mechanize'
-require 'open-uri'
-require 'CSV'
-load 'mechanize_patch.rb'
-
 namespace :ripoff_report do 
 
 	@proxies = [
