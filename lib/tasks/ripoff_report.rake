@@ -1,3 +1,4 @@
+require 'mechanize'
 namespace :ripoff_report do 
 
 	@proxies = [
