@@ -1,5 +1,5 @@
 class Mechanize::HTTP::Agent
-  MAX_RESET_RETRIES = 10
+  MAX_RESET_RETRIES = 2
 
   # We need to replace the core Mechanize HTTP method:
   #
