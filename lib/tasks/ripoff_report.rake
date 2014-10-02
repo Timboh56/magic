@@ -84,7 +84,7 @@ namespace :ripoff_report do
 			agent.read_timeout = 1000
 			agent.max_history = 1
 			agent.redirect_ok = false
-	  	agent.follow_meta_refresh = true
+	  	agent.follow_meta_refresh = false
 	  	rand_no = Random.rand(@proxies.length)
 			puts "Using proxy ip: " + @proxies[rand_no][:ip].to_s + ":" + @proxies[rand_no][:port].to_s
 			agent.set_proxy @proxies[rand_no][:ip], @proxies[rand_no][:port]
