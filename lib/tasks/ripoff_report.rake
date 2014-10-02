@@ -3,27 +3,6 @@ namespace :ripoff_report do
 
 	@proxies = [
 		{ ip: "111.13.12.216", port: 80 },
-		{ ip: "220.181.32.106", port: 80 },
-		{ ip: "218.203.13.180", port: 80 },
-		{ ip: "148.251.234.73", port: 80 },
-		{ ip: "150.145.95.205", port: 80 },
-		{ ip: "64.107.13.126", port: 80 },
-		{ ip: "149.255.255.250", port: 80 },
-		{ ip: "120.202.249.230", port: 80 },
-		{ ip: "23.251.149.27", port: 80 },
-		{ ip: "123.155.243.140", port: 80 },
-		{ ip: "218.203.13.177", port: 80 },
-		{ ip: "94.201.134.251", port: 80 },
-		{ ip: "94.198.135.79", port: 80 },
-		{ ip: "211.143.146.239", port: 80 },
-		{ ip: "196.201.217.48", port: 80 },
-		{ ip: "122.96.59.103", port: 80 },
-		{ ip: "218.108.170.171", port: 80 },
-		{ ip: "218.108.168.68", port: 80 },
-		{ ip: "110.170.137.254", port: 8080 },
-		{ ip: "137.135.166.225", port: 8123 },
-		{ ip: "218.203.13.180", port: 80 },
-		{ ip: "217.174.254.186", port: 8080 }
 	]
 
 	task :run => :environment do
@@ -31,7 +10,7 @@ namespace :ripoff_report do
 	end
 
 	def run
-		#open_proxies_csv
+		open_proxies_csv
 		root_url = "http://www.ripoffreport.com/c/56/outrageous-popular-rip-off/lawyers"
 		page = scrape_with_new_proxy(root_url)
 	end
@@ -80,11 +59,12 @@ namespace :ripoff_report do
 		@agent = Mechanize.new { |agent|
 			agent.user_agent_alias = 'Mac Safari'
 			agent.keep_alive = true
-			agent.open_timeout = 1000
-			agent.read_timeout = 1000
+			agent.open_timeout = 5
+			agent.read_timeout = 5
 			agent.max_history = 1
 			agent.redirect_ok = false
 	  	agent.follow_meta_refresh = false
+	  	agent.ignore_bad_chunking = true
 	  	rand_no = Random.rand(@proxies.length)
 			puts "Using proxy ip: " + @proxies[rand_no][:ip].to_s + ":" + @proxies[rand_no][:port].to_s
 			agent.set_proxy @proxies[rand_no][:ip], @proxies[rand_no][:port]
@@ -113,9 +93,10 @@ namespace :ripoff_report do
 
 	def open_proxies_csv
 		puts "Opening proxies csv"
-		CSV.foreach("proxies.csv") do |row|
-			ip = row[0].split(';')[0]
-			port = row[0].split(';')[1]
+		CSV.foreach("_reliable_list.csv") do |row|
+			puts row.inspect
+			ip = row[0].split(':')[0]
+			port = row[0].split(':')[1]
 			@proxies.push({ ip: ip, port: port })
 		end
 		puts "Done with proxies csv."
