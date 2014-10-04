@@ -28,6 +28,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    bson (2.3.0)
     builder (3.2.2)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -36,6 +37,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    connection_pool (2.0.0)
     domain_name (0.5.21)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
@@ -66,12 +68,23 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.6.0)
     minitest (5.4.2)
+    mongoid (4.0.0)
+      activemodel (~> 4.0)
+      moped (~> 2.0.0)
+      origin (~> 2.1)
+      tzinfo (>= 0.3.37)
+    moped (2.0.0)
+      bson (~> 2.2)
+      connection_pool (~> 2.0)
+      optionable (~> 0.2.0)
     multi_json (1.10.1)
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
     ntlm-http (0.1.1)
+    optionable (0.2.0)
+    origin (2.1.1)
     pg (0.17.1)
     polyglot (0.3.5)
     rack (1.5.2)
@@ -140,6 +153,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   mechanize
+  mongoid (~> 4.0.0)
   pg
   rails (= 4.1.1)
   sass-rails (~> 4.0.3)
