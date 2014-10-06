@@ -1,3 +1,31 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+// font overrides
+h1, .brand{
+	font-family: 'Indie Flower', cursive;
+}
+
+body {
+	background-image: url("/assets/ape.jpg");
+	background-size: 100%;
+}
+
+.scrapeape_container {
+background-color: rgba(244,244,244,.8);
+padding: 20px;
+border-radius: 10px;
+}
+
+footer {
+	background: white;
+	width: 100%;
+	position: fixed;
+	bottom: 0px;
+}
+
+.row {
+	margin-top: 10px;
+}

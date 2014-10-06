@@ -5,6 +5,7 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 #require "active_resource/railtie" # Comment this line for Rails 4.0+
 require "rails/test_unit/railtie"
+require 'resque/server'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,5 +24,6 @@ module Scraper
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.autoload_paths += Dir[Rails.root, "app", "jobs"]
   end
 end

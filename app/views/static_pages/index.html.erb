@@ -1,0 +1,69 @@
+<%= nested_form_for @scrape, { remote: true } do |f| %>
+  <div class="scrapeape_container">
+    <div class="row">
+      <h1>ScrapeApe</h1>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class='col-xs-3'>
+            <%= f.label "URL:" %>
+          </div>
+          <div class="col-xs-9">
+            <%= f.text_field "URL" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col-xs-3'>
+            <%= f.label "CSV filename:" %>
+          </div>
+          <div class="col-xs-9">
+            <%= f.text_field "filename" %>
+          </div>
+        </div>
+        <%= f.fields_for :parameters do |pf| %>
+          <div class="row">
+            <div class='col-xs-3'>
+              <%= pf.label "Link selector: " %>
+            </div>
+            <div class="col-xs-9">
+              <%= pf.text_field :selector %>
+            </div>
+          </div>
+          <div class="row">
+            <div class='col-xs-3'>
+              <%= pf.label "Name: " %>
+            </div>
+            <div class="col-xs-9">
+              <%= pf.text_field :selector %>
+            </div>
+          </div>
+        <% end %>
+        <div class="row">
+          Any links to add and crawl?
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <%= f.link_to_add "Add a page to crawl", :links, class: 'btn btn-default' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <%= f.button "Scrape!", { class: "btn btn-default scrape_btn" } %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.new_scrape').submit( function (event) {
+      var loading_gif = $('<img />').attr('src','<%= image_url "ajax-loader.gif" %>');
+      $('.scrape_btn').html(loading_gif);
+    });
+  });
+</script>

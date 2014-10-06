@@ -29,7 +29,13 @@ gem 'spring',        group: :development
 
 gem "mongoid", "~> 4.0.0"
 
-gem 'resque', "~> 1.22.0"
+gem 'devise'
+
+gem 'resque'
+
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+
+gem 'nested_form'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

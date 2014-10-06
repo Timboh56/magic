@@ -1,49 +1,46 @@
-require "mechanize"
-require "json"
-require "pathname"
+class ScraperWorker
+	require "mechanize"
+	require "json"
+	require "pathname"
+	attr_accessor :url, :output_filename
+  @queue = :scraper_queue
 
-namespace :ripoff_report do 
+	def initialize(url, name = nil, id = nil)
 
-	@proxies = [
-		{ ip: "111.13.12.216", port: 80 },
-		{ ip: "220.181.32.106", port: 80 },
-		{ ip: "218.203.13.180", port: 80 },
-		{ ip: "148.251.234.73", port: 80 },
-		{ ip: "150.145.95.205", port: 80 },
-		{ ip: "64.107.13.126", port: 80 },
-		{ ip: "149.255.255.250", port: 80 },
-		{ ip: "120.202.249.230", port: 80 },
-		{ ip: "23.251.149.27", port: 80 },
-		{ ip: "123.155.243.140", port: 80 },
-		{ ip: "218.203.13.177", port: 80 },
-		{ ip: "94.201.134.251", port: 80 },
-		{ ip: "94.198.135.79", port: 80 },
-		{ ip: "211.143.146.239", port: 80 },
-		{ ip: "196.201.217.48", port: 80 },
-		{ ip: "122.96.59.103", port: 80 },
-		{ ip: "218.108.170.171", port: 80 },
-		{ ip: "218.108.168.68", port: 80 },
-		{ ip: "110.170.137.254", port: 8080 },
-		{ ip: "137.135.166.225", port: 8123 },
-		{ ip: "218.203.13.180", port: 80 },
-		{ ip: "217.174.254.186", port: 8080 }
-	]
+		@proxies = []
 
-	@root_urls = [
-		"http://www.ripoffreport.com/c/126/health-fitness/plastic-surgeons",
-		"http://www.ripoffreport.com/c/381/health-fitness/dental-services",
-	]
+		@working_proxies = []
 
-	@working_proxies = []
+		@defective_proxies = []
 
-	@defective_proxies = []
+		@current_proxy = {}
 
-	@current_proxy = {}
+		@output_filename = name || DateTime.now.to_s
 
-	@output_file_name = "ripoff_insurance_companies"
+		@url = url
 
-	task :run => :environment do
-		run
+		@id = id
+	end
+
+	def self.perform(id)
+
+		set_agent_with_proxy(get_random_proxy)
+		@agent.get(URI(@url))
+		page = @agent.page
+		puts page.inspect
+		status_code = page.code
+		puts "Status: " + status_code.to_s
+
+		puts @agent.page.class.name
+		scrape_page
+	end
+
+	def run
+		
+		# load proxy list
+		open_proxies_csv
+		load_defective_list
+		page = scrape_with_new_proxy(@url)
 	end
 
 	def open_proxies_csv
@@ -63,21 +60,12 @@ namespace :ripoff_report do
 		puts "Done with proxies csv."
 	end
 
-	def write_to_csv(row, name)
-		puts "Writing " + row.inspect + " to csv file " + name.to_s
-		CSV.open("csvs/" + name.to_s + ".csv", "ab") do |csv|
+	def write_to_csv(row, filename = nil)
+		filename = filename || @output_filename.to_s
+		puts "Writing " + row.inspect + " to csv file " + filename.to_s
+		CSV.open("csvs/" + filename + ".csv", "ab") do |csv|
 		  csv << row
 		end
-	end
-
-	def run
-		open_proxies_csv
-		#root_url = "http://www.ripoffreport.com/c/56/outrageous-popular-rip-off/lawyers?pg=68"
-		#root_url = "http://www.ripoffreport.com/c/496/community/attorneys-general"
-		#root_url = "http://www.ripoffreport.com/c/381/health-fitness/dental-services?pg=44"
-		#root_url = "http://www.ripoffreport.com/c/559/health-fitness/doctors?pg=83"
-		root_url = "http://www.ripoffreport.com/c/235/finance/insurance-agencies"
-		page = scrape_with_new_proxy(root_url)
 	end
 
 	def scrape_page
@@ -103,33 +91,41 @@ namespace :ripoff_report do
 			next_link.click
 			scrape_page unless next_link.nil?
 		rescue Exception => e
-			puts "Error scraping page: " + e.inspect
+			puts "Error scraping page: " + e.inspect + ", pushing this proxy to defective list.."
 			puts "Attempting to rescrape page with new proxy ip for url: " + url.to_s
-			@defective_proxies.push @current_proxy
+			push_to_defective @current_proxy
 			scrape_with_new_proxy(url)
 
 			#scrape_with_new_proxy(url, @working_proxies[Random.rand(@working_proxies.length)])
-
 		end
+	end
+
+	def load_defective_list 
+		CSV.open("csvs/defective_list.csv").each do |row|
+			ip = row[0].split(':')[0]
+			port = row[0].split(':')[1]
+			@defective_proxies.push({ ip: ip, port: port })
+		end
+	end
+
+	def push_to_defective proxy
+		@defective_proxies.push proxy
+		write_to_csv([proxy[:ip]], "defective_list")
 	end
 
 	def scrape_with_new_proxy(url, proxy = nil)
 		begin
-			set_agent_with_proxy(proxy)
-			@agent.get(URI(url))
-			page = @agent.page
-			puts page.inspect
-			status_code = page.code
-			puts "Status: " + status_code.to_s
 
-			puts @agent.page.class.name
-			scrape_page
+			puts "Queuing shit up"
+
+			# add scraper class to resque queue
+			Resque.enqueue(ScraperWorker, DateTime.now.to_s)
 		rescue Exception => e
 			puts "Unable to get to website with IP, trying again with other proxy.."
 			puts e.to_s
 
 			puts "Proxy with IP " + @current_proxy[:ip] + " defective, pushed to defective list."
-			@defective_proxies.push(@current_proxy)
+			push_to_defective @current_proxy
 			scrape_with_new_proxy(url)
 		end
 	end
@@ -138,12 +134,12 @@ namespace :ripoff_report do
 		@agent = Mechanize.new { |agent|
 			agent.user_agent_alias = 'Mac Safari'
 			agent.keep_alive = true
-			agent.open_timeout = 3
-			agent.read_timeout = 3
+			agent.open_timeout = 2
+			agent.read_timeout = 2
 			agent.max_history = 2
-
+			puts "Setting Proxy"
 			@current_proxy = proxy.nil? ? get_random_proxy : proxy
-	
+			puts @current_proxy.to_s
 	  	puts "Using proxy ip: " + @current_proxy[:ip].to_s + ":" + @current_proxy[:port].to_s
 
 			agent.set_proxy @current_proxy[:ip], @current_proxy[:port]
@@ -177,7 +173,7 @@ namespace :ripoff_report do
 				puts "Phone: " + phone
 				puts "Report title: " + report_title
 				puts "Report content: " + report_content
-				write_to_csv([company, address, website, phone, report_title, report_content, category], @output_file_name)
+				write_to_csv([company, address, website, phone, report_title, report_content, category], @output_filename)
 			else
 				puts "Didn't find phone number... skipping"
 			end
