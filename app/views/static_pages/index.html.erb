@@ -6,51 +6,85 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="row">
-          <div class='col-xs-3'>
-            <%= f.label "URL:" %>
+          <div class='col-xs-2'>
+            <%= f.label "Root URL *" %>
           </div>
           <div class="col-xs-9">
             <%= f.text_field "URL" %>
           </div>
         </div>
         <div class="row">
-          <div class='col-xs-3'>
-            <%= f.label "CSV filename:" %>
+          <div class='col-xs-2'>
+            <%= f.label "Pagination selector" %>
+          </div>
+          <div class="col-xs-9">
+            <%= f.text_field "next_selector" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class='col-xs-2'>
+            <%= f.label "CSV filename " %>
           </div>
           <div class="col-xs-9">
             <%= f.text_field "filename" %>
           </div>
         </div>
-        <%= f.fields_for :parameters do |pf| %>
+        <%= f.fields_for :links do |lf| %>
           <div class="row">
-            <div class='col-xs-3'>
-              <%= pf.label "Link selector: " %>
+            <div class='col-xs-2'>
+              <%= lf.label "Link selector * " %>
             </div>
             <div class="col-xs-9">
-              <%= pf.text_field :selector %>
+              <%= lf.text_field :link_selector %>
+            </div>
+            <div class="col-xs-1">
+              <%= lf.link_to_remove "X" %>
             </div>
           </div>
+          <%= lf.fields_for :parameters do |pf|%>
+            <div class="row">
+              <div class="col-xs-2 col-xs-offset-1">
+                <%= pf.label "Data name: " %>
+              </div>
+              <div class="col-xs-8">
+                <%= pf.text_field :name %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-2 col-xs-offset-1">
+                <%= pf.label "Parameter selector: " %>
+              </div>
+              <div class="col-xs-8">
+                <%= pf.text_field :selector %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-2 col-xs-offset-1">
+                <%= pf.label "Include whitespace data?: " %>
+              </div>
+              <div class="col-xs-8">
+                <%= pf.check_box :include_whitespace %>
+              </div>
+              <div class="col-xs-1">
+                <%= pf.link_to_remove "X" %>
+              </div>
+            </div>
+          <% end %>
           <div class="row">
-            <div class='col-xs-3'>
-              <%= pf.label "Name: " %>
-            </div>
-            <div class="col-xs-9">
-              <%= pf.text_field :selector %>
-            </div>
+            <%= lf.link_to_add "Add a parameter", :parameters, class: 'btn btn-default' %>
           </div>
         <% end %>
         <div class="row">
-          Any links to add and crawl?
+          Add a <b>link</b> for the page you want the scraper to scrape within the page of the <b>root URL</b>.
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <%= f.link_to_add "Add a page to crawl", :links, class: 'btn btn-default' %>
+            <%= f.link_to_add "Add a link", :links, class: 'btn btn-default' %>
           </div>
         </div>
       </div>
     </div>
     <br>
-
     <div class="row">
       <div class="col-lg-12">
         <%= f.button "Scrape!", { class: "btn btn-default scrape_btn" } %>
@@ -59,11 +93,43 @@
   </div>
 <% end %>
 
+<div class="container recent-scrapes-container">
+  <div class="row">
+    <h1> Recent Scrapes </h1>
+  </div>
+  <div class="row">
+    <table id="recent-scrapes-table">
+      <thead>
+        <th>Created at</th>
+        <th>Root URL</th>
+        <th>Records collected</th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+        <% @scrapes.each do |scrape| %>
+          <tr>
+            <td><%= scrape.created_at %></td>
+            <td><%= scrape.filename %></td>
+            <td><%= scrape.records_collected %></td>
+            <td><%= link_to "Delete", scrape, method: :delete, data: { confirm: "Are you sure you want to end this?" } %> </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <script type="text/javascript">
   $(document).ready(function () {
+    $('#recent-scrapes-table').DataTable({
+      sPaginationType: "full_numbers",
+      bJQueryUI: true
+    });
     $('.new_scrape').submit( function (event) {
       var loading_gif = $('<img />').attr('src','<%= image_url "ajax-loader.gif" %>');
       $('.scrape_btn').html(loading_gif);
+    }).on('ajax:success', function () {
+      $('.scrape_btn').html('Scrape!');
     });
   });
 </script>

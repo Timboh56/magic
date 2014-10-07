@@ -5,6 +5,7 @@ class StaticPagesController < ApplicationController
   # GET /static_pages.json
   def index
     @scrape = Scrape.new
+    @scrapes = Scrape.all
   end
 
   def proxy_list

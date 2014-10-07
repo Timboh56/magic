@@ -26,14 +26,13 @@ class ScrapesController < ApplicationController
   def create
     @scrape = Scrape.new(scrape_params)
     
-    @scraper = ScraperWorker.new(scrape_params[:URL], scrape_params[:filename])
-    csv_file = @scraper.run
-
     respond_to do |format|
       if @scrape.save
-        format.csv { render text: @products.to_csv }
-        #format.html { redirect_to @scrape, notice: 'Scrape was successfully created.' }
-        #format.json { render :show, status: :created, location: @scrape }
+        @scrape.run
+
+        #format.csv { render text: @products.to_csv }
+        format.html { redirect_to @scrape, notice: 'Scrape was successfully created.' }
+        format.json { render :show, status: :created, location: @scrape }
       else
         format.html { render :new }
         format.json { render json: @scrape.errors, status: :unprocessable_entity }
@@ -60,7 +59,7 @@ class ScrapesController < ApplicationController
   def destroy
     @scrape.destroy
     respond_to do |format|
-      format.html { redirect_to scrapes_url, notice: 'Scrape was successfully destroyed.' }
+      format.html { redirect_to "/", notice: 'Scrape was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -73,6 +72,13 @@ class ScrapesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def scrape_params
-      params.require(:scrape).permit(:URL, :filename)
+      params.require(:scrape).permit(
+        :URL, :filename, :next_selector, :_destroy,
+        :links_attributes => [
+          :link_selector, :parameters_attributes => [
+            :include_white_space, :name, :selector, :_destroy
+            ]
+          ]
+        )
     end
 end

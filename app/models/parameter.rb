@@ -3,6 +3,9 @@ class Parameter
 
   field :name, type: String
   field :selector, type: String
-  field :param_type, type: String # "Link" or "Data"
-  belongs_to :scrape
+  field :include_whitespace, type: Boolean
+  
+  belongs_to :link
+
+  validates_presence_of :name
 end

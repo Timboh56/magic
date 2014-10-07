@@ -4,35 +4,9 @@ require "pathname"
 
 namespace :ripoff_report do 
 
-	@proxies = [
-		{ ip: "111.13.12.216", port: 80 },
-		{ ip: "220.181.32.106", port: 80 },
-		{ ip: "218.203.13.180", port: 80 },
-		{ ip: "148.251.234.73", port: 80 },
-		{ ip: "150.145.95.205", port: 80 },
-		{ ip: "64.107.13.126", port: 80 },
-		{ ip: "149.255.255.250", port: 80 },
-		{ ip: "120.202.249.230", port: 80 },
-		{ ip: "23.251.149.27", port: 80 },
-		{ ip: "123.155.243.140", port: 80 },
-		{ ip: "218.203.13.177", port: 80 },
-		{ ip: "94.201.134.251", port: 80 },
-		{ ip: "94.198.135.79", port: 80 },
-		{ ip: "211.143.146.239", port: 80 },
-		{ ip: "196.201.217.48", port: 80 },
-		{ ip: "122.96.59.103", port: 80 },
-		{ ip: "218.108.170.171", port: 80 },
-		{ ip: "218.108.168.68", port: 80 },
-		{ ip: "110.170.137.254", port: 8080 },
-		{ ip: "137.135.166.225", port: 8123 },
-		{ ip: "218.203.13.180", port: 80 },
-		{ ip: "217.174.254.186", port: 8080 }
-	]
+	@proxies = []
 
-	@root_urls = [
-		"http://www.ripoffreport.com/c/126/health-fitness/plastic-surgeons",
-		"http://www.ripoffreport.com/c/381/health-fitness/dental-services",
-	]
+	@root_urls = []
 
 	@working_proxies = []
 
@@ -46,6 +20,8 @@ namespace :ripoff_report do
 		run
 	end
 
+	private
+	
 	def open_proxies_csv
 		puts "Opening proxies csv"
 
