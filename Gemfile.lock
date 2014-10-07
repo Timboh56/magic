@@ -49,6 +49,11 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     connection_pool (2.0.0)
+    delayed_job (4.0.4)
+      activesupport (>= 3.0, < 4.2)
+    delayed_job_mongoid (2.1.0)
+      delayed_job (>= 3.0, < 5)
+      mongoid (>= 3.0, < 5)
     devise (3.2.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -193,6 +198,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
+  delayed_job_mongoid
   devise
   jbuilder (~> 2.0)
   jquery-datatables-rails
