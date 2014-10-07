@@ -67,3 +67,9 @@ test:
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+ production:
+   sessions:
+     default:
+       uri: <%= ENV['MONGOLAB_URI'] %>
+   options: #strictly 2 spaces before
+     raise_not_found_error: false #strictly 4 spaces before not 6
