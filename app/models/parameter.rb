@@ -7,6 +7,7 @@ class Parameter
   field :text_to_remove, type: String
   
   belongs_to :link
+  belongs_to :scrape
 
   validates_presence_of :name
 end

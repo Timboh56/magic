@@ -39,8 +39,13 @@ class ScraperWorker
 			begin
 				url = URI(@agent.page.uri.to_s)
 				current_page = @agent.page
-				status_code = current_page.code
 				puts "Scraping page: " + url.to_s
+
+				# if root url has any parameters to scrape..
+				@scrape.parameters.each do |parameter|
+					scrape_sub_page(current_page, @scrape)
+				end
+
 
 				@links.each do |crawl_link|
 					puts "Looking for link with selector: " + crawl_link.link_selector.to_s + "..."
@@ -53,7 +58,7 @@ class ScraperWorker
 						Mechanize::Page::Link.new(link, @agent, @agent.page).click
 
 						# scrape individual report page
-						scrape_report_page(@agent.page, crawl_link)
+						scrape_sub_page(@agent.page, crawl_link)
 					end
 				end
 				
@@ -112,7 +117,7 @@ class ScraperWorker
 			proxy
 		end
 
-		def scrape_report_page(page, link)
+		def scrape_sub_page(page, link)
 			begin
 				puts "Crawling page for data parameters"
 				csv_row = []
