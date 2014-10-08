@@ -84,7 +84,7 @@ class ScrapesController < ApplicationController
         :URL, :filename, :next_selector, :_destroy,
         :links_attributes => [
           :link_selector, :parameters_attributes => [
-            :reg_exp, :include_white_space, :name, :selector, :_destroy
+            :text_to_remove, :include_white_space, :name, :selector, :_destroy
             ]
           ]
         )

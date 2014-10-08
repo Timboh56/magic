@@ -117,7 +117,7 @@ class ScraperWorker
 				puts "Crawling page for data parameters"
 				csv_row = []
 				link.parameters.each do |parameter|
-					data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","")
+					data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
 					unless data == "" || data.match(/^\s*$/i)
 						csv_row.push data
 					else

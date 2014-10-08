@@ -4,7 +4,7 @@ class Parameter
   field :name, type: String
   field :selector, type: String
   field :include_whitespace, type: Boolean
-  field :reg_exp, type: String
+  field :text_to_remove, type: String
   
   belongs_to :link
 
