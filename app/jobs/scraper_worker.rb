@@ -29,10 +29,6 @@ class ScraperWorker
 			CSV.open("csvs/" + filename + ".csv", "ab") do |csv|
 			  csv << row
 			end
-
-			# save scrape object
-			@scrape.records_collected += 1
-			@scrape.save!
 		end
 
 		def scrape_page
@@ -45,7 +41,6 @@ class ScraperWorker
 				@scrape.parameters.each do |parameter|
 					scrape_sub_page(current_page, @scrape)
 				end
-
 
 				@links.each do |crawl_link|
 					puts "Looking for link with selector: " + crawl_link.link_selector.to_s + "..."
@@ -62,8 +57,12 @@ class ScraperWorker
 					end
 				end
 				
-				next_link = current_page.link_with(:text => @next_text)
-				next_link.click
+				next_link = current_page.search(@next_link_selector).first
+
+				Mechanize::Page::Link.new(next_link, @agent, @agent.page).click 
+
+				#next_link = current_page.link_with(:class_name => @next_text)
+
 				scrape_page unless next_link.nil?
 			rescue Exception => e
 				puts "Error scraping page: " + e.inspect + ", pushing this proxy to defective list.."
@@ -129,8 +128,13 @@ class ScraperWorker
 						puts "Didn't find any data for " + link.name.to_s + " on this page.. skipping"
 					end
 				end
-				write_to_csv(csv_row, @output_filename)
 
+				if csv_row.present?
+					# save scrape object
+					@scrape.records_collected += 1
+					@scrape.save!
+					write_to_csv(csv_row, @output_filename)
+				end
 			rescue Exception => e
 				puts "Error crawling page: " + e.inspect
 			end

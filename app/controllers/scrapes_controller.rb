@@ -87,6 +87,9 @@ class ScrapesController < ApplicationController
     def scrape_params
       params.require(:scrape).permit(
         :URL, :filename, :next_selector, :_destroy,
+        :parameters_attributes => [
+          :text_to_remove, :include_white_space, :name, :selector, :_destroy
+        ],
         :links_attributes => [
           :link_selector, :parameters_attributes => [
             :text_to_remove, :include_white_space, :name, :selector, :_destroy

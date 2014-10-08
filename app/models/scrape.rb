@@ -11,8 +11,11 @@ class Scrape
   # if scraping just one page without crawling additional URLS
   # this object can have many parameters
   has_many :parameters
+
+  has_many :records
   
   accepts_nested_attributes_for :links
+  accepts_nested_attributes_for :parameters
 
 
 	def run

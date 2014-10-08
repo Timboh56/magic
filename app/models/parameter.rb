@@ -9,5 +9,7 @@ class Parameter
   belongs_to :link
   belongs_to :scrape
 
+  has_many :parameters
+
   validates_presence_of :name
 end
