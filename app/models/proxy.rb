@@ -3,7 +3,7 @@ class Proxy
 
   field :ip, type: String
   field :port, type: Integer
-  field :working, type: Boolean
+  field :working, type: Boolean, :default => true
 
   validates_uniqueness_of :ip
 end

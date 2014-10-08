@@ -71,7 +71,6 @@ class ScrapesController < ApplicationController
   # DELETE /scrapes/1.json
   def destroy
     @scrape.destroy
-
     respond_to do |format|
       format.html { redirect_to "/", notice: 'Scrape was successfully destroyed.' }
       format.json { head :no_content }

@@ -16,7 +16,7 @@ class ScraperWorker
 	  		CSV.foreach(csv_file_path) do |row|
 					ip = row[0].split(':')[0]
 					port = row[0].split(':')[1]
-					@proxies.push({ ip: ip, port: port })
+					Proxy.create!(ip: ip, port: port) unless Proxy.exists?(conditions: { ip: ip, port: port })
 				end
 	  	end
 
@@ -73,17 +73,8 @@ class ScraperWorker
 			end
 		end
 
-		def load_defective_list 
-			CSV.open("proxy_lists/defective_list.csv").each do |row|
-				ip = row[0].split(':')[0]
-				port = row[0].split(':')[1]
-				@defective_proxies.push({ ip: ip, port: port })
-			end
-		end
-
 		def push_to_defective proxy
-			@defective_proxies.push proxy
-			write_to_csv([proxy[:ip]], "defective_list")
+			proxy.update_attributes!(:working => false)
 		end
 
 		def enqueue(url, proxy = nil)
@@ -101,19 +92,19 @@ class ScraperWorker
 				agent.open_timeout = 2
 				agent.read_timeout = 2
 				agent.max_history = 2
+
 				puts "Setting Proxy"
 				@current_proxy = proxy.nil? ? get_random_proxy : proxy
 				puts @current_proxy.to_s
-		  	puts "Using proxy ip: " + @current_proxy[:ip].to_s + ":" + @current_proxy[:port].to_s
-				agent.set_proxy @current_proxy[:ip], @current_proxy[:port]
+		  	puts "Using proxy ip: " + @current_proxy.ip.to_s + ":" + @current_proxy.port.to_s
+				agent.set_proxy @current_proxy.ip, @current_proxy.port
 			}
 		end
 
 		def get_random_proxy
-	  	rand_no = Random.rand(@proxies.length)
-	  	proxy = @proxies[rand_no]
-	  	get_random_proxy if @defective_proxies.include? proxy
-			proxy
+			working_proxies = Proxy.where(:working => true)
+	  	rand_no = Random.rand(working_proxies.count)
+	  	proxy = working_proxies[rand_no]
 		end
 
 		def scrape_sub_page(page, link)
@@ -124,8 +115,9 @@ class ScraperWorker
 					data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
 					unless data == "" || data.match(/^\s*$/i)
 						csv_row.push data
+						Record.create!(parameter_id: parameter.id, text: data)
 					else
-						puts "Didn't find any data for " + link.name.to_s + " on this page.. skipping"
+						puts "Didn't find any data for " + parameter.name.to_s + " on this page.. skipping"
 					end
 				end
 
@@ -133,7 +125,8 @@ class ScraperWorker
 					# save scrape object
 					@scrape.records_collected += 1
 					@scrape.save!
-					write_to_csv(csv_row, @output_filename)
+
+					# write_to_csv(csv_row, @output_filename)
 				end
 			rescue Exception => e
 				puts "Error crawling page: " + e.inspect
@@ -156,8 +149,6 @@ class ScraperWorker
 
 			@proxies = []
 
-			@defective_proxies = []
-
 			@current_proxy = {}
 
 			@output_filename = scrape["filename"] || DateTime.now.to_s
@@ -170,7 +161,6 @@ class ScraperWorker
 
 				# load proxy list
 				open_proxies_csv
-				load_defective_list
 
 				set_agent_with_proxy
 				@agent.get(URI(@url))
@@ -184,7 +174,7 @@ class ScraperWorker
 				puts "Unable to get to website with IP, trying again with other proxy.."
 				puts e.to_s
 
-				puts "Proxy with IP " + @current_proxy[:ip] + " defective, pushed to defective list."
+				puts "Proxy with IP " + @current_proxy.ip + " defective, pushed to defective list."
 				push_to_defective @current_proxy
 				enqueue(@url)
 			end
