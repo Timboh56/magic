@@ -15,9 +15,6 @@
 /log/*.log
 /tmp
 
-# ignore generated csvs
-/csvs/*
-
 */DS_Store
 
 dump.rdb
