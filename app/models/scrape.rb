@@ -11,7 +11,7 @@ class Scrape
   # if scraping just one page without crawling additional URLS
   # this object can have many parameters
   has_many :parameters
-
+  
   accepts_nested_attributes_for :links
 
 
@@ -20,17 +20,11 @@ class Scrape
 	end
 
   def format_to_downloadable_csv
-    begin
-      puts "generating csv"
-      csv = CSV.generate do |csv|
-        CSV.read("csvs/" + filename.to_s + ".csv").each do |row|
-          csv << row
-        end
+    csv = CSV.generate do |csv|
+      CSV.read("csvs/" + filename.to_s + ".csv").each do |row|
+        csv << row
       end
-      csv
-    rescue Exception => e
-      puts e.inspect
-      raise e
     end
+    csv
   end
 end

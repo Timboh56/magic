@@ -11,12 +11,17 @@ class ScrapesController < ApplicationController
   # GET /scrapes/1
   # GET /scrapes/1.json
   def show
-    scrape = Scrape.find(params[:id])
-    respond_to do |format|
-      format.csv do
-        send_data scrape.format_to_downloadable_csv
+    begin
+      scrape = Scrape.find(params[:id])
+      puts "Scrape found"
+      respond_to do |format|
+        format.csv do
+          send_data scrape.format_to_downloadable_csv
+        end
+        format.xls
       end
-      format.xls
+    rescue Exception => e
+      puts e.inspect
     end
   end
 
