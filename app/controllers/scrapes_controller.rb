@@ -44,10 +44,10 @@ class ScrapesController < ApplicationController
         @scrape.run
 
         #format.csv { render text: @products.to_csv }
-        format.html { redirect_to @scrape, notice: 'Scrape was successfully created.' }
+        #format.html { redirect_to @scrape, notice: 'Scrape was successfully created.' }
         format.json { render :show, status: :created, location: @scrape }
       else
-        format.html { render :new }
+        #format.html { render :new }
         format.json { render json: @scrape.errors, status: :unprocessable_entity }
       end
     end
@@ -71,6 +71,7 @@ class ScrapesController < ApplicationController
   # DELETE /scrapes/1.json
   def destroy
     @scrape.destroy
+
     respond_to do |format|
       format.html { redirect_to "/", notice: 'Scrape was successfully destroyed.' }
       format.json { head :no_content }
