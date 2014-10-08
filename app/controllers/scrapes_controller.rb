@@ -1,5 +1,6 @@
 class ScrapesController < ApplicationController
   before_action :set_scrape, only: [:show, :edit, :update, :destroy]
+  respond_to :html, :js, :csv
 
   # GET /scrapes
   # GET /scrapes.json
@@ -10,6 +11,13 @@ class ScrapesController < ApplicationController
   # GET /scrapes/1
   # GET /scrapes/1.json
   def show
+    scrape = Scrape.find(params[:id])
+    respond_to do |format|
+      format.csv do
+        send_data scrape.format_to_downloadable_csv
+      end
+      format.xls
+    end
   end
 
   # GET /scrapes/new
@@ -76,7 +84,7 @@ class ScrapesController < ApplicationController
         :URL, :filename, :next_selector, :_destroy,
         :links_attributes => [
           :link_selector, :parameters_attributes => [
-            :include_white_space, :name, :selector, :_destroy
+            :reg_exp, :include_white_space, :name, :selector, :_destroy
             ]
           ]
         )

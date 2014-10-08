@@ -114,7 +114,7 @@ class ScraperWorker
 
 		def scrape_report_page(page, link)
 			begin
-				puts "Scraping report page for data parameters"
+				puts "Crawling page for data parameters"
 				csv_row = []
 				link.parameters.each do |parameter|
 					data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","")
@@ -127,7 +127,7 @@ class ScraperWorker
 				write_to_csv(csv_row, @output_filename)
 
 			rescue Exception => e
-				puts "Error scraping report page: " + e.inspect
+				puts "Error crawling page: " + e.inspect
 			end
 		end
 

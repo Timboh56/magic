@@ -5,11 +5,6 @@ class StaticPagesController < ApplicationController
   # GET /static_pages.json
   def index
     @scrape = Scrape.new
-    @scrapes = Scrape.all
+    @scrapes = Scrape.all.order("created_at DESC")
   end
-
-  def proxy_list
-
-  end
-
 end

@@ -142,6 +142,8 @@ GEM
     redis (3.1.0)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
+    render_csv (2.0.0)
+      rails (>= 3.0)
     resque (1.22.0)
       multi_json (~> 1.0)
       redis-namespace (~> 1.0)
@@ -209,6 +211,7 @@ DEPENDENCIES
   nested_form
   pg
   rails (= 4.1.1)
+  render_csv (~> 2.0.0)
   resque
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

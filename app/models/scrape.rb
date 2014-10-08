@@ -13,4 +13,13 @@ class Scrape
 	def run
 		Resque.enqueue(ScraperWorker, id)
 	end
+
+  def format_to_downloadable_csv
+    csv = CSV.generate do |csv|
+      CSV.read("csvs/" + filename.to_s + ".csv").each do |row|
+        csv << row
+      end
+    end
+    csv
+  end
 end
