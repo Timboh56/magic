@@ -70,7 +70,7 @@ class ScraperWorker
 		end
 
 		def load_defective_list 
-			CSV.open("csvs/defective_list.csv").each do |row|
+			CSV.open("proxy_lists/defective_list.csv").each do |row|
 				ip = row[0].split(':')[0]
 				port = row[0].split(':')[1]
 				@defective_proxies.push({ ip: ip, port: port })
