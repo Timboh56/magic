@@ -6,4 +6,5 @@ class Record
 
 	belongs_to :record_set
 	belongs_to :parameter
+	belongs_to :scrape
 end

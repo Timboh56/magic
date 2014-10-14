@@ -51,7 +51,7 @@
               <%= dsf.link_to_remove "X" %>
             </div>
           </div>
-          <%= dsf.fields_for :parameters, Parameter.new do |pf|%>
+          <%= dsf.fields_for :parameters do |pf|%>
             <div class="row">
               <div class="col-xs-2 col-xs-offset-1">
                 <%= pf.label "Data name: " %>
@@ -126,7 +126,7 @@
           <tr>
             <td><%= scrape.created_at %></td>
             <td><%= scrape.filename %></td>
-            <td><%= scrape.records_collected %></td>
+            <td><%= scrape.records.count %></td>
             <td>
               <%= link_to "Download CSV", scrape_path(id: scrape.id, format: :csv) %>
 

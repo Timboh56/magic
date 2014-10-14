@@ -16,10 +16,9 @@ class ScraperWorker
 	  		CSV.foreach(csv_file_path) do |row|
 					ip = row[0].split(':')[0]
 					port = row[0].split(':')[1]
-					Proxy.create!(ip: ip, port: port) unless Proxy.where(ip: ip, port: port ).exists?
+					Proxy.create!(ip: ip, port: port) unless Proxy.where(ip: ip).exists?
 				end
 	  	end
-
 			puts "Done with proxies csv."
 		end
 
@@ -59,20 +58,14 @@ class ScraperWorker
 
 				Mechanize::Page::Link.new(next_link, @agent, @agent.page).click 
 
-				#next_link = current_page.link_with(:class_name => @next_text)
-
 				scrape_page unless next_link.nil?
 			rescue Exception => e
-				puts "Error scraping page: " + e.inspect + ", pushing this proxy to defective list.."
+				puts "Error scraping page: " + e.inspect + ", deleting proxy.."
 				puts "Attempting to rescrape page with new proxy ip for url: " + url.to_s
 
-				push_to_defective @current_proxy
+				@current_proxy.destroy!
 				enqueue(url)
 			end
-		end
-
-		def push_to_defective proxy
-			proxy.update_attributes!(:working => false)
 		end
 
 		def enqueue(url, proxy = nil)
@@ -80,7 +73,7 @@ class ScraperWorker
 			puts "Queuing shit up"
 
 			# add scraper class to resque queue
-			Resque.enqueue(ScraperWorker, @scrape.id)
+			Resque.enqueue(ScraperWorker, @scrape.id, url)
 		end
 
 		def set_agent_with_proxy(proxy = nil)
@@ -116,16 +109,16 @@ class ScraperWorker
 						csv_row.push data
 						Record.create!(scrape_id: @scrape.id, record_set_id: record_set.id, parameter_id: parameter.id, text: data)
 					else
-						record_set.destroy!
 						raise "Not all parameters found in page. Skipping.."
 					end
 				end
 			rescue Exception => e
 				puts "Error crawling page: " + e.inspect
+				record_set.destroy!
 			end
 		end
 
-		def perform(id)
+		def perform(id, root_url)
 			unless id.is_a? String
 				scrape = Scrape.find(id["$oid"])
 			else
@@ -145,7 +138,7 @@ class ScraperWorker
 
 			@output_filename = scrape["filename"] || DateTime.now.to_s
 
-			@url = scrape["URL"]
+			@url = root_url || scrape["URL"]
 
 			@id = scrape["filename"] + DateTime.now.to_s
 
@@ -166,8 +159,8 @@ class ScraperWorker
 				puts "Unable to get to website with IP, trying again with other proxy.."
 				puts e.to_s
 
-				puts "Proxy with IP " + @current_proxy[:ip] + " defective, pushed to defective list."
-				push_to_defective @current_proxy
+				puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
+				@current_proxy.destroy!
 				enqueue(@url)
 			end
 		end

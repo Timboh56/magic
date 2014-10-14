@@ -5,7 +5,6 @@ class Scrape
   field :URL, :type => String
   field :filename, :type => String
   field :next_selector, :type => String
-  field :records_collected, :type => Integer, :default => 0
   has_many :data_sets
 
   has_many :records
@@ -25,7 +24,7 @@ class Scrape
 	end
 
   def get_csv_data_row record_set
-    record_set.records.map { |r| r }
+    record_set.records.map { |r| r.text }
   end
 
   def get_csv_header_row parameters
