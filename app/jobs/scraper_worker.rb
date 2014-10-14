@@ -141,18 +141,14 @@ class ScraperWorker
 				puts @agent.page.class.name
 				scrape_page
 
-			rescue Mechanize::ResponseCodeError => exception
-			  if exception.response_code == '403'
-			    login_page = exception.page
-   				puts "Unable to get to website with IP, trying again with other proxy.."
-					puts e.to_s
-
-					puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
-					push_to_defective @current_proxy
-					enqueue(@url)
-			  else
-			    raise # Some other error, re-raise
-			  end
+			rescue Exception => e
+				puts e.inspect
+		    login_page = exception.page
+ 				puts "Unable to get to website with IP, trying again with other proxy.."
+				puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
+				push_to_defective @current_proxy
+				enqueue(@url)
+			end
 		end
 	end
 end
