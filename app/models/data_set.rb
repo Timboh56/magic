@@ -2,9 +2,9 @@ class DataSet
 	include Mongoid::Document
 
 	field :link_selector, type: String
-	belongs_to :scrape
 	has_many :parameters
-	accepts_nested_attributes_for :parameters
+	has_many :record_sets
+	belongs_to :scrape
 
-	validates_presence_of :link_selector
+	accepts_nested_attributes_for :parameters
 end

@@ -24,14 +24,8 @@ class Scrape
 		Resque.enqueue(ScraperWorker, id)
 	end
 
-  def get_csv_data_row parameters
-    csv_row = []
-    parameters.each do |parameter|
-      parameter.records.each do |record|
-        csv_row.push record
-      end
-    end
-    csv_row
+  def get_csv_data_row record_set
+    record_set.records.map { |r| r }
   end
 
   def get_csv_header_row parameters
@@ -43,22 +37,17 @@ class Scrape
   end
 
   def format_to_downloadable_csv
-    #csv = CSV.generate do |csv|
-    #  CSV.read("csvs/" + filename.to_s + ".csv").each do |row|
-    #    csv << row
-    #  end
-    #end
-    #csv
 
     CSV.generate do |csv|
-      csv << get_csv_header_row(parameters)
-      csv << get_csv_data_row(parameters)
+      data_sets.each do |data_set|
 
-      # for each link used by scraper,
-      # parse to CSV form all parameters
-      links.each do |link|
-        csv << get_csv_header_row(parameters)
-        csv << get_csv_data_row(link.parameters)
+        # header
+        csv << get_csv_header_row(data_set.parameters)
+
+        # data
+        data_set.record_sets do |record_set|
+          csv << get_csv_data_row(record_set)
+        end
       end
     end
   end

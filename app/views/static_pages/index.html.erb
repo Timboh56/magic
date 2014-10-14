@@ -5,7 +5,7 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        <b>Root URL</h1>
+        <b>Root URL</b>
       </div>
     </div>
     <div class="row">
@@ -35,51 +35,14 @@
           </div>
         </div>
         <div class="row">
-          <%= f.link_to_add "Add a data set", :data_sets, class: 'btn btn-default' %>
+          <div class="col-xs-8 col-xs-offset-2">
+            Add a <b>data set</b> and indicate a <b> link selector</b> for ScrapeApe to click to crawl a page, or leave <b>link selector</b> to crawl the page of the <b> root url</b>.
+          </div>
         </div>
-        
         <%= f.fields_for :data_sets do |dsf| %>
-          <%= dsf.fields_for :parameters do |pf|%>
-            <div class="row">
-              <div class="col-xs-2 col-xs-offset-1">
-                <%= pf.label "Data name: " %>
-              </div>
-              <div class="col-xs-8">
-                <%= pf.text_field :name %>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-2 col-xs-offset-1">
-                <%= pf.label "Parameter selector: " %>
-              </div>
-              <div class="col-xs-8">
-                <%= pf.text_field :selector %>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-2 col-xs-offset-1">
-                <%= pf.label "Text to remove from parameter: " %>
-              </div>
-              <div class="col-xs-8">
-                <%= pf.text_field :text_to_remove %>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-2 col-xs-offset-1">
-                <%= pf.label "Include whitespace data?: " %>
-              </div>
-              <div class="col-xs-8">
-                <%= pf.check_box :include_whitespace %>
-              </div>
-              <div class="col-xs-1">
-                <%= pf.link_to_remove "X" %>
-              </div>
-            </div>
-          <% end %>
-          <hr />
           <div class="row">
             <div class='col-xs-2'>
-              <%= dsf.label "Link selector * " %>
+              <%= dsf.label "Link selector" %>
             </div>
             <div class="col-xs-9">
               <%= dsf.text_field :link_selector %>
@@ -126,15 +89,13 @@
             </div>
           <% end %>
           <div class="row">
-            <%= dsf.link_to_add "Add a parameter for link", :parameters, class: 'btn btn-default' %>
+            <%= dsf.link_to_add "Add a parameter for data set", :parameters, class: 'btn btn-default' %>
           </div>
+          <hr />
         <% end %>
         <div class="row">
-          Add a <b>data set</b> for the page you want the scraper to scrape within the page of the <b>root URL</b>.
-        </div>
-        <div class="row">
           <div class="col-xs-12">
-            <%= f.link_to_add "Add a subpage", :data_sets, class: 'btn btn-default' %>
+            <%= f.link_to_add "Add a data set", :data_sets, class: 'btn btn-default' %>
           </div>
         </div>
       </div>

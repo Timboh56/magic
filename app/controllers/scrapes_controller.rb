@@ -37,19 +37,24 @@ class ScrapesController < ApplicationController
   # POST /scrapes
   # POST /scrapes.json
   def create
-    @scrape = Scrape.new(scrape_params)
-    
-    respond_to do |format|
-      if @scrape.save
-        @scrape.run
+    begin
+      @scrape = Scrape.new(scrape_params)
+      
+      respond_to do |format|
+        if @scrape.save!
+          @scrape.run
 
-        #format.csv { render text: @products.to_csv }
-        #format.html { redirect_to @scrape, notice: 'Scrape was successfully created.' }
-        format.json { render :show, status: :created, location: @scrape }
-      else
-        #format.html { render :new }
-        format.json { render json: @scrape.errors, status: :unprocessable_entity }
+          #format.csv { render text: @products.to_csv }
+          #format.html { redirect_to @scrape, notice: 'Scrape was successfully created.' }
+          format.json { render :show, status: :created, location: @scrape }
+        else
+          #format.html { render :new }
+
+          format.json { render json: @scrape.errors, status: :unprocessable_entity }
+        end
       end
+    rescue Exception => e
+      puts e.inspect
     end
   end
 
@@ -87,14 +92,11 @@ class ScrapesController < ApplicationController
     def scrape_params
       params.require(:scrape).permit(
         :URL, :filename, :next_selector, :_destroy,
-        :parameters_attributes => [
-          :text_to_remove, :include_white_space, :name, :selector, :_destroy
-        ],
         :data_sets_attributes => [
           :link_selector, :parameters_attributes => [
-            :text_to_remove, :include_white_space, :name, :selector, :_destroy
-            ]
+            :name, :text_to_remove, :include_whitespace, :selector, :_destroy
           ]
-        )
+        ]
+      )
     end
 end

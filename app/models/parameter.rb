@@ -8,7 +8,5 @@ class Parameter
   
   belongs_to :data_set
 
-  has_many :parameters
-
   validates_presence_of :name
 end

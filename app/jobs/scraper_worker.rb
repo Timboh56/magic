@@ -16,7 +16,7 @@ class ScraperWorker
 	  		CSV.foreach(csv_file_path) do |row|
 					ip = row[0].split(':')[0]
 					port = row[0].split(':')[1]
-					Proxy.create!(ip: ip, port: port) unless Proxy.exists?(conditions: { ip: ip, port: port })
+					Proxy.create!(ip: ip, port: port) unless Proxy.where(ip: ip, port: port ).exists?
 				end
 	  	end
 
@@ -38,22 +38,20 @@ class ScraperWorker
 				puts "Scraping page: " + url.to_s
 
 				# if root url has any parameters to scrape..
-				@scrape.root_data_set.each do |parameter|
-					scrape_sub_page(current_page, @scrape.root_data_set)
-				end
+				scrape_sub_page(current_page, @scrape.root_data_set) if @scrape.root_data_set.present?
 
-				@sub_pages.each do |crawl_link|
-					puts "Looking for link with selector: " + crawl_link.link_selector.to_s + "..."
+				@sub_pages.each do |sub_page|
+					puts "Looking for link with selector: " + sub_page.link_selector.to_s + "..."
 
 					# find links to pages to crawl on current page
-					current_page.search(crawl_link.link_selector).each do |link|
+					current_page.search(sub_page.link_selector).each do |link|
 						
 						puts "	Clicking link with text: " + link.inspect
 						
 						Mechanize::Page::Link.new(link, @agent, @agent.page).click
 
 						# scrape individual page
-						scrape_sub_page(@agent.page, crawl_link)
+						scrape_sub_page(@agent.page, sub_page)
 					end
 				end
 				
@@ -107,26 +105,20 @@ class ScraperWorker
 	  	proxy = working_proxies[rand_no]
 		end
 
-		def scrape_sub_page(page, link)
+		def scrape_sub_page(page, data_set)
 			begin
 				puts "Crawling page for data parameters"
 				csv_row = []
-				link.parameters.each do |parameter|
+				record_set = RecordSet.create!(data_set_id: data_set.id)
+				data_set.parameters.each do |parameter|
 					data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
 					unless data == "" || data.match(/^\s*$/i)
 						csv_row.push data
-						Record.create!(parameter_id: parameter.id, text: data)
+						Record.create!(scrape_id: @scrape.id, record_set_id: record_set.id, parameter_id: parameter.id, text: data)
 					else
-						puts "Didn't find any data for " + parameter.name.to_s + " on this page.. skipping"
+						record_set.destroy!
+						raise "Not all parameters found in page. Skipping.."
 					end
-				end
-
-				if csv_row.present?
-					# save scrape object
-					@scrape.records_collected += 1
-					@scrape.save!
-
-					# write_to_csv(csv_row, @output_filename)
 				end
 			rescue Exception => e
 				puts "Error crawling page: " + e.inspect
@@ -174,7 +166,7 @@ class ScraperWorker
 				puts "Unable to get to website with IP, trying again with other proxy.."
 				puts e.to_s
 
-				puts "Proxy with IP " + @current_proxy.ip + " defective, pushed to defective list."
+				puts "Proxy with IP " + @current_proxy[:ip] + " defective, pushed to defective list."
 				push_to_defective @current_proxy
 				enqueue(@url)
 			end
