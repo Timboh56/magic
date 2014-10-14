@@ -51,7 +51,7 @@
               <%= dsf.link_to_remove "X" %>
             </div>
           </div>
-          <%= dsf.fields_for :parameters do |pf|%>
+          <%= dsf.fields_for :parameters, Parameter.new do |pf|%>
             <div class="row">
               <div class="col-xs-2 col-xs-offset-1">
                 <%= pf.label "Data name: " %>
@@ -150,7 +150,7 @@
     $('.new_scrape').submit( function (event) {
       var loading_gif = $('<img />').attr('src','<%= image_url "ajax-loader.gif" %>');
       $('.scrape_btn').html(loading_gif);
-    }).on('ajax:success', function () {
+    }).on('ajax:complete', function () {
       $('.scrape_btn').html('Scrape!');
     });
   });
