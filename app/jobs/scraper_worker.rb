@@ -118,7 +118,7 @@ class ScraperWorker
 			end
 		end
 
-		def perform(id, root_url)
+		def perform(id, root_url = nil)
 			unless id.is_a? String
 				scrape = Scrape.find(id["$oid"])
 			else
