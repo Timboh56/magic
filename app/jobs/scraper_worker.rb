@@ -63,8 +63,8 @@ class ScraperWorker
 				puts "Error scraping page: " + e.inspect + ", deleting proxy.."
 				puts "Attempting to rescrape page with new proxy ip for url: " + url.to_s
 
-				@current_proxy.destroy!
-				enqueue(url)
+				push_to_defective @current_proxy
+				enqueue(@agent.page.uri.to_s)
 			end
 		end
 
@@ -118,6 +118,10 @@ class ScraperWorker
 			end
 		end
 
+		def push_to_defective proxy
+			proxy.update_attributes!(:working => false)
+		end
+
 		def perform(id, root_url = nil)
 			unless id.is_a? String
 				scrape = Scrape.find(id["$oid"])
@@ -143,7 +147,7 @@ class ScraperWorker
 			@id = scrape["filename"] + DateTime.now.to_s
 
 			begin
-
+				puts "URL: " + @url.to_s
 				# load proxy list
 				open_proxies_csv
 
@@ -160,7 +164,7 @@ class ScraperWorker
 				puts e.to_s
 
 				puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
-				@current_proxy.destroy!
+				push_to_defective @current_proxy
 				enqueue(@url)
 			end
 		end
