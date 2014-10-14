@@ -44,7 +44,8 @@ class Scrape
         csv << get_csv_header_row(data_set.parameters)
 
         # data
-        data_set.record_sets do |record_set|
+        data_set.record_sets.each do |record_set|
+          puts record_set.inspect
           csv << get_csv_data_row(record_set)
         end
       end
