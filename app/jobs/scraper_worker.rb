@@ -62,7 +62,7 @@ class ScraperWorker
 				agent.keep_alive = true
 				agent.open_timeout = 2
 				agent.read_timeout = 2
-				agent.max_history = 1
+				agent.max_history = 2
 
 				puts "Setting Proxy"
 				@current_proxy = proxy.nil? ? get_random_proxy : proxy
