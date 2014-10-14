@@ -24,7 +24,6 @@ class ScraperWorker
 
 					# find links to pages to crawl on current page
 					current_page.search(sub_page.link_selector).each do |link|
-						
 						puts "	Clicking link with text: " + link.inspect
 						
 						Mechanize::Page::Link.new(link, @agent, @agent.page).click
@@ -59,10 +58,10 @@ class ScraperWorker
 		def set_agent_with_proxy(proxy = nil)
 			@agent = Mechanize.new { |agent|
 				agent.user_agent_alias = 'Mac Safari'
-				agent.keep_alive = true
-				agent.open_timeout = 2
-				agent.read_timeout = 2
-				agent.max_history = 2
+				agent.keep_alive = false
+				agent.open_timeout = 3
+				agent.read_timeout = 3
+				agent.max_history = 3
 
 				puts "Setting Proxy"
 				@current_proxy = proxy.nil? ? get_random_proxy : proxy
@@ -74,6 +73,7 @@ class ScraperWorker
 
 		def get_random_proxy
 			working_proxies = ProxyHost.where(:working => true)
+			raise "There are no working proxies. " if working_proxies.count == 0
 	  	rand_no = Random.rand(working_proxies.count)
 	  	proxy = working_proxies[rand_no]
 		end
