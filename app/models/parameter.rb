@@ -6,8 +6,7 @@ class Parameter
   field :include_whitespace, type: Boolean
   field :text_to_remove, type: String
   
-  belongs_to :link
-  belongs_to :scrape
+  belongs_to :data_set
 
   has_many :parameters
 

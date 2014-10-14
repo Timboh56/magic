@@ -1,4 +1,4 @@
-class Link
+class DataSet
 	include Mongoid::Document
 
 	field :link_selector, type: String

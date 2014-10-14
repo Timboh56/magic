@@ -90,7 +90,7 @@ class ScrapesController < ApplicationController
         :parameters_attributes => [
           :text_to_remove, :include_white_space, :name, :selector, :_destroy
         ],
-        :links_attributes => [
+        :data_sets_attributes => [
           :link_selector, :parameters_attributes => [
             :text_to_remove, :include_white_space, :name, :selector, :_destroy
             ]

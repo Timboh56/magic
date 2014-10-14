@@ -38,11 +38,11 @@ class ScraperWorker
 				puts "Scraping page: " + url.to_s
 
 				# if root url has any parameters to scrape..
-				@scrape.parameters.each do |parameter|
-					scrape_sub_page(current_page, @scrape)
+				@scrape.root_data_set.each do |parameter|
+					scrape_sub_page(current_page, @scrape.root_data_set)
 				end
 
-				@links.each do |crawl_link|
+				@sub_pages.each do |crawl_link|
 					puts "Looking for link with selector: " + crawl_link.link_selector.to_s + "..."
 
 					# find links to pages to crawl on current page
@@ -52,7 +52,7 @@ class ScraperWorker
 						
 						Mechanize::Page::Link.new(link, @agent, @agent.page).click
 
-						# scrape individual report page
+						# scrape individual page
 						scrape_sub_page(@agent.page, crawl_link)
 					end
 				end
@@ -145,7 +145,7 @@ class ScraperWorker
 
 			@next_selector = scrape["next_selector"]
 
-			@links = scrape.links
+			@sub_pages = scrape.sub_pages_data_sets
 
 			@proxies = []
 

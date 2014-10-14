@@ -6,17 +6,19 @@ class Scrape
   field :filename, :type => String
   field :next_selector, :type => String
   field :records_collected, :type => Integer, :default => 0
-  has_many :links
-
-  # if scraping just one page without crawling additional URLS
-  # this object can have many parameters
-  has_many :parameters
+  has_many :data_sets
 
   has_many :records
   
-  accepts_nested_attributes_for :links
-  accepts_nested_attributes_for :parameters
+  accepts_nested_attributes_for :data_sets
 
+  def root_data_set
+    data_sets.select { |d| !d.link_selector.present? }.first
+  end
+
+  def sub_pages_data_sets
+    data_sets.select { |d| d.link_selector.present? }
+  end
 
 	def run
 		Resque.enqueue(ScraperWorker, id)
