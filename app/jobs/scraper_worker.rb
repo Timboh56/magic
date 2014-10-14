@@ -12,9 +12,12 @@ class ScraperWorker
 				page_uri = @agent.page.uri.to_s
 				url = URI(page_uri)
 				#unless ScrapedPage.where(url: page_uri).exists?
-				scraped_page = ScrapedPage.create!(url: page_uri)
+				#scraped_page = ScrapedPage.create!(url: page_uri)
+				
 				current_page = @agent.page
 				puts "Scraping page: " + url.to_s
+
+				set_agent_with_proxy
 
 				# if root url has any parameters to scrape..
 				scrape_sub_page(current_page, @scrape.root_data_set) if @scrape.root_data_set.present?
@@ -88,7 +91,7 @@ class ScraperWorker
 					unless data == "" || data.match(/^\s*$/i)
 						csv_row.push data
 						params = { scrape_id: @scrape.id, record_set_id: record_set.id, parameter_id: parameter.id, text: data }
-						Record.create!(params) unless Record.where(params).exists?
+						Record.create!(params)
 					else
 						raise "Not all parameters found in page. Skipping.."
 					end
@@ -138,14 +141,18 @@ class ScraperWorker
 				puts @agent.page.class.name
 				scrape_page
 
-			rescue Exception => e
-				puts "Unable to get to website with IP, trying again with other proxy.."
-				puts e.to_s
+			rescue Mechanize::ResponseCodeError => exception
+			  if exception.response_code == '403'
+			    login_page = exception.page
+   				puts "Unable to get to website with IP, trying again with other proxy.."
+					puts e.to_s
 
-				puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
-				push_to_defective @current_proxy
-				enqueue(@url)
-			end
+					puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
+					push_to_defective @current_proxy
+					enqueue(@url)
+			  else
+			    raise # Some other error, re-raise
+			  end
 		end
 	end
 end
