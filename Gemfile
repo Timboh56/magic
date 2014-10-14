@@ -45,6 +45,8 @@ gem 'jquery-datatables-rails'
 
 gem 'render_csv', '~> 2.0.0'
 
+gem 'foreman'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

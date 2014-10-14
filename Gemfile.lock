@@ -64,6 +64,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     execjs (2.2.1)
+    foreman (0.62.0)
+      thor (>= 0.13.6)
     hike (1.2.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -202,6 +204,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   delayed_job_mongoid
   devise
+  foreman
   jbuilder (~> 2.0)
   jquery-datatables-rails
   jquery-rails
