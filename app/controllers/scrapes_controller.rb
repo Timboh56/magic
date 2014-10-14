@@ -19,6 +19,7 @@ class ScrapesController < ApplicationController
           send_data scrape.format_to_downloadable_csv
         end
         format.xls
+        format.html
       end
     rescue Exception => e
       puts e.inspect
