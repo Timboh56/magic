@@ -1,4 +1,4 @@
-class Proxy
+class ProxyHost
   include Mongoid::Document
 
   field :ip, type: String

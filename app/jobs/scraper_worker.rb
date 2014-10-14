@@ -7,32 +7,12 @@ class ScraperWorker
   @queue = :scraper_queue
 
   class << self
-		def open_proxies_csv
-			puts "Opening proxies csv"
-
-			Dir["proxy_lists/*.csv"].each do |csv_file_path|
-
-	  		puts csv_file_path
-	  		CSV.foreach(csv_file_path) do |row|
-					ip = row[0].split(':')[0]
-					port = row[0].split(':')[1]
-					Proxy.create!(ip: ip, port: port) unless Proxy.where(ip: ip).exists?
-				end
-	  	end
-			puts "Done with proxies csv."
-		end
-
-		def write_to_csv(row, filename = nil)
-			filename = filename || @output_filename.to_s
-			puts "Writing " + row.inspect + " to csv file " + filename.to_s
-			CSV.open("csvs/" + filename + ".csv", "ab") do |csv|
-			  csv << row
-			end
-		end
-
 		def scrape_page
 			begin
-				url = URI(@agent.page.uri.to_s)
+				page_uri = @agent.page.uri.to_s
+				url = URI(page_uri)
+				#unless ScrapedPage.where(url: page_uri).exists?
+				scraped_page = ScrapedPage.create!(url: page_uri)
 				current_page = @agent.page
 				puts "Scraping page: " + url.to_s
 
@@ -82,7 +62,7 @@ class ScraperWorker
 				agent.keep_alive = true
 				agent.open_timeout = 2
 				agent.read_timeout = 2
-				agent.max_history = 2
+				agent.max_history = 1
 
 				puts "Setting Proxy"
 				@current_proxy = proxy.nil? ? get_random_proxy : proxy
@@ -93,7 +73,7 @@ class ScraperWorker
 		end
 
 		def get_random_proxy
-			working_proxies = Proxy.where(:working => true)
+			working_proxies = ProxyHost.where(:working => true)
 	  	rand_no = Random.rand(working_proxies.count)
 	  	proxy = working_proxies[rand_no]
 		end
@@ -107,7 +87,8 @@ class ScraperWorker
 					data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
 					unless data == "" || data.match(/^\s*$/i)
 						csv_row.push data
-						Record.create!(scrape_id: @scrape.id, record_set_id: record_set.id, parameter_id: parameter.id, text: data)
+						params = { scrape_id: @scrape.id, record_set_id: record_set.id, parameter_id: parameter.id, text: data }
+						Record.create!(params) unless Record.where(params).exists?
 					else
 						raise "Not all parameters found in page. Skipping.."
 					end
@@ -148,8 +129,6 @@ class ScraperWorker
 
 			begin
 				puts "URL: " + @url.to_s
-				# load proxy list
-				open_proxies_csv
 
 				set_agent_with_proxy
 				@agent.get(URI(@url))

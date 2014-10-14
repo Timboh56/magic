@@ -19,7 +19,23 @@ class Scrape
     data_sets.select { |d| d.link_selector.present? }
   end
 
+  def open_proxies_csv
+    puts "Opening proxies csv"
+
+    Dir["proxy_lists/*.csv"].each do |csv_file_path|
+
+      puts csv_file_path
+      CSV.foreach(csv_file_path) do |row|
+        ip = row[0].split(':')[0]
+        port = row[0].split(':')[1]
+        ProxyHost.create!(ip: ip, port: port) unless ProxyHost.where(ip: ip).exists?
+      end
+    end
+    puts "Done with proxies csv."
+  end
+
 	def run
+    open_proxies_csv
 		Resque.enqueue(ScraperWorker, id)
 	end
 
