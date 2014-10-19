@@ -70,7 +70,6 @@ test:
 production:
   sessions:
     default:
-      database: scraper_production
       uri: <%= ENV['MONGOLAB_URI'] %>
   options: #strictly 2 spaces before
     raise_not_found_error: false #strictly 4 spaces before not 6
