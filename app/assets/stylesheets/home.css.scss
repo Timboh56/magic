@@ -18,12 +18,11 @@ body {
 }
 
 #recent-scrapes-table, #recent-blasts-table {
-	width: 100%;
-	margin: 20px;
-
+width: 90%;
+margin: 10px 5%;
 }
 
-.scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
+.home-container, .scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
 	background-color: rgba(244,244,244,.8);
 	padding: 20px;
 	border-radius: 10px;

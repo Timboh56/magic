@@ -2,8 +2,7 @@ class TwitterBlastsController < ApplicationController
 	def create
 		@twitter_blast = TwitterBlast.new(twitter_blast_params)
 		@twitter_blast.save!
-
-		@twitter_blast.blast
+		@twitter_blast.blast!
 	end
 
 	def new

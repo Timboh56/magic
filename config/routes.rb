@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :static_pages
   resources :scrapes
   resources :twitter_blasts
+
+  get '/scrape_ape' => "static_pages#scrape_ape"
   get '/twitter_blaster' => "static_pages#twitter_blaster"
   put '/scrape/:id/run' => "scrapes#run"
   put '/scrape/:id/restart' => "scrapes#restart"
