@@ -7,4 +7,9 @@ class StaticPagesController < ApplicationController
     @scrape = Scrape.new
     @scrapes = Scrape.all.order("created_at DESC")
   end
+
+  def twitter_blaster
+  	@twitter_blast = TwitterBlast.new
+  	@twitter_blasts = TwitterBlast.all.order("created_at DESC")
+  end
 end

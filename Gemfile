@@ -49,6 +49,8 @@ gem 'foreman'
 
 gem 'twitter'
 
+gem 'haml-rails', '>= 0.3.4'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

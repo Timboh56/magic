@@ -17,19 +17,23 @@ body {
   background-size: 200%;
 }
 
-#recent-scrapes-table {
+#recent-scrapes-table, #recent-blasts-table {
 	width: 100%;
-}
-.recent-scrapes-table {
 	margin: 20px;
+
 }
-.scrapeape_container, .recent-scrapes-container {
-background-color: rgba(244,244,244,.8);
-padding: 20px;
-border-radius: 10px;
-margin-top: 50px;
-width: 100%;
-margin: 50px auto;
+
+.scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
+	background-color: rgba(244,244,244,.8);
+	padding: 20px;
+	border-radius: 10px;
+	margin-top: 50px;
+	width: 100%;
+	margin: 50px auto;
+	textarea, input[type="text"] {
+			width: 100%;
+			resize: none;
+	}
 }
 
 footer {
@@ -45,10 +49,6 @@ footer {
 
 label {
 	font-size: .9em;
-}
-
-input[type="text"] {
-	width: 70%;
 }
 
 .row {

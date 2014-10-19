@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   devise_for :users
   resources :static_pages
   resources :scrapes
-
+  resources :twitter_blasts
+  get '/twitter_blaster' => "static_pages#twitter_blaster"
   put '/scrape/:id/run' => "scrapes#run"
   put '/scrape/:id/restart' => "scrapes#restart"
 

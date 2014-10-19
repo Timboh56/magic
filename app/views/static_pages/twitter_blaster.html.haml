@@ -1,0 +1,69 @@
+.twitter_blaster_container
+	%h1 Twitter blaster
+	.row.description
+		Provide a user handle and a message to send to that user's followers.
+	= nested_form_for @twitter_blast, { remote: true } do |f|
+		.row
+			.col-xs-12
+				.col-xs-3
+					%label Twitter Handle
+				.col-xs-9
+					= f.text_field :user_handle
+		.row
+			.col-xs-12
+				.col-xs-3
+					%label Message
+				.col-xs-9
+					= f.text_area :message
+		.row
+			.col-xs-12
+				= f.submit "Blast!", { class: "blast-btn" }
+
+.recent-blasts-container
+	.row
+		%h1 Recent Blasts
+	%table{ id: "recent-blasts-table" }
+		%thead
+			%th
+				Created at
+			%th
+				User Handle
+			%th
+				Messages sent
+			%th
+				Status
+			%th
+				Actions
+			%th
+		%tbody
+			- @twitter_blasts.each do |twitter_blast|
+				%tr
+					%td
+						= twitter_blast.created_at
+					%td
+						= twitter_blast.user_handle
+					%td
+						= twitter_blast.messages_sent
+					%td
+						= twitter_blast.status
+					%td
+						= link_to "Run", '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
+					%td
+						= link_to "Delete", twitter_blast_path(twitter_blast), method: :delete, data: { confirm: "Do you really wanna delete this? " }
+:javascript
+	$(document).ready( function () {
+		$('#recent-blasts-table').dataTable({
+			sPaginationType: "full",
+			bJQueryUI: true,
+			responsive: true,
+			"order": [[ 0, "desc" ]]
+		});
+		
+		$('.new_twitter_blast').submit( function (event) {
+			var loading_gif = $('<img />').attr('src','#{ image_url "ajax-loader.gif" }');
+			$('.blast-btn').html(loading_gif);
+		}).on('ajax:complete', function () {
+			$('.blast-btn').html('Scrape!');
+		});
+
+	});
