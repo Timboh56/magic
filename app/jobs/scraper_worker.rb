@@ -15,7 +15,7 @@ class ScraperWorker
 
       set_agent_with_proxy
 
-      save_last_url
+      save_last_url(url)
 
       # if root url has any parameters to scrape..
       scrape_sub_page(current_page, @scrape.root_data_set) if @scrape.root_data_set.present?
@@ -169,9 +169,9 @@ class ScraperWorker
       end
     end
 
-    def save_last_url
+    def save_last_url(url = nil)
       @scrape.status = "Stopped"
-      @scrape.last_scanned_url = @agent.page.uri.to_s
+      @scrape.last_scanned_url = url || @agent.page.uri.to_s
       @scrape.save!
     end
   end
