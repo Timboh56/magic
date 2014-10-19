@@ -4,12 +4,16 @@
 
 
 // font overrides
-h1, .brand{
-	font-family: 'Indie Flower', cursive;
+h1, .brand {
+	font-family: 'Oswald';
 }
 
+.brand {
+	margin: 14px 0;
+}
 body {
-	background-image: url("/assets/ape.jpg");
+  background-color: #00ff00;
+	//background-image: url("/assets/ape.jpg");
 	background-repeat: no-repeat;
   -webkit-background-size: 200%;
   -moz-background-size: 200%;
@@ -23,8 +27,8 @@ margin: 10px 5%;
 }
 
 .home-container, .scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
-	background-color: rgba(244,244,244,.8);
-	padding: 20px;
+	//background-color: rgba(244,244,244,.8);
+	padding: 0 20px;
 	border-radius: 10px;
 	margin-top: 50px;
 	width: 100%;
@@ -35,6 +39,14 @@ margin: 10px 5%;
 	}
 }
 
+.left-aligned {
+	text-align: left !important;
+}
+ul li {
+	margin: 1em 0;
+	text-decoration: none;
+	list-style-type: none;
+}
 footer {
 	background: white;
 	width: 100%;
