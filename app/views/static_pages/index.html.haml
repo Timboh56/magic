@@ -1,5 +1,3 @@
-= content_for :js_block do
-	= javascript_include_tag "home"
 .bounce-container
 	.container-fluid.bounce.jumbotron
 		%h1{ id: "b" }
@@ -31,3 +29,9 @@
 				%li
 					%b Scrape not going as planne? No problemo.
 					Pause/stop/run your web scraper anytime. We use background workers to ensure that the scraper keeps running at all times.
+:javascript
+	$(document).ready( function () {
+		bounce();
+		set_bounce();
+		createTransition("b");
+	});
