@@ -94,7 +94,7 @@ class ScrapesController < ApplicationController
   def destroy
     @scrape.destroy
     respond_to do |format|
-      format.html { redirect_to "/", notice: 'Scrape was successfully destroyed.' }
+      format.html { redirect_to scrapers_path, notice: 'Scrape was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

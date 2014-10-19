@@ -34,8 +34,9 @@
 			%th
 				Status
 			%th
-				Actions
+				Run
 			%th
+				Delete
 		%tbody
 			- @twitter_blasts.each do |twitter_blast|
 				%tr
@@ -48,9 +49,9 @@
 					%td
 						= twitter_blast.status
 					%td
-						= link_to "Run", '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
+						= link_to fa_icon("play"), '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
 					%td
-						= link_to "Delete", twitter_blast_path(twitter_blast), method: :delete, data: { confirm: "Do you really wanna delete this? " }
+						= link_to fa_icon("trash-o"), twitter_blast_path(twitter_blast), method: :delete, data: { confirm: "Do you really wanna delete this? " }
 :javascript
 	$(document).ready( function () {
 		$('#recent-blasts-table').dataTable({
