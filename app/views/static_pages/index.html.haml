@@ -1,10 +1,15 @@
+= content_for :js_block do
+	= javascript_include_tag "home"
+.bounce-container
+	.container-fluid.bounce.jumbotron
+		%h1{ id: "b" }
+			= fa_icon "magic", text: "DopeMagic! Web tools"
+		.row
+			.col-xs-8.col-xs-offset-2{ style: "margin-top: 12px; "}
+				DopeMagic! Web tools is your ultimate source for scraping, email blasting, SMS gateway and other great growth hacking tools. Email tim@wrent.it for more info.
 .home-container
-	%h1
-		DopeMagic! Web tools
 	.row
-		DopeMagic! Web tools is your ultimate source for scraping, email blasting, SMS gateway and other great growth hacking tools. Email tim@wrent.it for more info.
-	.row
-		.col-xs-8.col-xs-offset-2
+		.col-lg-8.col-lg-offset-2
 			%b Features:
 
 			%ul.left-aligned

@@ -18,7 +18,9 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
+
+gem 'jquery-ui-rails', '~> 5.0.2'
+
 gem 'mechanize'
 gem 'smarter_csv'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -50,6 +52,8 @@ gem 'foreman'
 gem 'twitter'
 
 gem 'haml-rails', '>= 0.3.4'
+
+gem 'font-awesome-rails'
 
 
 # Use ActiveModel has_secure_password

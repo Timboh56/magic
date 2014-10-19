@@ -5,11 +5,31 @@
 
 // font overrides
 h1, .brand {
-	font-family: 'Oswald';
+	font-family: 'Ubuntu';
 }
-
+.bounce-container{
+	top: 50px;
+	 height: 220px;
+	 width: 100%;
+	 position: absolute;
+	 color: #00000;
+}
+a:hover {
+	color: gray !important;
+	background: none !important;
+}
+.bounce {
+	width: 100%;
+	bottom: 0px;
+	position: absolute;
+	background: none !important;
+}
 .brand {
 	margin: 14px 0;
+}
+.home-container {
+	top: 240px;
+	position: relative;
 }
 body {
   background-color: #00ff00;
@@ -30,9 +50,8 @@ margin: 10px 5%;
 	//background-color: rgba(244,244,244,.8);
 	padding: 0 20px;
 	border-radius: 10px;
-	margin-top: 50px;
 	width: 100%;
-	margin: 50px auto;
+	margin: 20px auto;
 	textarea, input[type="text"] {
 			width: 100%;
 			resize: none;

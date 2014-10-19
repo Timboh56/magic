@@ -1,5 +1,6 @@
 .twitter_blaster_container
-	%h1 Twitter blaster
+	%h1 
+		= fa_icon "twitter",  text: "Twitter Blaster"
 	.row.description
 		Provide a user handle and a message to send to that user's followers.
 	= nested_form_for @twitter_blast, { remote: true } do |f|
