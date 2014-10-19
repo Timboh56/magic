@@ -9,8 +9,13 @@ class ScrapesController < ApplicationController
   end
 
   def run
-    scrape = Scrape.find(params[:id])
-    scrape.run
+    begin
+      scrape = Scrape.find(params[:id])
+      scrape.run
+    rescue Exception => e
+      @errors = "Error(s): " + e.message
+      render :partial => "shared/errors", status: :unprocessable_entity
+    end
   end
 
   def restart
@@ -65,7 +70,8 @@ class ScrapesController < ApplicationController
         end
       end
     rescue Exception => e
-      puts e.inspect
+      @errors = "Error(s): " + e.message
+      render :partial => "shared/errors", status: :unprocessable_entity
     end
   end
 

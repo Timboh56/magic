@@ -1,8 +1,13 @@
 class TwitterBlastsController < ApplicationController
 	def create
-		@twitter_blast = TwitterBlast.new(twitter_blast_params)
-		@twitter_blast.save!
-		@twitter_blast.blast!
+		begin
+			@twitter_blast = TwitterBlast.new(twitter_blast_params)
+			@twitter_blast.save!
+			@twitter_blast.blast!
+		rescue Exception => e
+			@errors = "Error(s): " + e.message
+			render :partial => "shared/errors", status: :unprocessable_entity
+		end
 	end
 
 	def new
