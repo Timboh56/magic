@@ -8,6 +8,16 @@ class ScrapesController < ApplicationController
     @scrapes = Scrape.all
   end
 
+  def run
+    scrape = Scrape.find(params[:id])
+    scrape.run
+  end
+
+  def restart
+    scrape = Scrape.find(params[:id])
+    scrape.restart
+  end
+
   # GET /scrapes/1
   # GET /scrapes/1.json
   def show
@@ -92,7 +102,7 @@ class ScrapesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def scrape_params
       params.require(:scrape).permit(
-        :URL, :filename, :next_selector, :_destroy,
+        :URL, :filename, :next_selector, :use_proxies, :_destroy,
         :data_sets_attributes => [
           :link_selector, :_destroy, :parameters_attributes => [
             :name, :text_to_remove, :include_whitespace, :selector, :_destroy

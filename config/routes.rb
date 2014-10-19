@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   resources :static_pages
   resources :scrapes
 
+  put '/scrape/:id/run' => "scrapes#run"
+  put '/scrape/:id/restart' => "scrapes#restart"
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

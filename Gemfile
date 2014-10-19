@@ -47,6 +47,8 @@ gem 'render_csv', '~> 2.0.0'
 
 gem 'foreman'
 
+gem 'twitter'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

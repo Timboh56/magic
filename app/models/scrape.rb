@@ -5,9 +5,14 @@ class Scrape
   field :URL, :type => String
   field :filename, :type => String
   field :next_selector, :type => String
+  field :use_proxies, :type => Boolean, :default => false
+  field :last_scanned_url, :type => String
+  field :status, :type => String
+
   has_many :data_sets
 
   has_many :records
+  has_many :record_sets
   
   accepts_nested_attributes_for :data_sets
 
@@ -26,8 +31,14 @@ class Scrape
 
       puts csv_file_path
       CSV.foreach(csv_file_path) do |row|
-        ip = row[0].split(':')[0]
-        port = row[0].split(':')[1]
+        puts "csv"
+        if row[0].include? ";"
+          ip = row[0].split(';')[0]
+          port = row[0].split(';')[1]
+        else
+          ip = row[0].split(':')[0]
+          port = row[0].split(':')[1]
+        end
         ProxyHost.create!(ip: ip, port: port) unless ProxyHost.where(ip: ip).exists?
       end
     end
@@ -36,8 +47,14 @@ class Scrape
 
 	def run
     open_proxies_csv
-		Resque.enqueue(ScraperWorker, id)
+		Resque.enqueue(ScraperWorker, id, last_scanned_url.present?)
 	end
+
+  def restart
+    open_proxies_csv
+    record_sets.destroy_all
+    Resque.enqueue(ScraperWorker, id)
+  end
 
   def get_csv_data_row record_set
     record_set.records.map { |r| r.text }
@@ -60,7 +77,7 @@ class Scrape
         csv << get_csv_header_row(data_set.parameters)
 
         # data
-        data_set.record_sets.each do |record_set|
+        data_set.record_sets.order("created_at ASC").each do |record_set|
           puts record_set.inspect
           csv << get_csv_data_row(record_set)
         end
