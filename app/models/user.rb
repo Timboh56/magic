@@ -5,6 +5,8 @@ class User
   field :uid, type: String
   field :provider, type: String
   field :name, type: String
+  field :oauth_token, type: String
+  field :oauth_secret, type: String
 
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
@@ -15,6 +17,14 @@ class User
       user.provider = auth["provider"]
       user.uid = auth["uid"]
       user.name = auth["info"]["nickname"]
+      user.oauth_token = auth["credentials"]["token"]
+      user.oauth_secret = auth["credentials"]["secret"]
+    end
+  end
+
+  def twitter
+    if provider == "twitter"
+      @twitter ||= Twitter::Client.new(oauth_token: oauth_token, oauth_token_secret: oauth_secret)
     end
   end
 end

@@ -3,7 +3,7 @@ class TwitterBlastsController < ApplicationController
 		begin
 			@twitter_blast = TwitterBlast.new(twitter_blast_params)
 			@twitter_blast.save!
-			@twitter_blast.blast!
+			@twitter_blast.blast!(current_user)
 		rescue Exception => e
 			@errors = "Error(s): " + e.message
 			render :partial => "shared/errors", status: :unprocessable_entity
