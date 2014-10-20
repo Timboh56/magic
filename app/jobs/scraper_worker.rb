@@ -126,7 +126,7 @@ class ScraperWorker
 
         @scrape = scrape
 
-        @scrape.status => "Running.."
+        @scrape.status = "Running.."
 
         @scrape.save!
         
@@ -153,8 +153,7 @@ class ScraperWorker
         page = @agent.page
         scrape_page
 
-      rescue Timeout::Error => et, WWW::Mechanize::ResponseCodeError => ex
-        puts et.inspect
+      rescue Timeout::Error, WWW::Mechanize::ResponseCodeError
         if @scrape.use_proxies
           puts "Unable to get to website with IP, trying again with other proxy.."
           puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
@@ -163,9 +162,11 @@ class ScraperWorker
         save_last_url(@url)
         enqueue(@url)
       rescue Exception => e
-        @scrape.status => "Error"
+
+        puts e.inspect
+
+        @scrape.status = "Error"
         @scrape.save!
-        # other exception occurred
       end
     end
 
