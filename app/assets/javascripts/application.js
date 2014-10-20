@@ -21,6 +21,13 @@
 //= require dataTables/extras/dataTables.responsive
 var window = window || document.window;
 
+$(document).on('click', '.toggle-btn', function () {
+	var klass = $(this).data('toggle');
+	var id = $(this).attr('id');
+	$(klass).addClass('hide');
+	$('#' + id + klass).toggleClass('hide');
+});
+
 function set_bounce() {
 	setInterval(function () {
 		setTimeout( function () {

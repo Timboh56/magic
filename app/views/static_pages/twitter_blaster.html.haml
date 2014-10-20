@@ -6,22 +6,53 @@
 	%div#user_nav
 		- if current_user.nil?
 			= link_to "Sign in with Twitter", "/auth/twitter"
-	= nested_form_for @twitter_blast, { remote: true } do |f|
-		.row
-			.col-xs-12
-				.col-xs-3
-					%label Twitter Handle
-				.col-xs-9
-					= f.text_field :user_handle
-		.row
-			.col-xs-12
-				.col-xs-3
-					%label Message
-				.col-xs-9
-					= f.text_area :message
-		.row
-			.col-xs-12
-				= f.submit "Blast!", { class: "blast-btn" }
+	.row
+		.col-xs-12
+			%a.btn.btn-default.toggle-btn{ id: "handles", "data-toggle" => ".twitter-blast-form" }
+				Use Handles
+			%a.btn.btn-default.toggle-btn{ id: "followers", "data-toggle" => ".twitter-blast-form" }
+				Use Followers			
+	.twitter-blast-handles-form.twitter-blast-form.hide{ id: "handles" }
+		= nested_form_for @twitter_blast, { remote: true } do |f|
+			= f.hidden_field :blast_type, value: "handles"
+			.row
+				%h1 Tweet to handles
+			.row
+				.col-xs-12
+					.col-xs-3
+						%label Twitter handles (separated by comma or newline)
+					.col-xs-9
+						= f.text_area :twitter_handles
+			.row
+				.col-xs-12
+					.col-xs-3
+						%label Message
+					.col-xs-9
+						= f.text_area :message
+			.row
+				.col-xs-12
+					= f.submit "Blast!", { class: "blast-btn" }
+	.twitter-blast-followers-form.twitter-blast-form.hide{ id: "followers"}
+		= nested_form_for @twitter_blast, { remote: true } do |f|
+			= f.hidden_field :blast_type, value: "followers"
+			.row
+				%h1
+					Tweet to followers
+			.row
+				.col-xs-12
+					.col-xs-3
+						%label Twitter Handle
+					.col-xs-9
+						= f.text_field :user_handle
+			.row
+				.col-xs-12
+					.col-xs-3
+						%label Message
+					.col-xs-9
+						= f.text_area :message
+			.row
+				.col-xs-12
+					= f.submit "Blast!", { class: "blast-btn" }
 .recent-blasts-container
 	.row
 		%h1 Recent Blasts
