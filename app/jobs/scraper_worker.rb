@@ -153,7 +153,7 @@ class ScraperWorker
         page = @agent.page
         scrape_page
 
-      rescue Timeout::Error, WWW::Mechanize::ResponseCodeError
+      rescue Timeout::Error, Mechanize::ResponseCodeError
         if @scrape.use_proxies
           puts "Unable to get to website with IP, trying again with other proxy.."
           puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
