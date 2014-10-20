@@ -53,15 +53,6 @@ class ScraperWorker
       end
     end
 
-    def node_to_uri node
-      uri = URI(node.attributes['href'].value.to_s).to_s
-      if uri.match(/^(http|https):\/.+(\.(com|net|org|gov|it|biz))/).nil?
-        @website_root + uri
-      else
-        uri
-      end
-    end
-
     def enqueue(url)
 
       puts "Queuing shit up with url: " + url.inspect
@@ -131,25 +122,30 @@ class ScraperWorker
         scrape = Scrape.find(id)
       end
 
-      @scrape = scrape
-
-      @next_selector = scrape.next_selector
-
-      @sub_pages = scrape.sub_pages_data_sets
-
-      @proxies = []
-
-      @current_proxy = {}
-
-      @output_filename = scrape["filename"] || DateTime.now.to_s
-
-      @url = continue == true ? @scrape.last_scanned_url : (root_url || scrape["URL"])
-
-      @website_root = @url.match(/^((http|https):\/.+(\.(com|net|org|gov|it|biz)))/)[1]
-
-      @id = scrape["filename"] + DateTime.now.to_s
-
       begin
+
+        @scrape = scrape
+
+        @scrape.status => "Running.."
+
+        @scrape.save!
+        
+        @next_selector = scrape.next_selector
+
+        @sub_pages = scrape.sub_pages_data_sets
+
+        @proxies = []
+
+        @current_proxy = {}
+
+        @output_filename = scrape["filename"] || DateTime.now.to_s
+
+        @url = continue == true ? @scrape.last_scanned_url : (root_url || scrape["URL"])
+
+        @website_root = @url.match(/^((http|https):\/.+(\.(com|net|org|gov|it|biz)))/)[1]
+
+        @id = scrape["filename"] + DateTime.now.to_s
+
         puts "URL: " + @url.to_s
 
         set_agent_with_proxy
@@ -157,20 +153,32 @@ class ScraperWorker
         page = @agent.page
         scrape_page
 
-      rescue Exception => e
-        puts e.inspect
+      rescue Timeout::Error => et, WWW::Mechanize::ResponseCodeError => ex
+        puts et.inspect
         if @scrape.use_proxies
           puts "Unable to get to website with IP, trying again with other proxy.."
           puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
           push_to_defective @current_proxy
         end
-        save_last_url
+        save_last_url(@url)
         enqueue(@url)
+      rescue Exception => e
+        @scrape.status => "Error"
+        @scrape.save!
+        # other exception occurred
+      end
+    end
+
+    def node_to_uri node
+      uri = URI(node.attributes['href'].value.to_s).to_s
+      if uri.match(/^(http|https):\/.+(\.(com|net|org|gov|it|biz))/).nil?
+        @website_root + uri
+      else
+        uri
       end
     end
 
     def save_last_url(url = nil)
-      @scrape.status = "Stopped"
       @scrape.last_scanned_url = url || @agent.page.uri.to_s
       @scrape.save!
     end

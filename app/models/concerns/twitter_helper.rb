@@ -1,8 +1,10 @@
 module TwitterHelper
 	def twitter_client
-		client = Twitter::REST::Client.new do |config|
-		  config.consumer_key    = "k835HQO0vkJuseCB2b0QMGOhR" || ENV["TWITTER_CONSUMER_KEY"]
-		  config.consumer_secret = "3VywVRrvOv3C6SGyhjzuuHH3M4xTPyqEImD4omYSGTuQJhaC5Z" || ENV["TWITTER_CONSUMER_SECRET"]
+		@client ||= Twitter::REST::Client.new do |config|
+		  config.consumer_key    = "1SzfIhMcCxz5UwfhT6RlC7hON" || ENV["TWITTER_CONSUMER_KEY"]
+		  config.consumer_secret = "smg6wZaOVcyTOp4dBQawnIE1E6XWs5SjCzemQXiK3r7gfiPYoL" || ENV["TWITTER_CONSUMER_SECRET"]
+			config.access_token = "2214765794-1WkCygxJhhbvt8PJ0uf24tmcv9UfzV7HrsjPjEN"
+			config.access_token_secret = "b2d7xptVILjHbn3EYJrSjGZOm14mNftyywNrK5xIew0hf"
 		end
 	end
 end

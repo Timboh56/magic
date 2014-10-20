@@ -3,6 +3,9 @@
 		= fa_icon "twitter",  text: "Twitter Blaster"
 	.row.description
 		Provide a user handle and a message to send to that user's followers.
+	%div#user_nav
+		- if current_user.nil?
+			= link_to "Sign in with Twitter", "/auth/twitter"
 	= nested_form_for @twitter_blast, { remote: true } do |f|
 		.row
 			.col-xs-12
@@ -19,7 +22,6 @@
 		.row
 			.col-xs-12
 				= f.submit "Blast!", { class: "blast-btn" }
-
 .recent-blasts-container
 	.row
 		%h1 Recent Blasts

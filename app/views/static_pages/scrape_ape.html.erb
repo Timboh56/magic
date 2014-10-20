@@ -144,7 +144,7 @@
               <%= link_to fa_icon("play"), "/scrape/" + scrape.id.to_s + "/run", { method: :put, data: { remote: true }, alt: "run" } %>
             </td>
             <td>
-              <%= link_to fa_icon("refresh"), "/scrape/" + scrape.id.to_s + "/restart", method: :put, data: { remote: true } %>
+              <%= link_to fa_icon("refresh"), "/scrape/" + scrape.id.to_s + "/restart", method: :put, data: { confirm: "Are you sure you want to reset this? All your current data scraped will be deleted.", remote: true } %>
             </td>
             <td>
               <%= link_to fa_icon("download"), scrape_path(id: scrape.id, format: :csv) %>
