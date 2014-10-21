@@ -2,6 +2,7 @@ class TwitterBlast
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  field :name, :type => String
   field :user_handle, :type => String
   field :status, :type => String
   field :message, :type => String

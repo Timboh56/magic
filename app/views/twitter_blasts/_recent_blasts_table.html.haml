@@ -6,6 +6,10 @@
 			%th
 				Created at
 			%th
+				Name
+			%th
+				Type
+			%th
 				User Handle
 			%th
 				Messages sent
@@ -25,6 +29,10 @@
 					%td
 						= twitter_blast.created_at
 					%td
+						= twitter_blast.name
+					%td
+						= twitter_blast.blast_type
+					%td
 						= twitter_blast.user_handle
 					%td
 						= twitter_blast.messages_sent
@@ -35,7 +43,7 @@
 					%td
 						= link_to "Edit", edit_twitter_blast_path(twitter_blast)
 					%td
-						= link_to fa_icon("refresh"), '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
+						= link_to fa_icon("play"), '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
 					%td
 						= link_to fa_icon("trash-o"), twitter_blast_path(twitter_blast), method: :delete, data: { confirm: "Do you really wanna delete this? " }
 :javascript

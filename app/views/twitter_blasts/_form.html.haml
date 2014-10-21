@@ -10,6 +10,11 @@
 = form_for @twitter_blast do |f|
 	.row
 		.col-xs-4
+			= f.label "Name:"
+		.col-xs-8
+			= f.text_field :name
+	.row
+		.col-xs-4
 			= f.label "User handle (send to followers):"
 		.col-xs-8
 			= f.text_field :user_handle
