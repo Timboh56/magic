@@ -82,8 +82,11 @@ ul li {
 footer {
 	background: white;
 	width: 100%;
-	position: relative;
+	position: fixed;
 	bottom: 0px;
+}
+.layout-container {
+	margin-bottom: 30px !important;
 }
 
 .fields {
