@@ -19,6 +19,6 @@ class ApplicationController < ActionController::Base
 
   def show_errors(e)
     @errors = "Error(s): " + e.message
-    render :partial => "shared/errors", status: :unprocessable_entity
+    render :partial => "shared/errors.js", status: :unprocessable_entity
   end
 end

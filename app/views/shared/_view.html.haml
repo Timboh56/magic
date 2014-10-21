@@ -1,0 +1,14 @@
+.show-container
+	%h1 Viewing #{ obj.class.name }
+	.row
+		= link_to "Edit", send("edit_#{obj.class.name.underscore.downcase}_path", obj), { class: "btn btn-default" }
+	.row
+		.col-xs-12
+			= obj.id
+	- obj.attributes.each do |a|
+		.row
+			.col-xs-2.right-aligned
+				%label
+					= a[0].gsub("_", " ").capitalize
+			.col-xs-10.left-aligned
+				= a[1]

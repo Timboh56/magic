@@ -1,5 +1,6 @@
 class TwitterBlastsController < ApplicationController
 	before_action :check_current_user
+	layout "home"
 
 	def check_current_user
 		if current_user.nil?
@@ -17,6 +18,9 @@ class TwitterBlastsController < ApplicationController
 
 	end
 
+	def show
+		@twitter_blast = TwitterBlast.find(params[:id])
+	end
 	def destroy
 		TwitterBlast.find(params[:id]).destroy
     respond_to do |format|

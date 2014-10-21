@@ -1,0 +1,12 @@
+= render :partial => "shared/view", locals: { obj: @twitter_blast }
+
+.show-container
+	.row
+		%h2 Twitter handles
+	.row
+		.col-xs-12
+			- if @twitter_blast.records.length > 0
+				- @twitter_blast.records.each do |handle|
+					#{ handle.text }
+			- else
+				None to show.

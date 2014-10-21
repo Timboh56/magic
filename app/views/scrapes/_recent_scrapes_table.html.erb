@@ -4,12 +4,18 @@
     <h1> Recent Scrapes </h1>
   </div>
   <div class="row">
+    <div class="col-lg-12">
+      <%= link_to "Stop all workers", "/scrape/stop_all", { remote: true, class: "btn btn-default" } %>
+    </div>
+  </div>
+  <div class="row">
     <table id="recent-scrapes-table">
       <thead>
         <th>Created at</th>
         <th>File name</tH>
         <th>Records collected</th>
         <th>Status</th>
+        <th>View</th>
         <th>Run</th>
         <th>Restart</th>        
         <th>Download CSV</th>
@@ -22,6 +28,7 @@
             <td><%= scrape.filename %></td>
             <td><%= scrape.records.count %></td>
             <td><%= scrape.status %></td>
+            <td><%= link_to "View", scrape_path(scrape), { class: "view_link"} %></td>
             <td>
               <%= link_to fa_icon("play"), "/scrape/" + scrape.id.to_s + "/run", { method: :put, data: { remote: true }, alt: "run" } %>
             </td>

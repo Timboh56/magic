@@ -1,6 +1,8 @@
 class ScrapesController < ApplicationController
   before_action :set_scrape, only: [:show, :edit, :update, :destroy]
   respond_to :html, :js, :csv
+  layout 'home'
+
 
   # GET /scrapes
   # GET /scrapes.json
@@ -121,10 +123,10 @@ class ScrapesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def scrape_params
       params.require(:scrape).permit(
-        :URL, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
+        :URL, :id, :_id, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
         :data_sets_attributes => [
-          :link_selector, :_destroy, :parameters_attributes => [
-            :name, :text_to_remove, :include_whitespace, :selector, :_destroy
+          :id, :_id, :link_selector, :_destroy, :parameters_attributes => [
+            :id, :_id, :name, :text_to_remove, :include_whitespace, :selector, :_destroy
           ]
         ]
       )

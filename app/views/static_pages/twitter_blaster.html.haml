@@ -68,6 +68,8 @@
 			%th
 				Status
 			%th
+				View
+			%th
 				Run
 			%th
 				Delete
@@ -82,6 +84,8 @@
 						= twitter_blast.messages_sent
 					%td
 						= twitter_blast.status
+					%td
+						= link_to "View", twitter_blast_path(twitter_blast)
 					%td
 						= link_to fa_icon("play"), '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
 					%td

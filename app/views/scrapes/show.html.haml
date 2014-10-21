@@ -1,3 +1,1 @@
-p#notice
-	= notice
-= link_to "Edit", edit_scrape_path(@scrape)
+= render :partial => "shared/view", locals: { obj: @scrape }
