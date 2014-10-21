@@ -42,16 +42,18 @@ class ScraperWorker
       end
       
       if @next_selector.present?
-        next_link = current_page.search(@next_selector).last 
+        next_link = current_page.search(@next_selector).last
+        @agent.get(node_to_uri(next_link)) 
 
       else
 
-        # use URL parameters to find next
-        next_link = @scrape.page_parameterized_url.gsub(":id", (@page_interval * @page_index).to_s)
-        @page_interval += 1
-      end
+        @page_index += 1
 
-      @agent.get(node_to_uri(next_link))
+        # use URL parameters to find next
+        next_link = @scrape.page_parameterized_url.gsub(":page", (@page_interval * @page_index).to_s)
+
+        @agent.get(next_link)
+      end
 
       unless next_link.nil?
         puts "Clicked next link: " + next_link.to_s
@@ -103,7 +105,7 @@ class ScraperWorker
           data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
           unless data == "" || data.match(/^\s*$/i)
             csv_row.push data
-            params = { scrape_id: @scrape.id parameter_id: parameter.id, text: data }
+            params = { scrape_id: @scrape.id, parameter_id: parameter.id, text: data }
             unless Record.where(params).exists?
               record = Record.create!(params.merge!({ record_set_id: record_set.id}))
               puts "Whoop Whoop! Record added: " + params.inspect
@@ -174,9 +176,7 @@ class ScraperWorker
         end
         save_last_url(@url)
       rescue Exception => e
-
         puts e.inspect
-
         @scrape.status = "Error"
         @scrape.save!
       end

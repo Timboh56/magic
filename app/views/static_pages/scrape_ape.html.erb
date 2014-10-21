@@ -9,6 +9,14 @@
       </div>
     </div>
     <div class="row">
+      <div class='col-xs-2'>
+        <%= f.label "Name " %>
+      </div>
+      <div class="col-xs-9">
+        <%= f.text_field "filename", required: true %>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-lg-12">
         <div class="row">
           <div class='col-xs-2'>
@@ -31,7 +39,7 @@
         </div>
         <div class="row">
           <div class="col-lg-12">
-            If you want to use a URL with page number parameters, enter ":id" wherever you want page number parsed to paginate, or use a page paginator selector.
+            If you want to use a URL with page number parameters, enter ":page" wherever you want page number to be parsed in the URL. Otherwise, you may use a selector to find a page paginator button.
           </div>
         </div>
         <div class="row">
@@ -64,14 +72,6 @@
           </div>
           <div class="col-xs-9">
             <%= f.text_field "next_selector" %>
-          </div>
-        </div>
-        <div class="row">
-          <div class='col-xs-2'>
-            <%= f.label "Name " %>
-          </div>
-          <div class="col-xs-9">
-            <%= f.text_field "filename", required: true %>
           </div>
         </div>
         <div class="row" style="margin: 2em 0;">

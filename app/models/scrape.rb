@@ -48,7 +48,7 @@ class Scrape
   end
 
 	def run
-    open_proxies_csv
+    open_proxies_csv if use_proxies
 		Resque.enqueue(ScraperWorker, id, last_scanned_url.present?)
 	end
 

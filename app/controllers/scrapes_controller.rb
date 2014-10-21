@@ -65,11 +65,11 @@ class ScrapesController < ApplicationController
           format.json { render :show, status: :created, location: @scrape }
         else
           #format.html { render :new }
-
           format.json { render json: @scrape.errors, status: :unprocessable_entity }
         end
       end
     rescue Exception => e
+      puts e.inspect
       @errors = "Error(s): " + e.message
       render :partial => "shared/errors", status: :unprocessable_entity
     end
