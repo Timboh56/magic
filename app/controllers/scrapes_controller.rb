@@ -89,6 +89,19 @@ class ScrapesController < ApplicationController
     end
   end
 
+  def get_scrapes_table_info
+    @scrapes = Scrape.all
+    render :partial => "scrapes/recent_scrapes_table"
+  end
+
+  def stop_all_scrapes
+    Resque.workers.each {|w| w.unregister_worker}
+    Scrape.all.each do |scrape|
+      scrape.status = "Stopped"
+      scrape.save!
+    end
+  end
+
   # DELETE /scrapes/1
   # DELETE /scrapes/1.json
   def destroy

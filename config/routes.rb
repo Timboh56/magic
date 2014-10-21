@@ -67,7 +67,8 @@ Rails.application.routes.draw do
   #   end
   root :to => 'static_pages#index'
   mount Resque::Server, :at => "/resque"
-
+  get '/scrape/stop_all', to: "scrapes#stop_all_scrapes"
+  get '/scrape/get_scrapes', to: "scrapes#get_scrapes_table_info"
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
