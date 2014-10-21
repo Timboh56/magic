@@ -5,7 +5,7 @@
 		Use a list of twitter handles separated by commas with a message for the users, or provide a user handle and a message to send to that user's followers.
 	- if current_user.nil?
 		%div#user_nav
-			= link_to "Sign in with Twitter", "/auth/twitter"
+			= link_to "Sign in with Twitter", "/auth/twitter", { class: "btn btn-default" }
 	- else
 		.row
 			.col-xs-12
