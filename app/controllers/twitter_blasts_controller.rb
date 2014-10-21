@@ -24,6 +24,7 @@ class TwitterBlastsController < ApplicationController
 	def update
 		@twitter_blast = TwitterBlast.find(params[:id])
 		@twitter_blast.update_attributes!(params[:twitter_blast])
+		redirect_to "/twitter_blaster"
 	end
 
 	def get_blasts
