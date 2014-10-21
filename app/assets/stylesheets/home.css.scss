@@ -35,7 +35,7 @@ a:hover {
 	margin: 14px 0;
 }
 .home-container {
-	top: 240px;
+	margin-top: 240px !important;
 	position: relative;
 }
 #user_nav {
@@ -82,11 +82,15 @@ ul li {
 footer {
 	background: white;
 	width: 100%;
-	position: fixed;
+	position: relative;
 	bottom: 0px;
+	text-align: center;
 }
 .layout-container {
 	margin-bottom: 30px !important;
+	height: auto;
+	position: relative;
+	overflow: auto;
 }
 
 .fields {
