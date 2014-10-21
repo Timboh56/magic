@@ -24,8 +24,8 @@ class TwitterBlast
   def tweet_to from, to
 
     #twitter_client.create_direct_message(follower, message)
-    twitter_client(from).update("@#{ to } " + message)
-    
+    response = twitter_client(from).update("@#{ to } " + message)
+
     self.messages_sent = self.messages_sent + 1
 
     # create a record
@@ -33,21 +33,16 @@ class TwitterBlast
   end
 
   def blast!(user)
-    begin
-      if blast_type == "followers"
-        get_user_followers.each do |follower|
-          sn = follower.screen_name
-          puts "Tweeting to: " + sn
-          tweet_to(user, sn)
-        end
-      else
-        blast_type.split(",").each do |handle|
-          tweet_to(user, handle.strip)
-        end
+    if blast_type == "followers"
+      get_user_followers.each do |follower|
+        sn = follower.screen_name
+        tweet_to(user, sn)
       end
-      save!
-    rescue Exception => e 
-      puts e.inspect
+    else
+      twitter_handles.split(",").each do |sn|
+        tweet_to(user, sn.strip)
+      end
     end
+    save!
   end
 end

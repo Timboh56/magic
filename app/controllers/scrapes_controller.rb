@@ -108,7 +108,7 @@ class ScrapesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def scrape_params
       params.require(:scrape).permit(
-        :URL, :filename, :next_selector, :use_proxies, :_destroy,
+        :URL, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
         :data_sets_attributes => [
           :link_selector, :_destroy, :parameters_attributes => [
             :name, :text_to_remove, :include_whitespace, :selector, :_destroy

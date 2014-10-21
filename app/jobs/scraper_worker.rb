@@ -41,7 +41,15 @@ class ScraperWorker
         end
       end
       
-      next_link = current_page.search(@next_selector).last
+      if @next_selector.present?
+        next_link = current_page.search(@next_selector).last 
+
+      else
+
+        # use URL parameters to find next
+        next_link = @scrape.page_parameterized_url.gsub(":id", (@page_interval * @page_index).to_s)
+        @page_interval += 1
+      end
 
       @agent.get(node_to_uri(next_link))
 
@@ -95,9 +103,9 @@ class ScraperWorker
           data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
           unless data == "" || data.match(/^\s*$/i)
             csv_row.push data
-            params = { scrape_id: @scrape.id, record_set_id: record_set.id, parameter_id: parameter.id, text: data }
+            params = { scrape_id: @scrape.id parameter_id: parameter.id, text: data }
             unless Record.where(params).exists?
-              record = Record.create!(params)
+              record = Record.create!(params.merge!({ record_set_id: record_set.id}))
               puts "Whoop Whoop! Record added: " + params.inspect
             end
           else
@@ -146,6 +154,11 @@ class ScraperWorker
 
         @id = scrape["filename"] + DateTime.now.to_s
 
+        # if using parameters
+        @page_index = 0
+
+        @page_interval = scrape.page_interval
+
         puts "URL: " + @url.to_s
 
         set_agent_with_proxy
@@ -160,7 +173,6 @@ class ScraperWorker
           push_to_defective @current_proxy
         end
         save_last_url(@url)
-        enqueue(@url)
       rescue Exception => e
 
         puts e.inspect

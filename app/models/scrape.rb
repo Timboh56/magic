@@ -3,6 +3,8 @@ class Scrape
   include Mongoid::Timestamps
 
   field :URL, :type => String
+  field :page_parameterized_url, :type => String
+  field :page_interval, :type => Integer
   field :filename, :type => String
   field :next_selector, :type => String
   field :use_proxies, :type => Boolean, :default => false

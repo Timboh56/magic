@@ -1,13 +1,16 @@
 class TwitterBlastsController < ApplicationController
-	def create
-		begin
-			@twitter_blast = TwitterBlast.new(twitter_blast_params)
-			@twitter_blast.save!
-			@twitter_blast.blast!(current_user)
-		rescue Exception => e
-			@errors = "Error(s): " + e.message
-			render :partial => "shared/errors", status: :unprocessable_entity
+	before_action :check_current_user
+
+	def check_current_user
+		if current_user.nil?
+			raise "You must be signed into twitter to blast!"
 		end
+	end
+
+	def create
+		@twitter_blast = TwitterBlast.new(twitter_blast_params)
+		@twitter_blast.save!
+		@twitter_blast.blast!(current_user)
 	end
 
 	def new

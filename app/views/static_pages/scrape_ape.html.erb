@@ -27,6 +27,38 @@
           </div>
         </div>
         <div class="row">
+          <b>Pagination type</b>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            If you want to use a URL with page number parameters, enter ":id" wherever you want page number parsed to paginate, or use a page paginator selector.
+          </div>
+        </div>
+        <div class="row">
+          <a id="page_paginator" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a page paginator</a>
+          <a id="url_parameters" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a URL parameter</a>
+        </div>
+        <div id="url_parameters" class="row pagination-type hide">
+          <div class="row">
+            <div class='col-xs-2'>
+              <%= f.label "Parameterized URL" %>
+            </div>
+            <div class="col-xs-9">
+              <%= f.text_field "page_parameterized_url" %>
+            </div>
+          </div>
+          <div class='clear-fix'>
+          </div>
+          <div class="row">
+            <div class='col-xs-2'>
+              <%= f.label "Page interval" %>
+            </div>
+            <div class="col-xs-9">
+              <%= f.number_field "page_interval" %>
+            </div>
+          </div>
+        </div>
+        <div id="page_paginator" class="row pagination-type hide">
           <div class='col-xs-2'>
             <%= f.label "Paginator selector" %>
           </div>

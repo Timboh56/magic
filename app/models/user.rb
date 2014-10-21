@@ -24,7 +24,14 @@ class User
 
   def twitter
     if provider == "twitter"
-      @twitter ||= Twitter::Client.new(oauth_token: oauth_token, oauth_token_secret: oauth_secret)
+      @twitter ||= Twitter::REST::Client.new do |config|
+        config.access_token = oauth_token
+        config.access_token_secret = oauth_secret
+        config.consumer_key = Rails.application.config.twitter_key
+        config.consumer_secret = Rails.application.config.twitter_secret
+      end
+      return @twitter
     end
+    return nil
   end
 end
