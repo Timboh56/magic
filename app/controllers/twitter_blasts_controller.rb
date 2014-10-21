@@ -13,6 +13,11 @@ class TwitterBlastsController < ApplicationController
 		@twitter_blast.blast!(current_user)
 	end
 
+	def run
+		@twitter_blast = TwitterBlast.find(params[:id])
+		@twitter_blast.blast!(current_user)
+	end
+
 	def new
 
 	end
@@ -28,7 +33,7 @@ class TwitterBlastsController < ApplicationController
 	end
 
 	def get_blasts
-		@twitter_blasts = TwitterBlast.all
+		@twitter_blasts = TwitterBlast.all.order("created_at DESC")
 		render :partial => "recent_blasts_table"
 	end
 

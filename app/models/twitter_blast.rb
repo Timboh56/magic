@@ -21,6 +21,14 @@ class TwitterBlast
   	twitter_client.followers(user_handle)
   end
 
+  def get_users_followers(user)
+    users_followers = []
+    twitter_handles.split(",").each do |handle|
+      users_followers.concat twitter_client(user).followers(handle).inject([]) { |arr, i| arr.push(i.screen_name) }
+    end
+    users_followers
+  end
+
   def tweet_to from, to
 
     #twitter_client.create_direct_message(follower, message)
@@ -33,14 +41,19 @@ class TwitterBlast
   end
 
   def blast!(user)
+    records.destroy_all
     if blast_type == "followers"
-      get_user_followers.each do |follower|
+      get_user_followers(user).each do |follower|
         sn = follower.screen_name
         tweet_to(user, sn)
       end
     elsif blast_type == "handles"
       twitter_handles.split(",").each do |sn|
         tweet_to(user, sn.strip)
+      end
+    elsif blast_type == "get_followers"
+      get_users_followers(user).each do |sn|
+        Record.create!(:twitter_blast_id => id, :record_type => "Twitter handle", :text => sn)
       end
     end
     save!

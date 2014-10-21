@@ -10,9 +10,24 @@
 		.row
 			.col-xs-12
 				%a.btn.btn-default.toggle-btn{ id: "handles", "data-toggle" => ".twitter-blast-form" }
-					Use Handles
+					Twitter blast handles
 				%a.btn.btn-default.toggle-btn{ id: "followers", "data-toggle" => ".twitter-blast-form" }
-					Use Followers			
+					Twitter blast followers of handle
+				%a.btn.btn-default.toggle-btn{ id: "get_followers", "data-toggle" => ".twitter-blast-form" }
+					Get followers (no message)	
+		.twitter-blast-get-followers-form.twitter-blast-form.hide{ id: "get_followers" }
+			= nested_form_for @twitter_blast, { remote: true } do |f|
+				= f.hidden_field :blast_type, value: "get_followers"
+				.row
+					%h1 Get followers of user(s)
+				.row
+					.col-xs-12
+						.col-xs-3
+							%label Twitter handles (separated by commas)
+						.col-xs-9
+							= f.text_area :twitter_handles
+				.row
+					= f.submit "Get'em!", class: "btn btn-default"
 		.twitter-blast-handles-form.twitter-blast-form.hide{ id: "handles" }
 			= nested_form_for @twitter_blast, { remote: true } do |f|
 				= f.hidden_field :blast_type, value: "handles"
@@ -59,24 +74,7 @@
 :javascript
 	$(document).ready( function () {
 
-		setInterval(function () {
-			$.ajax({
-				url: "twitter_blast/get_blasts",
-				type: "GET",
-				dataType: "html",
-				success: function (xhr) {
-					$('.recent-blasts-update').html(xhr);
-				}
-			});
-		}, 5000);
 
-		$('#recent-blasts-table').dataTable({
-			sPaginationType: "full",
-			bJQueryUI: true,
-			responsive: true,
-			"order": [[ 0, "desc" ]]
-		});
-		
 		$('.new_twitter_blast').submit( function (event) {
 			var loading_gif = $('<img />').attr('src','#{ image_url "ajax-loader.gif" }');
 			$('.blast-btn').html(loading_gif);

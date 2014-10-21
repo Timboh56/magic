@@ -22,6 +22,9 @@ a:hover {
 	color: gray !important;
 	background: none !important;
 }
+.bottom-table {
+	margin-top: 30px !important;
+}
 .bounce {
 	width: 100%;
 	bottom: 0px;
@@ -79,7 +82,7 @@ ul li {
 footer {
 	background: white;
 	width: 100%;
-	position: fixed;
+	position: relative;
 	bottom: 0px;
 }
 

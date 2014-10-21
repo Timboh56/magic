@@ -70,6 +70,7 @@ Rails.application.routes.draw do
   get '/scrape/stop_all', to: "scrapes#stop_all_scrapes"
   get '/scrape/get_scrapes', to: "scrapes#get_scrapes_table_info"
   get '/twitter_blast/get_blasts', to: "twitter_blasts#get_blasts"
+  get '/twitter_blast/:id/run', to: "twitter_blasts#run"
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
