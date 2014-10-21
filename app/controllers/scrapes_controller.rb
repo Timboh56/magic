@@ -83,7 +83,7 @@ class ScrapesController < ApplicationController
     respond_to do |format|
       if @scrape.update(scrape_params)
         format.html { redirect_to @scrape, notice: 'Scrape was successfully updated.' }
-        format.json { render :show, status: :ok, location: @scrape }
+        format.json { render :show, status: :ok, scrape: @scrape }
       else
         format.html { render :edit }
         format.json { render json: @scrape.errors, status: :unprocessable_entity }
