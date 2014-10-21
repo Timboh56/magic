@@ -1,0 +1,40 @@
+.recent-blasts-container
+	.row
+		%h1 Recent Blasts
+	%table{ id: "recent-blasts-table" }
+		%thead
+			%th
+				Created at
+			%th
+				User Handle
+			%th
+				Messages sent
+			%th
+				Status
+			%th
+				View
+			%th
+				Edit
+			%th
+				Run
+			%th
+				Delete
+		%tbody
+			- @twitter_blasts.each do |twitter_blast|
+				%tr
+					%td
+						= twitter_blast.created_at
+					%td
+						= twitter_blast.user_handle
+					%td
+						= twitter_blast.messages_sent
+					%td
+						= twitter_blast.status
+					%td
+						= link_to "View", twitter_blast_path(twitter_blast)
+					%td
+						= link_to "Edit", edit_twitter_blast_path(twitter_blast)
+					%td
+						= link_to fa_icon("play"), '/twitter_blast/' + twitter_blast.id + '/run', data: { remote: true }
+					%td
+						= link_to fa_icon("trash-o"), twitter_blast_path(twitter_blast), method: :delete, data: { confirm: "Do you really wanna delete this? " }

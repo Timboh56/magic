@@ -1,10 +1,9 @@
 class TwitterBlastsController < ApplicationController
-	before_action :check_current_user
-	layout "home"
+	before_action :check_current_user, only: [:create, :destroy, :update]
 
 	def check_current_user
 		if current_user.nil?
-			raise "You must be signed into twitter to blast!"
+			raise "You must be signed into twitter!"
 		end
 	end
 
@@ -18,9 +17,24 @@ class TwitterBlastsController < ApplicationController
 
 	end
 
+	def edit
+		@twitter_blast = TwitterBlast.find(params[:id])
+	end
+
+	def update
+		@twitter_blast = TwitterBlast.find(params[:id])
+		@twitter_blast.update_attributes!(params[:twitter_blast])
+	end
+
+	def get_blasts
+		@twitter_blasts = TwitterBlast.all
+		render :partial => "recent_blasts_table"
+	end
+
 	def show
 		@twitter_blast = TwitterBlast.find(params[:id])
 	end
+
 	def destroy
 		TwitterBlast.find(params[:id]).destroy
     respond_to do |format|

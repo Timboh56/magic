@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user
   before_action :set_title
+  layout "home"
 
   rescue_from Exception, with: :show_errors
 
@@ -19,6 +20,9 @@ class ApplicationController < ActionController::Base
 
   def show_errors(e)
     @errors = "Error(s): " + e.message
-    render :partial => "shared/errors.js", status: :unprocessable_entity
+    respond_to do |format|
+      format.js { render :partial => "shared/errors.js", status: :unprocessable_entity }
+      format.html { redirect_to :back, status: :unprocessable_entity }
+    end
   end
 end

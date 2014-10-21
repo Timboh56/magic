@@ -38,7 +38,7 @@ class TwitterBlast
         sn = follower.screen_name
         tweet_to(user, sn)
       end
-    else
+    elsif blast_type == "handles"
       twitter_handles.split(",").each do |sn|
         tweet_to(user, sn.strip)
       end

@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   mount Resque::Server, :at => "/resque"
   get '/scrape/stop_all', to: "scrapes#stop_all_scrapes"
   get '/scrape/get_scrapes', to: "scrapes#get_scrapes_table_info"
+  get '/twitter_blast/get_blasts', to: "twitter_blasts#get_blasts"
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
