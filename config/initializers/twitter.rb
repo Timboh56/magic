@@ -1,2 +1,2 @@
-Rails.application.config.twitter_key = "1SzfIhMcCxz5UwfhT6RlC7hON" || ENV["TWITTER_CONSUMER_KEY"]
-Rails.application.config.twitter_secret = "smg6wZaOVcyTOp4dBQawnIE1E6XWs5SjCzemQXiK3r7gfiPYoL" || ENV["TWITTER_CONSUMER_SECRET"]
+Rails.application.config.twitter_key = "IeiFUDTEhI9IstiYsAzgFahtC" || ENV["TWITTER_CONSUMER_KEY"]
+Rails.application.config.twitter_secret = "WPBXPBnVD9C7JoBWOqRkdYW3jsXEwQdXCI1cu5H6BVfv4ygjId" || ENV["TWITTER_CONSUMER_SECRET"]

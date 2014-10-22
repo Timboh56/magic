@@ -22,7 +22,7 @@ class User
     end
   end
 
-  def twitter
+  def twitter_client
     if provider == "twitter"
       @twitter ||= Twitter::REST::Client.new do |config|
         config.access_token = oauth_token
@@ -30,6 +30,7 @@ class User
         config.consumer_key = Rails.application.config.twitter_key
         config.consumer_secret = Rails.application.config.twitter_secret
       end
+      puts @twitter.inspect
       return @twitter
     end
     return nil
