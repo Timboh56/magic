@@ -20,9 +20,10 @@ class ApplicationController < ActionController::Base
 
   def show_errors(e)
     @errors = "Error(s): " + e.message
+    puts @errors
     respond_to do |format|
       format.js { render :partial => "shared/errors.js", status: :unprocessable_entity }
-      format.html { redirect_to :back, status: :unprocessable_entity }
+      format.html { redirect_to request.env["HTTP_REFERER"] || root_url, status: :unprocessable_entity }
     end
   end
 end
