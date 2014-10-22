@@ -11,6 +11,12 @@ class User
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
   end
+
+  def update_from_omniauth!(auth)
+    self.oauth_token = auth["credentials"]["token"]
+    self.oauth_secret = auth["credentials"]["secret"]
+    save!
+  end
   
   def self.create_from_omniauth(auth)
     create! do |user|
@@ -30,7 +36,6 @@ class User
         config.consumer_key = Rails.application.config.twitter_key
         config.consumer_secret = Rails.application.config.twitter_secret
       end
-      puts @twitter.inspect
       return @twitter
     end
     return nil

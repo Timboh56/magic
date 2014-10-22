@@ -1,2 +1,2 @@
-Rails.application.config.twitter_key = "IeiFUDTEhI9IstiYsAzgFahtC" || ENV["TWITTER_CONSUMER_KEY"]
-Rails.application.config.twitter_secret = "WPBXPBnVD9C7JoBWOqRkdYW3jsXEwQdXCI1cu5H6BVfv4ygjId" || ENV["TWITTER_CONSUMER_SECRET"]
+Rails.application.config.twitter_key = ENV["DOPE_TWITTER_CONSUMER_KEY"]
+Rails.application.config.twitter_secret = ENV["DOPE_TWITTER_SECRET"]
