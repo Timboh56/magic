@@ -80,7 +80,6 @@ class Scrape
 
         # data
         data_set.record_sets.order("created_at ASC").each do |record_set|
-          puts record_set.inspect
           csv << get_csv_data_row(record_set)
         end
       end
