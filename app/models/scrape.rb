@@ -1,6 +1,7 @@
 class Scrape
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Runnable
 
   field :URL, :type => String
   field :page_parameterized_url, :type => String
@@ -9,11 +10,9 @@ class Scrape
   field :next_selector, :type => String
   field :use_proxies, :type => Boolean, :default => false
   field :last_scanned_url, :type => String
-  field :status, :type => String
 
   has_many :data_sets
 
-  has_many :records
   has_many :record_sets
   
   accepts_nested_attributes_for :data_sets

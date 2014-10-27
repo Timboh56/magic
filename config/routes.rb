@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
   get '/scrape_ape' => "static_pages#scrape_ape"
   get '/twitter_blaster' => "static_pages#twitter_blaster"
+  get '/craig_crammer' => "static_pages#craig_crammer"
+  get '/sms_blaster' => "static_pages#sms_blaster"
+
   put '/scrape/:id/run' => "scrapes#run"
   put '/scrape/:id/restart' => "scrapes#restart"
 

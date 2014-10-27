@@ -22,6 +22,11 @@ a:hover {
 	color: gray !important;
 	background: none !important;
 }
+
+// override bootsrap
+table, td {
+	font-size: 0.9em !important;
+}
 .bottom-table {
 	margin-top: 30px !important;
 }

@@ -15,4 +15,8 @@ class StaticPagesController < ApplicationController
   	@twitter_blast = TwitterBlast.new
   	@twitter_blasts = TwitterBlast.all.order("created_at DESC")
   end
+
+  def craig_crammer
+
+  end
 end

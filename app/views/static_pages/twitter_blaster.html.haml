@@ -14,7 +14,7 @@
 				%a.btn.btn-default.toggle-btn{ id: "followers", "data-toggle" => ".twitter-blast-form" }
 					Twitter blast followers of handle
 				%a.btn.btn-default.toggle-btn{ id: "get_followers", "data-toggle" => ".twitter-blast-form" }
-					Get followers (no message)	
+					Get followers' handles (no message)	
 		.twitter-blast-get-followers-form.twitter-blast-form.hide{ id: "get_followers" }
 			= nested_form_for @twitter_blast, { remote: true } do |f|
 				= f.hidden_field :blast_type, value: "get_followers"
