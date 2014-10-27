@@ -80,6 +80,13 @@
 							= f.text_area :twitter_handles
 				.row
 					.col-xs-12
+						- @handle_lists.each do |hl|
+							.col-xs-3
+								%label 
+									= hl.name
+								= f.check_box "handle_list_ids[]", h1.id
+				.row
+					.col-xs-12
 						.col-xs-3
 							%label Message
 						.col-xs-9

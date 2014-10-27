@@ -3,7 +3,7 @@ class TwitterBlastWorker
   @queue = :scraper_queue
 
   class << self
-    def perform(id, user_id)
+    def perform(id, user_id, limit = nil)
       unless id.is_a? String
         @twitter_blast = TwitterBlast.find(id["$oid"])
       else
@@ -49,13 +49,21 @@ class TwitterBlastWorker
 
       @twitter_blast.increment!(:messages_sent)
 
-      Record.create!(text: tweet, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
+      record = Record.new(text: tweet, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
+      record.handle_list_id = @twitter_blast.handle_lists.first.id
+      record.save!
     end
 
-    def blast!(user)
+    def blast!(user, n = nil)
+
+      @twitter_blast.status = "Running"
+      @twitter_blast.save!
+
       @twitter_blast.records.destroy_all
       if @twitter_blast.blast_type == "followers"
-        get_users_followers(user).each do |follower|
+        followers = n ? get_users_followers.take(n) : get_users_followers
+
+        followers.each do |follower|
           sn = follower.screen_name
           tweet_to(user, sn) unless Record.where(text: @twitter_blast.message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
           sleep(3)
@@ -67,6 +75,8 @@ class TwitterBlastWorker
       elsif @twitter_blast.blast_type == "get_followers"
         get_users_followers(user)
       end
+
+      @twitter_blast.status = "Stopped"
       @twitter_blast.save!
     end
   end
