@@ -21,11 +21,12 @@ class TwitterBlastWorker
           followers = user.twitter_client.users(follower_ids)
 
           followers.each do |follower|
-            puts "Got follower information: " + follower.inspect
+
+            p "Got follower information: " + follower.inspect
             users.push follower
           
             # create a record
-            record = Record.create!(:twitter_blast_id => @twitter_blast.id, :record_type => "Twitter handle", :text => follower.screen_name)
+            record = Record.create!(:twitter_blast_id => @twitter_blast.id, :record_type => "Handle", :text => follower.screen_name)
             
             p "Created record: " + record.inspect
 
@@ -41,11 +42,14 @@ class TwitterBlastWorker
       retry
     end
 
-    def tweet_to from, to
+    def tweet_to from, to, message
 
-      response = from.twitter_client.update("@#{ to } " + message)
+      tweet = "@#{ to } #{@twitter_blast.message}"
+      response = from.twitter_client.update(tweet)
 
-      self.messages_sent = self.messages_sent + 1
+      @twitter_blast.increment!(:messages_sent)
+
+      Record.create!(text: tweet, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
     end
 
     def blast!(user)
@@ -53,7 +57,7 @@ class TwitterBlastWorker
       if @twitter_blast.blast_type == "followers"
         get_users_followers(user).each do |follower|
           sn = follower.screen_name
-          tweet_to(user, sn)
+          tweet_to(user, sn) unless Record.where(text: @twitter_blast.message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
           sleep(3)
         end
       elsif @twitter_blast.blast_type == "handles"

@@ -27,13 +27,13 @@ class Scrape
   end
 
   def open_proxies_csv
-    puts "Opening proxies csv"
+    p "Opening proxies csv"
 
     Dir["proxy_lists/*.csv"].each do |csv_file_path|
 
-      puts csv_file_path
+      p csv_file_path
       CSV.foreach(csv_file_path) do |row|
-        puts "csv"
+        p "csv"
         if row[0].include? ";"
           ip = row[0].split(';')[0]
           port = row[0].split(';')[1]
@@ -44,7 +44,7 @@ class Scrape
         ProxyHost.create!(ip: ip, port: port) unless ProxyHost.where(ip: ip).exists?
       end
     end
-    puts "Done with proxies csv."
+    p "Done with proxies csv."
   end
 
 	def run

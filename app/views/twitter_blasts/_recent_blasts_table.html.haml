@@ -10,7 +10,9 @@
 			%th
 				Type
 			%th
-				User Handle
+				Handle(s)
+			%th
+				Handle(s) acquired
 			%th
 				Messages sent
 			%th
@@ -33,7 +35,9 @@
 					%td
 						= twitter_blast.blast_type
 					%td
-						= twitter_blast.user_handle
+						= twitter_blast.handles_array.present? ? twitter_blast.handles_array.take(3).join(", ").concat("..") : ""
+					%td
+						= twitter_blast.handle_records_count
 					%td
 						= twitter_blast.messages_sent
 					%td

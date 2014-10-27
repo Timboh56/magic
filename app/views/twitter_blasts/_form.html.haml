@@ -10,14 +10,14 @@
 = form_for @twitter_blast do |f|
 	.row
 		.col-xs-4
+			= f.label "Twitter handles:"
+		.col-xs-8
+			= f.text_area :twitter_handles
+	.row
+		.col-xs-4
 			= f.label "Name:"
 		.col-xs-8
 			= f.text_field :name
-	.row
-		.col-xs-4
-			= f.label "User handle (send to followers):"
-		.col-xs-8
-			= f.text_field :user_handle
 	.row
 		.col-xs-4
 			= f.label "Status:"
@@ -26,11 +26,6 @@
 	.row
 		.col-xs-4
 			= f.label "Message:"
-		.col-xs-8
-			= f.text_field :message
-	.row
-		.col-xs-4
-			= f.label "Twitter handles sending to:"
 		.col-xs-8
 			= f.text_field :message
 	.row
