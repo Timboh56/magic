@@ -14,8 +14,14 @@ class TwitterBlastsController < ApplicationController
 	end
 
 	def run
-		@twitter_blast = TwitterBlast.find(params[:id])
-		@twitter_blast.blast!(current_user)
+		begin
+			@twitter_blast = TwitterBlast.find(params[:id])
+			@twitter_blast.blast!(current_user)
+			render "create"
+		rescue Exception => e
+			puts e.inspect
+			raise e
+		end
 	end
 
 	def new

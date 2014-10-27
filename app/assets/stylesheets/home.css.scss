@@ -15,7 +15,7 @@ h1, .brand {
 	top: 50px;
 	 height: 220px;
 	 width: 100%;
-	 position: absolute;
+	 position: relative;
 	 color: #00000;
 }
 a:hover {
@@ -35,7 +35,7 @@ a:hover {
 	margin: 14px 0;
 }
 .home-container {
-	margin-top: 240px !important;
+	margin-top: 10px !important;
 	position: relative;
 }
 #user_nav {
