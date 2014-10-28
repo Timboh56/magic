@@ -8,7 +8,7 @@ namespace :feed_retweeter do
 
 				# get rss tweet without random hashtag
 				# to see if this tweet has been tweeted before
-				tweet = rsf.rss_tweet
+				tweet = rsf.rss_tweet_no_tag
 
 				unless Record.where(text: tweet, record_type: "Tweet").exists?
 					tweet = rsf.generate_rss_tweet

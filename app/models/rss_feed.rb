@@ -24,6 +24,6 @@ class RssFeed
 
 	def generate_rss_tweet
 		random_tag = (rs = rss_feed_collection.get_random_tag).present? ? "##{ rs.text }" : ""
-		"#{ rss_tweet_no_tags } #{ random_tag }"
+		"#{ rss_tweet_no_tag } #{ random_tag }"
 	end
 end
