@@ -1,0 +1,18 @@
+.static-page-container
+	%h1 RSS Feeds
+	.row
+		DopeMagic will check RSS Feeds daily for new content and retweet from signed in twitter account.
+		
+	- if current_user
+		= form_tag "/rss/save", { method: :put, remote: true } do
+			.row
+				.col-xs-3
+					= label_tag "RSS Feeds: "
+				.col-xs-9
+					= text_area_tag :rss_feeds, @rss_feeds.map! { |r| r.text}.join(",")
+			.row
+				.col-xs-12
+					= button_tag "Save", { class: "btn btn-default"}
+	- else
+		%div#user_nav
+		= link_to "Sign in with Twitter", "/auth/twitter", { class: "btn btn-default" }

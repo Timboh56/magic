@@ -33,5 +33,6 @@ class TwitterBlast
     handle_list.name = name
     handle_list.handles = records.handles
     handle_list.twitter_blast_id = id
+    handle_list.save!
   end
 end

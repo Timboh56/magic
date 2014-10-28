@@ -57,6 +57,8 @@ gem 'font-awesome-rails'
 
 gem 'omniauth-twitter'
 
+gem 'feedjira'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

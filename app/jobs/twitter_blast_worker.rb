@@ -4,13 +4,17 @@ class TwitterBlastWorker
 
   class << self
     def perform(id, user_id, limit = nil)
-      unless id.is_a? String
-        @twitter_blast = TwitterBlast.find(id["$oid"])
-      else
-        @twitter_blast = TwitterBlast.find(id)
+      begin
+        unless id.is_a? String
+          @twitter_blast = TwitterBlast.find(id["$oid"])
+        else
+          @twitter_blast = TwitterBlast.find(id)
+        end
+        user = User.find(user_id["$oid"])
+        blast!(user)
+      rescue Exception => e
+        puts e.inspect
       end
-      user = User.find(user_id["$oid"])
-      blast!(user)
     end
 
     def get_users_followers user
@@ -25,11 +29,19 @@ class TwitterBlastWorker
             p "Got follower information: " + follower.inspect
             users.push follower
           
-            # create a record
-            record = Record.create!(:twitter_blast_id => @twitter_blast.id, :record_type => "Handle", :text => follower.screen_name)
-            
-            p "Created record: " + record.inspect
+            record_params = {
+              twitter_blast_id: @twitter_blast.id,
+              record_type: "Handle",
+              text: follower.screen_name,
+            }
 
+            unless Record.where(record_params).exists?
+            
+              # create a record
+              record = Record.create!(record_params.merge!({ handle_list_id: @twitter_blast.handle_lists.first.id }))
+            
+              p "Created record: " + record.inspect
+            end
           end
         end
         sleep(3)
@@ -50,7 +62,6 @@ class TwitterBlastWorker
       @twitter_blast.increment!(:messages_sent)
 
       record = Record.new(text: tweet, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
-      record.handle_list_id = @twitter_blast.handle_lists.first.id
       record.save!
     end
 

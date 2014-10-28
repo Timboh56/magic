@@ -11,7 +11,8 @@ class Record
 	belongs_to :handle_list
 
 	validates_presence_of :text
-	validates_uniqueness_of :text, scope: [:record_set_id, :record_type]
+	validates_uniqueness_of :text, scope: [:record_type]
 
   scope :handles, lambda { where(record_type: "Handle") }
+  scope :rss_feeds, lambda { where(record_type: "Rss") }
 end

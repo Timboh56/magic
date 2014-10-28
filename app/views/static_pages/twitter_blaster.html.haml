@@ -75,16 +75,18 @@
 				.row
 					.col-xs-12
 						.col-xs-3
-							%label Twitter Handle
+							%label Twitter Handles (comma separated)
 						.col-xs-9
 							= f.text_area :twitter_handles
 				.row
 					.col-xs-12
 						- @handle_lists.each do |hl|
 							.col-xs-3
-								%label 
+								%label Message to (lists)
+							.col-xs-9
+								%label
 									= hl.name
-								= f.check_box "handle_list_ids[]", h1.id
+									= f.check_box :handle_list_ids, {}, hl.id
 				.row
 					.col-xs-12
 						.col-xs-3

@@ -27,6 +27,13 @@ a:hover {
 table, td {
 	font-size: 0.9em !important;
 }
+.word-wrap {
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
 .bottom-table {
 	margin-top: 30px !important;
 }
@@ -62,7 +69,7 @@ margin: 10px 5%;
 }
 
 textarea { resize: none; }
-.home-container, .scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
+.static-page-container, .home-container, .scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
 	//background-color: rgba(244,244,244,.8);
 	padding: 0 20px;
 	border-radius: 10px;

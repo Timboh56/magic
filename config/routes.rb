@@ -10,7 +10,8 @@ Rails.application.routes.draw do
   get '/twitter_blaster' => "static_pages#twitter_blaster"
   get '/craig_crammer' => "static_pages#craig_crammer"
   get '/sms_blaster' => "static_pages#sms_blaster"
-
+  get '/rss_retweeter' => "static_pages#rss_retweeter"
+  put '/rss/save' => "static_pages#save_rss_feeds"
   put '/scrape/:id/run' => "scrapes#run"
   put '/scrape/:id/restart' => "scrapes#restart"
 

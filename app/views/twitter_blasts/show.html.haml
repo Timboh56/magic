@@ -4,10 +4,9 @@
 	.row
 		%h2 Twitter handles
 	.row
-		.col-xs-12
+		.col-xs-12.word-wrap
 			- if @twitter_blast.records.length > 0
-				- @twitter_blast.records.each do |handle|
-					#{ handle.text }
+				#{ @twitter_blast.records.map { |record| record.text }.join(",") }
 			- else
 				None to show.
 	.row
