@@ -20,7 +20,20 @@
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables/extras/dataTables.responsive
 var window = window || document.window;
+var btn, curr_val;
 
+$(document).ready (function () {
+	$('form').submit( function () {
+		var loading_gif = $('<img />').attr('src','#{ image_url "ajax-loader.gif" }');
+		btn = $(this).find('input[type=submit], button');
+		curr_val = btn.html();
+		btn.html(loading_gif);
+		btn.prop('disabled', true);
+	}).on('ajax:complete', function () {
+		btn.html(curr_val);
+		btn.prop('disabled', false);
+	});
+});
 $(document).on('click', '.toggle-btn', function () {
 	var klass = $(this).data('toggle');
 	var id = $(this).attr('id');

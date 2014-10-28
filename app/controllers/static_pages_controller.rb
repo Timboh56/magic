@@ -22,25 +22,56 @@ class StaticPagesController < ApplicationController
   end
 
   def rss_retweeter
-    @rss_record_set = RecordSet.where(record_set_type: "Rss feeds").first || RecordSet.new(record_set_type: "Rss feeds")
-    @rss_feeds = @rss_record_set.records
+    if current_user
+      @rss_feed_collection = current_user.rss_feed_collection || RssFeedCollection.new(user_id: current_user.id)
+      @tags = current_user.rss_feed_collection.tags if current_user.rss_feed_collection.present?
+    end
   end
 
   def save_rss_feeds
-    @rss_record_set = RecordSet.where(record_set_type: "Rss feeds").first || RecordSet.create!(record_set_type: "Rss feeds")
-
+    rss_feeds = []
+    tags = []
     if params[:rss_feeds]
+
+
+      unless current_user.rss_feeds.present?
+        rss_feed_collection = RssFeedCollection.create!(user_id: current_user.id)
+      else
+        rss_feed_collection = current_user.rss_feed_collection
+      end
+
       params[:rss_feeds].split(",").each do |rss_feed|
         
-        record_params = {
-          record_set_id: @rss_record_set.id,
-          record_type: "Rss",
-          text: rss_feed.strip
+        rss_params = {
+          url: rss_feed.strip,
         }
-        
-        Record.create!(record_params) unless Record.where(record_params).exists?
+
+        rss_feed = RssFeed.new(rss_params)
+        rss_feeds.push(rss_feed)
       end
-      @rss_record_set.save!
+
+      params[:tags].split(",").each do |tag|
+        tag_params = { text: tag.strip.gsub(" ","_") }
+        tags << Tag.new(tag_params) 
+      end
     end
+
+    (current_user.rss_feeds - rss_feeds).each do |rss_feed|
+      p "Destroying " + rss_feed.inspect
+      rss_feed.destroy
+    end
+
+    (current_user.tags - tags).each do
+      p "Destroying " + tag.inspect
+      tag.destroy
+    end
+
+    rss_feed_collection.rss_feeds = rss_feeds
+    rss_feed_collection.tags = tags
+    rss_feed_collection.save!
+
+    flash[:success] = "Saved."
+    redirect_to "/rss_retweeter"
+    #render "shared/success"
   end
 end

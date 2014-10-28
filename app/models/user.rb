@@ -8,6 +8,8 @@ class User
   field :oauth_token, type: String
   field :oauth_secret, type: String
 
+  has_one :rss_feed_collection
+
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
   end
@@ -39,5 +41,53 @@ class User
       return @twitter
     end
     return nil
+  end
+
+  def get_followers(handle, twitter_blast = nil)
+    followers = []
+    results = twitter_client.follower_ids(handle)
+    results.to_a.each_slice(100).each do |follower_ids|
+      followers = twitter_client.users(follower_ids)
+
+      followers.each do |follower|
+
+        p "Got follower information: " + follower.inspect
+      
+        record_params = {
+          record_type: "Handle",
+          text: follower.screen_name,
+        }
+
+        unless (record = Record.where(record_params).first).present?
+
+          record_params.merge!({
+            twitter_blast_id: twitter_blast.id,
+            handle_list_id: twitter_blast.handle_list.id
+          }) if twitter_blast
+
+          # create a record
+          record = Record.create!(record_params)
+        
+          p "Created record: " + record.inspect
+        end
+
+        followers << follower
+      end
+    end
+    followers
+  end
+
+  def tweet(message)
+    response = twitter_client.update(message)
+    message
+  end
+
+  # shortcut
+  def rss_feeds
+    rss_feed_collection.present? ? rss_feed_collection.rss_feeds : []
+  end
+
+  def tags
+    rss_feed_collection.present? ? rss_feed_collection.rss_feeds.collect! { |r| r.tag } : []
   end
 end

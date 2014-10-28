@@ -12,7 +12,7 @@ class TwitterBlast
   validates_length_of :message, maximum: 140
 
   has_many :records, :dependent => :destroy
-  has_many :handle_lists
+  has_one :handle_list
 
   after_create :create_handle_list
 
