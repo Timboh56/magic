@@ -16,10 +16,14 @@ class RssFeed
 		true
 	end
 
-	def generate_rss_tweet
+	def rss_tweet_no_tag
 		response = Feedjira::Feed.fetch_and_parse(url)
 		latest_entry = response.entries.first
-		random_tag = rss_feed_collection.get_random_tag.text
-		" #{ latest_entry.url } #{ latest_entry.title[0,80] } ##{ random_tag }"
+		"#{ latest_entry.url } #{ latest_entry.title[0,80] }"
+	end
+
+	def generate_rss_tweet
+		random_tag = (rs = rss_feed_collection.get_random_tag).present? ? "##{ rs.text }" : ""
+		"#{ rss_tweet_no_tags } #{ random_tag }"
 	end
 end
