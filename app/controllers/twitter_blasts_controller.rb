@@ -1,12 +1,6 @@
 class TwitterBlastsController < ApplicationController
 	before_action :check_current_user, only: [:create, :destroy, :update]
 
-	def check_current_user
-		if current_user.nil?
-			raise "You must be signed into twitter!"
-		end
-	end
-
 	def index
 		@twitter_blast = TwitterBlast.new
 		@twitter_blasts = TwitterBlast.all.order("created_at DESC")
@@ -17,6 +11,7 @@ class TwitterBlastsController < ApplicationController
 		@twitter_blast = TwitterBlast.new(twitter_blast_params)
 		@twitter_blast.save!
 		@twitter_blast.blast!(current_user)
+		redirect_to @twitter_blast
 	end
 
 	def run
@@ -31,7 +26,6 @@ class TwitterBlastsController < ApplicationController
 	end
 
 	def new
-
 	end
 
 	def edit
@@ -80,7 +74,7 @@ class TwitterBlastsController < ApplicationController
 	def twitter_blast_params
 	  params.require(:twitter_blast).permit(
 	  	:name, :handles_type, :blast_type, :twitter_handles, :user_handle, :status, :message, :messages_sent,
-	  	:handle_list_id
+	  	:handle_list_id, :limit
 	  )
 	end
 end

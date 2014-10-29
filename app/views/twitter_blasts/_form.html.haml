@@ -1,11 +1,11 @@
 .twitter-blast-get-followers-form.twitter-blast-form
-	= nested_form_for @twitter_blast do |f|
+	= form_for @twitter_blast do |f|
 		.row
 			.col-xs-12
 				.col-xs-3
 					= f.label "Type:"
 				.col-xs-9
-					= f.select :blast_type, options_for_select([["Follow followers of handle(s)", "follow_followers"], ["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"], ["Tweet To followers of handle(s)", "tweet_to_followers"]])
+					= f.select :blast_type, options_for_select([["Follow followers of handle(s)", "follow_followers"], ["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"], ["Tweet To followers of handle(s)", "tweet_to_followers"]]), :selected => f.object.blast_type
 		.row
 			.col-xs-12
 				.col-xs-3
@@ -41,7 +41,13 @@
 				.col-xs-3
 					%label Message to tweet
 				.col-xs-9
-					= f.text_area :message	
+					= f.text_area :message
+		.row.message-row
+			.col-xs-12
+				.col-xs-3
+					%label Limit
+				.col-xs-9
+					= f.number_field :limit, { max: 5000, min: 0, placeholder: "5000"}
 		.row
 			%br
 			= f.button "Submit", { type: "submit", class: "btn btn-default blast-btn" }

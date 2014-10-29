@@ -97,6 +97,12 @@ class User
     message
   end
 
+  def follow(handle)
+    twitter_client.follow(handle)
+
+    p "Followed: " + handle.inspect
+  end
+
   def rss_feeds
     if rss_feed_collections.present?
       rss_feed_collections.inject([]) { |arr,collection| arr.concat collection.rss_feeds }

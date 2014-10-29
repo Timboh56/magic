@@ -10,27 +10,27 @@ class TwitterBlastWorker
         else
           @twitter_blast = TwitterBlast.find(id)
         end
-        user = User.find(user_id["$oid"])
-        blast!(user)
+        @user = User.find(user_id["$oid"])
+        blast!
       rescue Exception => e
         puts e.inspect
       end
     end
 
-    def get_users_followers user
+
+    def get_followers
       users = []
 
-      if @twitter_blast.handles_types == "textarea"
+      if @twitter_blast.handles_type == "textarea"
         handles = @twitter_blast.twitter_handles.split(",")
       else
         handles = @twitter_blast.handle_list.handles.slice(0, @twitter_blast.limit)
       end
 
       handles.each do |handle|
-        users.concat user.get_followers(handle, @twitter_blast)
+        users.concat @user.get_followers(handle, @twitter_blast)
         sleep(3)
       end
-
       users
     end
 
@@ -40,7 +40,44 @@ class TwitterBlastWorker
       record = Record.create!(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
     end
 
-    def blast!(user)
+    def tweet_to_followers
+      get_followers.each do |follower|
+        sn = follower.screen_name
+
+        message = '@#{ to } #{ @twitter_blast.message }'
+
+        tweet_to(@user, sn, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
+        sleep(3)
+      end
+    end
+
+    def tweet_to_handles
+      get_handles.each do |sn|
+        to = sn.strip
+        message = '@#{ to } #{ @twitter_blast.message }'
+        tweet_to(@user, to, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
+      end
+    end
+
+    def follow_followers
+      get_followers.each do |follower|
+        @user.follow(follower.id)
+      end
+    end
+
+    def get_handles
+      @handles ||= @twitter_blast.handles_type == "textarea" ? @twitter_blast.twitter_handles.split(",") : @twitter_blast.handles_stringified
+    end
+
+    def follow_handles
+      p "Follow handles"
+      get_handles.each do |handle|
+        @user.follow(handle)
+      end
+      p "Donzo"
+    end
+
+    def blast!
 
       @twitter_blast.update_attributes(status: "Running")
 
@@ -48,41 +85,17 @@ class TwitterBlastWorker
       
       limit = @twitter_blast.limit
 
-      case @twitter_blast.blast_type
-      when "tweet_to_followers"
-        get_users_followers(user).each do |follower|
-          sn = follower.screen_name
-
-          message = '@#{ to } #{ @twitter_blast.message }'
-
-          tweet_to(user, sn, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
-          sleep(3)
-        end
-      when "tweet_to_handles"
-        handles = @twitter_blast.handles_type == "textarea" ? @twitter_blast.twitter_handles.split(",") : @twitter_blast.handle_list.handles
-        handles.each do |sn|
-          to = sn.strip
-          message = '@#{ to } #{ @twitter_blast.message }'
-          tweet_to(user, to, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
-        end
-      when "follow_followers"
-        get_users_followers(user).each do |follower|
-          user.twitter_client.follow(follower.id)
-        end
-      when "follow_handles"
-        handles = @twitter_blast.handles_type == "textarea" ? @twitter_blast.handle_list.handles : @twitter_blast.twitter_handles.split(",")
-        handles.each do |handle|
-          user.twitter_client.follow(handle)
-        end
-      when "get_followers"
-        handles = @twitter_blast.handles_type == "textarea" ? @twitter_blast.handle_list.handles : @twitter_blast.twitter_handles.split(",")
-        handles.each do |handle|
-          user.twitter_client.users(handle)
-        end
-      end
+      send(@twitter_blast.blast_type)
 
       @twitter_blast.status = "Stopped"
       @twitter_blast.save!
+    rescue Twitter::Error::TooManyRequests => error
+      p error
+      p 'Sleep ' + error.rate_limit.reset_in.to_s
+      sleep error.rate_limit.reset_in
+      retry
+    rescue Exception => e
+      p e
     end
   end
 end

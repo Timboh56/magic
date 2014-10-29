@@ -18,6 +18,10 @@ class TwitterBlast
 
   before_create :create_handle_list
 
+  def handles_stringified
+    handle_list.handles.take(limit).map! { |h| h.text }
+  end
+
   def blast!(user, limit = nil)
     Resque.enqueue(TwitterBlastWorker, id, user.id, limit)
   end
