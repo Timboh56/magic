@@ -97,9 +97,12 @@ class User
     message
   end
 
-  def follow(handle)
-    twitter_client.follow(handle)
+  def unfollow(handle)
+    twitter_client.unfollow(handle)
+  end
 
+  def follow(handle)
+    twitter_client.follow!(handle)
     p "Followed: " + handle.inspect
   end
 

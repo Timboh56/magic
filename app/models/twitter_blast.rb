@@ -18,6 +18,10 @@ class TwitterBlast
 
   before_create :create_handle_list
 
+  def follows
+    records.follows
+  end
+
   def handles_stringified
     handle_list.handles.take(limit).map! { |h| h.text }
   end

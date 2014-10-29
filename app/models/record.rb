@@ -18,4 +18,5 @@ class Record
 	validates_uniqueness_of :text, scope: [:record_type]
 
   scope :handles, lambda { where(record_type: "Handle") }
+  scope :follows, lambda { where(record_type: "Friendship") }
 end

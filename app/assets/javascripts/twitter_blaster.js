@@ -44,6 +44,7 @@ $(document).on('click','select#twitter_blast_blast_type', function () {
 $(document).ready( function () {
 	var curr_val, blast_btn;
 
+	/**
 	setInterval(function () {
 		$.ajax({
 			url: '/twitter_blast/get_blasts',
@@ -53,7 +54,7 @@ $(document).ready( function () {
 				$('.recent-blasts-update').html(xhr);
 			}
 		});
-	}, 5000);
+	}, 5000);**/
 
 	$('select#twitter_blast_handle_list').on('change', function () {
 		var val = $(this).val();

@@ -72,19 +72,31 @@ class TwitterBlastWorker
     def follow_handles
       p "Follow handles"
       get_handles.each do |handle|
-        @user.follow(handle)
+        record_params = { twitter_blast_id: @twitter_blast.id, text: handle, record_type: "Friendship" }
+        
+        begin
+          unless Record.where(record_params).exists?
+            @user.follow(handle)
+            r = Record.create!(record_params)
+            p "Record created: " + r.inspect
+          else
+            p "User #{ handle } already followed, skipping.."
+          end
+        rescue Twitter::Error::RequestTimeout, Twitter::Error::Forbidden
+          p "Request timeout/Forbidden.. Skipping"
+        end
       end
-      p "Donzo"
+      p "Donezo"
+    end
+
+    def reset
+      @twitter_blast.records.destroy_all
     end
 
     def blast!
 
       @twitter_blast.update_attributes(status: "Running")
-
-      @twitter_blast.records.destroy_all
       
-      limit = @twitter_blast.limit
-
       send(@twitter_blast.blast_type)
 
       @twitter_blast.status = "Stopped"
@@ -95,7 +107,7 @@ class TwitterBlastWorker
       sleep error.rate_limit.reset_in
       retry
     rescue Exception => e
-      p e
+      p e.inspect
     end
   end
 end

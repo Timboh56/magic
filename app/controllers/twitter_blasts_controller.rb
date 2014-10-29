@@ -47,7 +47,7 @@ class TwitterBlastsController < ApplicationController
 	end
 
 	def get_blasts
-		@twitter_blasts = TwitterBlast.all.order("created_at DESC")
+		@twitter_blasts = TwitterBlast.all.cache.order("created_at DESC")
 		render :partial => "recent_blasts_table"
 	end
 
