@@ -40,17 +40,6 @@ class TwitterBlastWorker
       record = Record.create!(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
     end
 
-    def tweet_to_followers
-      get_followers.each do |follower|
-        sn = follower.screen_name
-
-        message = '@#{ to } #{ @twitter_blast.message }'
-
-        tweet_to(@user, sn, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
-        sleep(3)
-      end
-    end
-
     def tweet_to_handles
       get_handles.each do |sn|
         to = sn.strip
@@ -59,14 +48,24 @@ class TwitterBlastWorker
       end
     end
 
-    def follow_followers
-      get_followers.each do |follower|
-        @user.follow(follower.id)
+    def get_handles
+      @handles ||= @twitter_blast.handles_type == "textarea" ? @twitter_blast.twitter_handles.split(",") : @twitter_blast.handles_stringified
+    end
+
+    def get_follows
+      @follows ||= @twitter_blast.follows_stringified
+    end
+
+    def unfollow_followed
+      get_follows.each do |handle|
+        
       end
     end
 
-    def get_handles
-      @handles ||= @twitter_blast.handles_type == "textarea" ? @twitter_blast.twitter_handles.split(",") : @twitter_blast.handles_stringified
+    def unfollow_handles
+      get_handles.each do |handle|
+        @user.unfollow(handle)
+      end
     end
 
     def follow_handles
@@ -84,6 +83,11 @@ class TwitterBlastWorker
           end
         rescue Twitter::Error::RequestTimeout, Twitter::Error::Forbidden
           p "Request timeout/Forbidden.. Skipping"
+        rescue Twitter::Error::TooManyRequests => error
+          p error
+          p 'Sleep ' + error.rate_limit.reset_in.to_s
+          sleep error.rate_limit.reset_in
+          retry
         end
       end
       p "Donezo"
@@ -101,11 +105,6 @@ class TwitterBlastWorker
 
       @twitter_blast.status = "Stopped"
       @twitter_blast.save!
-    rescue Twitter::Error::TooManyRequests => error
-      p error
-      p 'Sleep ' + error.rate_limit.reset_in.to_s
-      sleep error.rate_limit.reset_in
-      retry
     rescue Exception => e
       p e.inspect
     end

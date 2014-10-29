@@ -22,8 +22,12 @@ class RssFeed
 		"#{ latest_entry.title[0,80] } #{ latest_entry.url } "
 	end
 
-	def generate_rss_tweet(no_tags = 1)
-		random_tags = (0..no_tags).inject("") { |str, | str += "#{ generate_random_tag } " }
+	def generate_rss_tweet(no_tags = 2)
+		random_tags = (1..no_tags).inject("") { |str, no|
+			random_tag = generate_random_tag
+			str += "#{ random_tag } " if str.match(random_tag).nil?
+			str
+		}
 		"#{ rss_tweet_no_tags } #{ random_tags }"
 	end
 

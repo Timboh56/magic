@@ -14,12 +14,17 @@ class TwitterBlast
   validates_length_of :message, maximum: 140
 
   has_many :records, :dependent => :destroy
+  has_many :messages
   belongs_to :handle_list
 
   before_create :create_handle_list
 
   def follows
     records.follows
+  end
+
+  def follows_stringified
+    follows.take(limit).map! { |h| h.text }
   end
 
   def handles_stringified
