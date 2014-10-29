@@ -58,7 +58,7 @@ class TwitterBlastsController < ApplicationController
 
 	def get_handle_list
 		@handle_list = HandleList.find(params[:id])
-		render json: { name: @handle_list.name, handles: @handle_list.handles } 
+		render json: { name: @handle_list.name, handles: @handle_list.handles.take(50) } 
 	end
 
 	def show
@@ -78,7 +78,8 @@ class TwitterBlastsController < ApplicationController
 	# Never trust parameters from the scary internet, only allow the white list through.
 	def twitter_blast_params
 	  params.require(:twitter_blast).permit(
-	  	:name, :blast_type, :twitter_handles, :user_handle, :status, :message, :messages_sent
+	  	:name, :handles_type, :blast_type, :twitter_handles, :user_handle, :status, :message, :messages_sent,
+	  	:handle_list_id
 	  )
 	end
 end

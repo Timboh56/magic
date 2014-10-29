@@ -8,7 +8,9 @@ class User
   field :oauth_token, type: String
   field :oauth_secret, type: String
 
-  has_one :rss_feed_collection
+  has_many :rss_feed_collections
+
+  accepts_nested_attributes_for :rss_feed_collections
 
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
@@ -93,14 +95,5 @@ class User
   def tweet(message)
     response = twitter_client.update(message)
     message
-  end
-
-  # shortcut
-  def rss_feeds
-    rss_feed_collection.present? ? rss_feed_collection.rss_feeds : []
-  end
-
-  def tags
-    rss_feed_collection.present? ? rss_feed_collection.rss_feeds.collect! { |r| r.tag } : []
   end
 end

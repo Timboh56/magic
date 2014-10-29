@@ -12,38 +12,20 @@ $(document).ready( function () {
 		});
 	}, 5000);
 
+	$('.twitter-handles-btn').on('click', function () {
+		var id = $(this).attr('id');
+		var target = $(this).data('target');
+		var input = $(this).data('update');
+
+		$('.option-group').hide();
+		$(target).show();
+		$('.active').removeClass('active');
+		$(this).addClass('active');
+		$(input).val(id);
+	});
+
 	$('select#twitter_blast_blast_type').on('change', function () {
 		var val = $(this).val();
-
-		switch(val) {
-
-			// follow followers of user(s) from textarea
-			// or follow handles from handle list
-			case "follow_followers":
-				$('.message-row').hide();
-				break;
-
-			case "follow_handles":
-				$('.message-row').hide();
-				break;
-
-			// get followers of user(s) from textarea or handle list
-			case "get_followers":
-				$('.message-row').hide();
-				break;
-
-			// tweet to handles from textarea or handle list
-			case "handles":
-				$('.message-row').show();
-				$('.handle-lists-container').show();
-				break;
-
-			// tweet to followers of handle
-			case "followers":
-				$('.message-row').show();
-				$('.handle-lists-container').hide();
-				break;
-		}
 	});
 
 	$('select#twitter_blast_handle_list').on('change', function () {

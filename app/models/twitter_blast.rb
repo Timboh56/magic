@@ -9,13 +9,14 @@ class TwitterBlast
   field :messages_sent, type: Integer, default: 0
   field :twitter_handles, type: String
   field :blast_type, type: String # followers or handles
-  field :limit, type: String
+  field :limit, type: Integer, default: 5000
+  field :handles_type, type: String, default: "textarea" # textarea or list
   validates_length_of :message, maximum: 140
 
   has_many :records, :dependent => :destroy
-  has_one :handle_list
+  belongs_to :handle_list
 
-  after_create :create_handle_list
+  before_create :create_handle_list
 
   def blast!(user, limit = nil)
     Resque.enqueue(TwitterBlastWorker, id, user.id, limit)
@@ -30,10 +31,12 @@ class TwitterBlast
   end
 
   def create_handle_list
-    handle_list = HandleList.new
-    handle_list.name = name
-    handle_list.handles = records.handles
-    handle_list.twitter_blast_id = id
-    handle_list.save!
+    if handles_type == "list" && handle_list_id.nil?
+      handle_list = HandleList.new
+      handle_list.name = name
+      handle_list.handles = records.handles
+      handle_list.save!
+      handle_list_id = handle_list.id
+    end
   end
 end

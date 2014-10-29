@@ -5,12 +5,13 @@ Rails.application.routes.draw do
   resources :static_pages
   resources :scrapes
   resources :twitter_blasts
+  resources :rss_feed_collections
 
   get '/scrape_ape' => "scrapes#index"
   get '/twitter_blaster' => "twitter_blasts#index"
   get '/craig_crammer' => "static_pages#craig_crammer"
   get '/sms_blaster' => "static_pages#sms_blaster"
-  get '/rss_retweeter' => "static_pages#rss_retweeter"
+  get '/rss_retweeter' => "rss_feed_collections#index"
   put '/rss/save' => "static_pages#save_rss_feeds"
   put '/scrape/:id/run' => "scrapes#run"
   put '/scrape/:id/restart' => "scrapes#restart"

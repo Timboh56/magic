@@ -3,6 +3,6 @@ class HandleList
   include Mongoid::Timestamps
 
   field :name, type: String
-  belongs_to :twitter_blast
+  has_many :twitter_blasts
   has_many :handles, :class_name => "Record"
 end

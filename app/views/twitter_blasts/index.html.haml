@@ -16,41 +16,39 @@
 						.col-xs-3
 							= f.label "Type:"
 						.col-xs-9
-							= f.select :blast_type, options_for_select([["Follow followers of handle(s)", "follow_followers"], ["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "handles"], ["Tweet To followers of handle(s)", "followers"]])
+							= f.select :blast_type, options_for_select([["Follow followers of handle(s)", "follow_followers"], ["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"], ["Tweet To followers of handle(s)", "tweet_to_followers"]])
 				.row
 					.col-xs-12
 						.col-xs-3
-							= f.label "Name?"
+							= f.label "Name this action"
 						.col-xs-9
 							= f.text_field :name
 				.row
 					Enter twitter handles in textarea separated by commas, or choose a preexisting list of handles.
-				.row.twitter-handles-text-container
+				.row
+					= f.hidden_field :handles_type, { value: "textarea", class: "handles_type_input"}
+					%a.btn.btn-default.twitter-handles-btn.active{ id: "textarea", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-text-container" } Twitter Handles (comma separated)
+					%a.btn.btn-default.twitter-handles-btn{ id: "list", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-list-container"} Twitter Handles from saved list
+				.row.option-group.twitter-handles-text-container
 					.col-xs-12
 						.col-xs-3
-							%label Twitter handles (separated by commas)
+							%label Type Twitter handles (comma separated)
 						.col-xs-9
 							= f.text_area :twitter_handles
-				.handle-lists-container
+				.option-group.twitter-handles-list-container{style: "display: none; "}
 					.row
 						.col-xs-12
 							.col-xs-3
-								%label Handle List
+								%label Choose a handle list
 							.col-xs-9
-								= f.select :handle_list, options_from_collection_for_select(@handle_lists, "id", "name")
+								= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name")
 					.row.word-wrap.handle-list-handles
 				.row.message-row
 					.col-xs-12
 						.col-xs-3
-							%label Message
+							%label Message to tweet
 						.col-xs-9
 							= f.text_area :message	
-				.row
-					.col-xs-12
-						.col-xs-3
-							%label Limit
-						.col-xs-9
-							= f.number_field :limit
 				.row
 					%br
 					= f.button "Get'em!", { type: "submit", class: "btn btn-default blast-btn" }

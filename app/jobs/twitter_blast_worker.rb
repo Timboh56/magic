@@ -19,10 +19,18 @@ class TwitterBlastWorker
 
     def get_users_followers user
       users = []
-      @twitter_blast.twitter_handles.split(",").each do |handle|
+
+      if @twitter_blast.handles_types == "textarea"
+        handles = @twitter_blast.twitter_handles.split(",")
+      else
+        handles = @twitter_blast.handle_list.handles.slice(0, @twitter_blast.limit)
+      end
+
+      handles.each do |handle|
         users.concat user.get_followers(handle, @twitter_blast)
         sleep(3)
       end
+
       users
     end
 
@@ -32,16 +40,17 @@ class TwitterBlastWorker
       record = Record.create!(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
     end
 
-    def blast!(user, n = nil)
+    def blast!(user)
 
       @twitter_blast.update_attributes(status: "Running")
 
       @twitter_blast.records.destroy_all
-     
-      followers = n ? get_users_followers(user).take(n) : get_users_followers(user)
+      
+      limit = @twitter_blast.limit
 
-      if @twitter_blast.blast_type == "followers"
-        followers.each do |follower|
+      case @twitter_blast.blast_type
+      when "tweet_to_followers"
+        get_users_followers(user).each do |follower|
           sn = follower.screen_name
 
           message = '@#{ to } #{ @twitter_blast.message }'
@@ -49,18 +58,26 @@ class TwitterBlastWorker
           tweet_to(user, sn, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
           sleep(3)
         end
-      elsif @twitter_blast.blast_type == "handles"
-        
-        @twitter_blast.twitter_handles.split(",").each do |sn|
-        
+      when "tweet_to_handles"
+        handles = @twitter_blast.handles_type == "textarea" ? @twitter_blast.twitter_handles.split(",") : @twitter_blast.handle_list.handles
+        handles.each do |sn|
           to = sn.strip
           message = '@#{ to } #{ @twitter_blast.message }'
-
           tweet_to(user, to, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
         end
-      elsif @twitter_blast.blast_type == "follow_followers"
-        followers.each do |follower|
+      when "follow_followers"
+        get_users_followers(user).each do |follower|
           user.twitter_client.follow(follower.id)
+        end
+      when "follow_handles"
+        handles = @twitter_blast.handles_type == "textarea" ? @twitter_blast.handle_list.handles : @twitter_blast.twitter_handles.split(",")
+        handles.each do |handle|
+          user.twitter_client.follow(handle)
+        end
+      when "get_followers"
+        handles = @twitter_blast.handles_type == "textarea" ? @twitter_blast.handle_list.handles : @twitter_blast.twitter_handles.split(",")
+        handles.each do |handle|
+          user.twitter_client.users(handle)
         end
       end
 

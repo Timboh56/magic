@@ -9,13 +9,9 @@
 			%b
 				= current_user.name
 		%hr
+
 		- @rss_feed_collections.each do |rfc|
 			= form_tag rfc, { action: "/rss/save", method: :put } do
-				.row
-					.col-xs-3
-						= label_tag "Name:"
-					.col-xs-9
-						= rfc.text_field :name
 				.row
 					.col-xs-3
 						= label_tag "RSS Feed URLs (commas separated): "
