@@ -1,23 +1,34 @@
-<h1>Listing scrapes</h1>
+<div class="row">
+  <h1><%= fa_icon "terminal", text: "ScrapeApe" %></h1>
+</div>
+<div class="row description">
+  Go apeshit on that data™
+</div>
+<%= render :partial => "scrapes/nested_form" %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="recent-scrapes-update">
+  <%= render :partial => "scrapes/recent_scrapes_table" %>
+</div>
 
-  <tbody>
-    <% @scrapes.each do |scrape| %>
-      <tr>
-        <td><%= link_to 'Show', scrape %></td>
-        <td><%= link_to 'Edit', edit_scrape_path(scrape) %></td>
-        <td><%= link_to 'Destroy', scrape, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<script type="text/javascript">
+  $(document).ready( function () {
 
-<br>
+    setInterval(function () {
+      $.ajax({
+        url: "scrape/get_scrapes",
+        type: "GET",
+        dataType: "html",
+        success: function (xhr) {
+          $('.recent-scrapes-update').html(xhr);
+        }
+      });
+    }, 5000);
 
-<%= link_to 'New Scrape', new_scrape_path %>
+    $('.new_scrape').submit( function (event) {
+      var loading_gif = $('<img />').attr('src','<%= image_url "ajax-loader.gif" %>');
+      $('.scrape_btn').html(loading_gif);
+    }).on('ajax:complete', function () {
+      $('.scrape_btn').html('Scrape!');
+    });
+  });
+</script>

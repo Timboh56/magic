@@ -3,12 +3,13 @@ class TwitterBlast
   include Mongoid::Timestamps
   include Runnable
 
-  field :name, :type => String
-  field :status, :type => String
-  field :message, :type => String
-  field :messages_sent, :type => Integer, :default => 0
-  field :twitter_handles, :type => String
-  field :blast_type, :type => String # followers or handles
+  field :name, type: String
+  field :status, type: String
+  field :message, type: String
+  field :messages_sent, type: Integer, default: 0
+  field :twitter_handles, type: String
+  field :blast_type, type: String # followers or handles
+  field :limit, type: String
   validates_length_of :message, maximum: 140
 
   has_many :records, :dependent => :destroy

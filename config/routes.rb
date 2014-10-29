@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   resources :scrapes
   resources :twitter_blasts
 
-  get '/scrape_ape' => "static_pages#scrape_ape"
-  get '/twitter_blaster' => "static_pages#twitter_blaster"
+  get '/scrape_ape' => "scrapes#index"
+  get '/twitter_blaster' => "twitter_blasts#index"
   get '/craig_crammer' => "static_pages#craig_crammer"
   get '/sms_blaster' => "static_pages#sms_blaster"
   get '/rss_retweeter' => "static_pages#rss_retweeter"
@@ -74,6 +74,7 @@ Rails.application.routes.draw do
   get '/scrape/stop_all', to: "scrapes#stop_all_scrapes"
   get '/scrape/get_scrapes', to: "scrapes#get_scrapes_table_info"
   get '/twitter_blast/get_blasts', to: "twitter_blasts#get_blasts"
+  get '/twitter_blast/get_handle_list', to: "twitter_blasts#get_handle_list"
   get '/twitter_blast/:id/run', to: "twitter_blasts#run"
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')

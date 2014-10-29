@@ -20,15 +20,10 @@ class TwitterBlastWorker
     def get_users_followers user
       users = []
       @twitter_blast.twitter_handles.split(",").each do |handle|
-        users = user.get_followers(handle, @twitter_blast)
+        users.concat user.get_followers(handle, @twitter_blast)
         sleep(3)
       end
       users
-    rescue Twitter::Error::TooManyRequests => error
-      p error
-      p 'Sleep ' + error.rate_limit.reset_in.to_s
-      sleep error.rate_limit.reset_in
-      retry
     end
 
     def tweet_to from, to, message

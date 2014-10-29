@@ -6,16 +6,6 @@ class StaticPagesController < ApplicationController
   def index
     
   end
-  def scrape_ape
-    @scrape = Scrape.new
-    @scrapes = Scrape.all.order("created_at DESC")
-  end
-
-  def twitter_blaster
-  	@twitter_blast = TwitterBlast.new
-  	@twitter_blasts = TwitterBlast.all.order("created_at DESC")
-    @handle_lists = HandleList.all
-  end
 
   def craig_crammer
 

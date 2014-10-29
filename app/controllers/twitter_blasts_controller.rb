@@ -7,6 +7,12 @@ class TwitterBlastsController < ApplicationController
 		end
 	end
 
+	def index
+		@twitter_blast = TwitterBlast.new
+		@twitter_blasts = TwitterBlast.all.order("created_at DESC")
+		@handle_lists = HandleList.all
+	end
+
 	def create
 		@twitter_blast = TwitterBlast.new(twitter_blast_params)
 		@twitter_blast.save!
@@ -48,6 +54,11 @@ class TwitterBlastsController < ApplicationController
 	def get_blasts
 		@twitter_blasts = TwitterBlast.all.order("created_at DESC")
 		render :partial => "recent_blasts_table"
+	end
+
+	def get_handle_list
+		@handle_list = HandleList.find(params[:id])
+		render json: { name: @handle_list.name, handles: @handle_list.handles } 
 	end
 
 	def show

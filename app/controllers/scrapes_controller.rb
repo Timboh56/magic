@@ -7,9 +7,10 @@ class ScrapesController < ApplicationController
   # GET /scrapes
   # GET /scrapes.json
   def index
-    @scrapes = Scrape.all
+    @scrape = Scrape.new
+    @scrapes = Scrape.all.order("created_at DESC")
   end
-
+  
   def run
     begin
       scrape = Scrape.find(params[:id])

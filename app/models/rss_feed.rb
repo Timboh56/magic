@@ -16,14 +16,18 @@ class RssFeed
 		true
 	end
 
-	def rss_tweet_no_tag
+	def rss_tweet_no_tags
 		response = Feedjira::Feed.fetch_and_parse(url)
 		latest_entry = response.entries.first
 		"#{ latest_entry.url } #{ latest_entry.title[0,80] }"
 	end
 
-	def generate_rss_tweet
+	def generate_rss_tweet(no_tags = 1)
+		random_tags = (0..no_tags).inject("") { |str, | str += " ##{ generate_random_tag }" }
+		"#{ rss_tweet_no_tags } #{ random_tags }"
+	end
+
+	def generate_random_tag
 		random_tag = (rs = rss_feed_collection.get_random_tag).present? ? "##{ rs.text }" : ""
-		"#{ rss_tweet_no_tag } #{ random_tag }"
 	end
 end

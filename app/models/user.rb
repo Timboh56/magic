@@ -45,13 +45,21 @@ class User
 
   def get_followers(handle, twitter_blast = nil)
     followers = []
-    results = twitter_client.follower_ids(handle)
-    results.to_a.each_slice(100).each do |follower_ids|
-      followers = twitter_client.users(follower_ids)
+    results = twitter_client.follower_ids(handle).to_a
 
-      followers.each do |follower|
+    p "Getting followers of: " + handle.to_s
 
-        p "Got follower information: " + follower.inspect
+    puts results.length
+
+    results.each_slice(100).each do |follower_ids|
+
+      p "Batch of 100"
+
+      follower_profiles = twitter_client.users(follower_ids)
+
+      follower_profiles.each do |follower|
+
+        p "Got follower information: " + follower.screen_name
       
         record_params = {
           record_type: "Handle",
@@ -75,6 +83,11 @@ class User
       end
     end
     followers
+  rescue Twitter::Error::TooManyRequests => error
+    p error
+    p 'Sleep ' + error.rate_limit.reset_in.to_s
+    sleep error.rate_limit.reset_in
+    retry
   end
 
   def tweet(message)

@@ -26,11 +26,13 @@ $(document).ready (function () {
 	$('form').submit( function () {
 		var loading_gif = $('<img />').attr('src','#{ image_url "ajax-loader.gif" }');
 		btn = $(this).find('input[type=submit], button');
-		curr_val = btn.html();
+		curr_val = btn.html() || btn.val();
 		btn.html(loading_gif);
+		btn.val(loading_gif.html());
 		btn.prop('disabled', true);
 	}).on('ajax:complete', function () {
 		btn.html(curr_val);
+		btn.val(curr_val);
 		btn.prop('disabled', false);
 	});
 });

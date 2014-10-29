@@ -1,0 +1,58 @@
+- content_for :js_block do
+	= javascript_include_tag('twitter_blaster.js')
+.twitter_blaster_container
+	%h1 
+		= fa_icon "twitter",  text: "Twitter Blaster"
+	.row.description
+		Use a list of twitter handles separated by commas with a message for the users, or provide a user handle and a message to send to that user's followers.
+	- if current_user.nil?
+		%div#user_nav
+			= link_to "Sign in with Twitter", "/auth/twitter", { class: "btn btn-default" }
+	- else
+		.twitter-blast-get-followers-form.twitter-blast-form
+			= nested_form_for @twitter_blast, { remote: true } do |f|
+				.row
+					.col-xs-12
+						.col-xs-3
+							= f.label "Type:"
+						.col-xs-9
+							= f.select :blast_type, options_for_select([["Follow followers of handle(s)", "follow_followers"], ["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "handles"], ["Tweet To followers of handle(s)", "followers"]])
+				.row
+					.col-xs-12
+						.col-xs-3
+							= f.label "Name?"
+						.col-xs-9
+							= f.text_field :name
+				.row
+					Enter twitter handles in textarea separated by commas, or choose a preexisting list of handles.
+				.row.twitter-handles-text-container
+					.col-xs-12
+						.col-xs-3
+							%label Twitter handles (separated by commas)
+						.col-xs-9
+							= f.text_area :twitter_handles
+				.handle-lists-container
+					.row
+						.col-xs-12
+							.col-xs-3
+								%label Handle List
+							.col-xs-9
+								= f.select :handle_list, options_from_collection_for_select(@handle_lists, "id", "name")
+					.row.word-wrap.handle-list-handles
+				.row.message-row
+					.col-xs-12
+						.col-xs-3
+							%label Message
+						.col-xs-9
+							= f.text_area :message	
+				.row
+					.col-xs-12
+						.col-xs-3
+							%label Limit
+						.col-xs-9
+							= f.number_field :limit
+				.row
+					%br
+					= f.button "Get'em!", { type: "submit", class: "btn btn-default blast-btn" }
+		.recent-blasts-update
+			= render :partial => "twitter_blasts/recent_blasts_table"
