@@ -19,7 +19,7 @@ class RssFeed
 	def rss_tweet_no_tags
 		response = Feedjira::Feed.fetch_and_parse(url)
 		latest_entry = response.entries.first
-		"#{ latest_entry.url } #{ latest_entry.title[0,80] }"
+		"#{ latest_entry.title[0,80] } #{ latest_entry.url } "
 	end
 
 	def generate_rss_tweet(no_tags = 1)
