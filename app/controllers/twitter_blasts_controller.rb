@@ -36,6 +36,7 @@ class TwitterBlastsController < ApplicationController
 
 	def edit
 		@twitter_blast = TwitterBlast.find(params[:id])
+		@handle_lists = HandleList.all
 	end
 
 	def update

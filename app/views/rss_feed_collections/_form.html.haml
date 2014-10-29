@@ -1,0 +1,14 @@
+= form_tag rfc, { action: "/rss/save", method: :put } do
+	.row
+		.col-xs-3
+			= label_tag "RSS Feed URLs (commas separated): "
+		.col-xs-9
+			= text_area_tag :rss_feeds, rfc.rss_feeds.present? ? rfc.rss_feeds.map! { |r| r.url }.join(",") : "", { required: true }
+	.row
+		.col-xs-3
+			= label_tag "Tags (commas separated)"
+		.col-xs-9
+			= text_area_tag :tags, rfc.tags.present? ? rfc.tags.map! { |t| t.text }.join(",") : ""
+	.row
+		.col-xs-12
+			= submit_tag "Save", { class: "btn btn-default"}

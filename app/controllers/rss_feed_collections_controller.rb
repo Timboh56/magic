@@ -3,7 +3,7 @@ class RssFeedCollectionsController < ApplicationController
 	def index
     if current_user
       @rss_feed_collections = current_user.rss_feed_collections
-      #@rss_feed_collections = RssFeedCollection.new(user_id: current_user.id)
+      @rss_feed_collection = RssFeedCollection.new(user_id: current_user.id)
     end
 	end
 

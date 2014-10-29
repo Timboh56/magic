@@ -1,4 +1,5 @@
-= render :partial => "form"
-
-.row
+- content_for :js_block do
+	= javascript_include_tag('twitter_blaster.js')
+.twitter_blaster_container
+	= render :partial => "form"
 	= link_to "Back", "/twitter_blaster", class: "btn btn-default"
