@@ -23,7 +23,7 @@ class RssFeed
 	end
 
 	def generate_rss_tweet(no_tags = 1)
-		random_tags = (0..no_tags).inject("") { |str, | str += " ##{ generate_random_tag }" }
+		random_tags = (0..no_tags).inject("") { |str, | str += "#{ generate_random_tag } " }
 		"#{ rss_tweet_no_tags } #{ random_tags }"
 	end
 
