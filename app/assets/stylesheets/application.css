@@ -17,3 +17,11 @@
  *= require font-awesome
  *= require home
  */
+
+.left-aligned {
+	text-align: left;
+}
+
+.right-aligned {
+	text-align: right;
+}

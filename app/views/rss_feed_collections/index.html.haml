@@ -13,9 +13,12 @@
 		%h2
 			New Rss Feed Collection
 		= render :partial => "rss_feed_collections/form", locals: { rfc: @rss_feed_collection }
-
-		- @rss_feed_collections.each do |rfc|
-			= render :partial => "rss_feed_collections/form", locals: { rfc: rfc }
+		- if @rss_feed_collections.present?
+			%hr
+				%h2
+					Edit
+			- @rss_feed_collections.each do |rfc|
+				= render :partial => "rss_feed_collections/form", locals: { rfc: rfc }
 	- else
 		%div#user_nav
 		= link_to "Sign in with Twitter", "/auth/twitter", { class: "btn btn-default" }

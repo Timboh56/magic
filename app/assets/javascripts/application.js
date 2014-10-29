@@ -28,12 +28,14 @@ $(document).ready (function () {
 		btn = $(this).find('input[type=submit], button');
 		curr_val = btn.html() || btn.val();
 		btn.html(loading_gif);
-		btn.val(loading_gif.html());
 		btn.prop('disabled', true);
-	}).on('ajax:complete', function () {
-		btn.html(curr_val);
-		btn.val(curr_val);
-		btn.prop('disabled', false);
+	});
+
+	$('form').on('ajax:complete', function () {
+		if (btn) {
+			btn.html(curr_val);
+			btn.prop('disabled', false);
+		}
 	});
 });
 $(document).on('click', '.toggle-btn', function () {

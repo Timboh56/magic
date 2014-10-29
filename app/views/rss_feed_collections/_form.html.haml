@@ -1,4 +1,9 @@
-= form_tag rfc, { action: "/rss/save", method: :put } do
+= form_for rfc, remote: true , html: { id: rfc.id } do |f|
+	.row
+		.col-xs-3
+			= f.label "Name: "
+		.col-xs-9
+			= f.text_field :name
 	.row
 		.col-xs-3
 			= label_tag "RSS Feed URLs (commas separated): "
@@ -11,4 +16,7 @@
 			= text_area_tag :tags, rfc.tags.present? ? rfc.tags.map! { |t| t.text }.join(",") : ""
 	.row
 		.col-xs-12
-			= submit_tag "Save", { class: "btn btn-default"}
+			= button_tag "Save", { type: "submit", class: "btn btn-default" }
+	.row
+		.col-xs-12
+			= link_to 'Destroy',  rfc, { remote: true, method: :delete, class: "btn btn-default", data: { confirm: 'Are you sure?' } } unless rfc.new_record?

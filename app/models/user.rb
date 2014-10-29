@@ -96,4 +96,10 @@ class User
     response = twitter_client.update(message)
     message
   end
+
+  def rss_feeds
+    if rss_feed_collections.present?
+      rss_feed_collections.inject([]) { |arr,collection| arr.concat collection.rss_feeds }
+    end
+  end
 end
