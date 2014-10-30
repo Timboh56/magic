@@ -5,7 +5,7 @@
 				.col-xs-3
 					= f.label "Type:"
 				.col-xs-9
-					= f.select :blast_type, options_for_select([["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"]]), :selected => f.object.blast_type
+					= f.select :blast_type, options_for_select([["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"]], ["Unfollow handle(s)", "unfollow_handles"]), :selected => f.object.blast_type
 		.row
 			.col-xs-12
 				.col-xs-3

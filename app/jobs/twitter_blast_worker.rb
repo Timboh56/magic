@@ -49,16 +49,16 @@ class TwitterBlastWorker
     end
 
     def get_handles
-      @handles ||= @twitter_blast.handles_type == "textarea" ? @twitter_blast.twitter_handles.split(",") : @twitter_blast.handles_stringified
+      @handles ||= @twitter_blast.handles
     end
 
     def get_follows
-      @follows ||= @twitter_blast.follows_stringified
+      @follows ||= @twitter_blast.follows_list_stringified
     end
 
     def unfollow_followed
       get_follows.each do |handle|
-        
+        @user.unfollow(handle)
       end
     end
 

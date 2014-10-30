@@ -7,6 +7,7 @@ class User
   field :name, type: String
   field :oauth_token, type: String
   field :oauth_secret, type: String
+  has_many :twitter_blasts
 
   has_many :rss_feed_collections
 
@@ -43,6 +44,32 @@ class User
       return @twitter
     end
     return nil
+  end
+
+  def detect_follow_respond(&block)
+    twitter_streaming_client.user do |object|
+      case object
+      when Twitter::Streaming::Event
+        yield if block_given? && object.name == "follow"
+      end
+    end
+  end
+
+  def direct_message(handle, text)
+    twitter_client.create_direct_message(handle, text)
+  end
+
+  def twitter_streaming_client
+
+    if provider == "twitter"
+      @streaming_client ||= Twitter::Streaming::Client.new do |config|
+        config.access_token = oauth_token
+        config.access_token_secret = oauth_secret
+        config.consumer_key = Rails.application.config.twitter_key
+        config.consumer_secret = Rails.application.config.twitter_secret
+      end
+    end
+    @streaming_client
   end
 
   def get_followers(handle, twitter_blast = nil)

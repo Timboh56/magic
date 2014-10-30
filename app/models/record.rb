@@ -3,8 +3,9 @@ class Record
 	include Mongoid::Timestamps
 
 	field :text, type: String
-
-	# "Tweet", "Handle", etc
+	field :to, type: String
+	
+	# "Tweet", "Handle", "Friendship", "DirectMessage" etc
 	field :record_type, type: String
 
 	belongs_to :record_set
@@ -19,4 +20,5 @@ class Record
 
   scope :handles, lambda { where(record_type: "Handle") }
   scope :follows, lambda { where(record_type: "Friendship") }
+  scope :direct_messages, lambda { where(record_type: "DirectMessage") }
 end
