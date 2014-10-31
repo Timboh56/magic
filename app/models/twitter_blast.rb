@@ -69,7 +69,7 @@ class TwitterBlast
   end
 
   def get_followers(handle = nil)
-    user.get_followers(handle, id)
+    user.get_followers(handle, self)
   end
 
   def following
