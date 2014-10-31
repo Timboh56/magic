@@ -59,7 +59,7 @@ class TwitterBlast
       # get list of followers of user
       get_followers.each do |follower|
 
-        unless records.direct_messages.where(to: follow.text).exists?
+        unless records.direct_messages.where(to: follower.text).exists?
           user.direct_message(follower.screen_name, message)
           Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
           sleep(rand(4))
