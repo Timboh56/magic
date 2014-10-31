@@ -54,11 +54,15 @@ class TwitterBlast
   # as a result of twitter blast with type follow_handles
   def direct_message_followers
 
-    # get list of followers of user
-    get_followers.each do |follower|
-      unless records.direct_messages.where(to: follow.text).exists?
-        direct_message(follower.screen_name, message)
-        Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
+    if message.present? && user.present?
+  
+      # get list of followers of user
+      get_followers.each do |follower|
+
+        unless records.direct_messages.where(to: follow.text).exists?
+          user.direct_message(follower.screen_name, message)
+          Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
+        end
       end
     end
   end
