@@ -34,15 +34,21 @@ class TwitterBlastsController < ApplicationController
   end
 
   def update
-    @twitter_blast = TwitterBlast.find(params[:id])
-    respond_to do |format|
-      if @twitter_blast.update(twitter_blast_params)
-        format.html { redirect_to @twitter_blast, notice: 'Successfully updated.' }
-        format.json { render :show, status: :ok, scrape: @twitter_blast }
-      else
-        format.html { render :edit }
-        format.json { render json: @twitter_blast.errors, status: :unprocessable_entity }
+    begin
+      @twitter_blast = TwitterBlast.find(params[:id])
+      @handle_lists = HandleList.all
+
+      respond_to do |format|
+        if @twitter_blast.update(twitter_blast_params)
+          format.html { redirect_to @twitter_blast, notice: 'Successfully updated.' }
+          format.json { render :show, status: :ok, scrape: @twitter_blast }
+        else
+          format.html { render :edit }
+          format.json { render json: @twitter_blast.errors, status: :unprocessable_entity }
+        end
       end
+    rescue Exception => e
+      p e.inspect
     end
   end
 
