@@ -2,8 +2,6 @@ namespace :twitter do
 
 	# for each twitter blast 
 	task :clean_followers => :environment do
-
-
 	end
 
 	# run daily
