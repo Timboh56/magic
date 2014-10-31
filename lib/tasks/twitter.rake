@@ -13,8 +13,9 @@ namespace :twitter do
 		end
 	end
 
-	task :unfollow_following => :environment do
-		TwitterBlast.all.each do |twitter_blast|
+	# run weekly
+	task :unfollow_following_not_followers => :environment do
+		TwitterBlast.follow_handles.each do |twitter_blast|
 			twitter_blast.unfollow_following
 		end
 	end

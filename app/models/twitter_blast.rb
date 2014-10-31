@@ -25,7 +25,7 @@ class TwitterBlast
   belongs_to :user
 
   scope :follow_handles, lambda { where(blast_type: "follow_handles") }
-  scope :direct_messages, lambda { where(blast_type: "direct_messages") }
+
   before_create :create_handle_list
 
 
@@ -34,17 +34,17 @@ class TwitterBlast
   def unfollow_following_not_followers
 
     # get list of followers
-    followers = get_followers.map! { |follower| follower.screen_name }
+    followers_list = get_followers.map { |f| f.screen_name }
     
     # get list of following
-    following = following.map! { |following| following.text }
+    following_list = following_list_stringified
 
     # unfollow handles on following not on followers
-    (following - followers).each do |handle|
+    (following_list - followers_list).each do |handle|
 
       p "Unfollowing " + handle.to_s
 
-      #user.unfollow(handle)
+      åuser.unfollow(handle)
     end
   end
 
@@ -69,10 +69,16 @@ class TwitterBlast
     records.follows
   end
 
+  # return array of handles of each 
+  # user that followed back
+  def followers_list_stringified
+    get_followers.map! { |f| f.screen_name }
+  end
+
   # return array of handles of each record of
   # user followed
   def following_list_stringified
-    follows.take(limit).map! { |h| h.text }
+    following.take(limit).map! { |h| h.text }
   end
 
   # return array of handles of each record
