@@ -14,7 +14,7 @@ namespace :twitter do
 		if Time.now.friday? # previous answer: Date.today.wday == 5
 			
 			TwitterBlast.follow_handles.each do |twitter_blast|
-				twitter_blast.unfollow_following
+				twitter_blast.unfollow_following_not_followers
 			end
 		end
 	end
