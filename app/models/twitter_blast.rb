@@ -44,7 +44,7 @@ class TwitterBlast
 
       p "Unfollowing " + handle.to_s
 
-      åuser.unfollow(handle)
+      user.unfollow(handle)
     end
   end
 
