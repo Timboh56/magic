@@ -39,7 +39,7 @@
 		.row.message-row
 			.col-xs-12
 				.col-xs-3
-					%label Message to tweet
+					%label Message
 				.col-xs-9
 					= f.text_area :message
 		.row.message-row
@@ -47,7 +47,7 @@
 				.col-xs-3
 					%label Limit
 				.col-xs-9
-					= f.number_field :limit, { max: 5000, min: 0, placeholder: "5000"}
+					= f.number_field :limit, { max: 1000, min: 0, placeholder: "1000"}
 		.row
 			%br
 			= f.button "Submit", { type: "submit", class: "btn btn-default blast-btn" }

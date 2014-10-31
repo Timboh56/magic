@@ -73,7 +73,7 @@ class TwitterBlastsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def twitter_blast_params
     params.require(:twitter_blast).permit(
-      :name, :handles_type, :blast_type, :twitter_handles, :user_handle,
+      :name, :user_id, :handles_type, :blast_type, :twitter_handles, :user_handle,
       :handle_list_id, :limit, :status, :message, :messages_sent
     )
   end

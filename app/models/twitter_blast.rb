@@ -16,7 +16,10 @@ class TwitterBlast
   field :handles_type, type: String, default: "textarea" # textarea or list
   validates_length_of :message, maximum: 140
 
+  # records of twitter blast - a tweet, a direct message,
+  # a follow, unfollow, or handle retrieved.
   has_many :records, :dependent => :destroy
+
   has_many :messages
   belongs_to :handle_list
   belongs_to :user
@@ -25,27 +28,50 @@ class TwitterBlast
   scope :direct_messages, lambda { where(blast_type: "direct_messages") }
   before_create :create_handle_list
 
-  def direct_message_follow_backs
 
-    # direct message followed users
-    records.follows.each do |follow|
+  # unfollow any user we are following
+  # not following us back
+  def unfollow_following_not_followers
 
-      # if direct message hasn't been sent
+    # get list of followers
+    followers = get_followers.map! { |follower| follower.screen_name }
+    
+    # get list of following
+    following = following.map! { |following| following.text }
+
+    # unfollow handles on following not on followers
+    (following - followers).each do |handle|
+
+      p "Unfollowing " + handle.to_s
+
+      #user.unfollow(handle)
+    end
+  end
+
+  # direct message ppl who followed back
+  # as a result of twitter blast with type follow_handles
+  def direct_message_followers
+
+    # get list of followers of user
+    get_followers.each do |follower|
       unless records.direct_messages.where(to: follow.text).exists?
-        
-        user.direct_message(follow, message)
-        Record.create!(twitter_blast_id: id, record_type: "DirectMessage", to: follow, text: message)
+        direct_message(follower.screen_name, message)
+        Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
       end
     end
   end
 
-  def follows
+  def get_followers(handle = nil)
+    user.get_followers(handle)
+  end
+
+  def following
     records.follows
   end
 
   # return array of handles of each record of
   # user followed
-  def follows_list_stringified
+  def following_list_stringified
     follows.take(limit).map! { |h| h.text }
   end
 

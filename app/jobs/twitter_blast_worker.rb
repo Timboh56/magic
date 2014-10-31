@@ -53,7 +53,7 @@ class TwitterBlastWorker
     end
 
     def get_follows
-      @follows ||= @twitter_blast.follows_list_stringified
+      @follows ||= @twitter_blast.following_list_stringified
     end
 
     def unfollow_followed
@@ -78,6 +78,10 @@ class TwitterBlastWorker
             @user.follow(handle)
             r = Record.create!(record_params)
             p "Record created: " + r.inspect
+
+            # sleep for random secs (< 10)
+            sleep(rand(10))
+            
           else
             p "User #{ handle } already followed, skipping.."
           end

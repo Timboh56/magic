@@ -72,8 +72,9 @@ class User
     @streaming_client
   end
 
-  def get_followers(handle, twitter_blast = nil)
+  def get_followers(handle = nil, twitter_blast = nil)
     followers = []
+    handle ||= name
     results = twitter_client.follower_ids(handle).to_a
 
     p "Getting followers of: " + handle.to_s
