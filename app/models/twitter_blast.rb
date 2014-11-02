@@ -40,31 +40,14 @@ class TwitterBlast
     following_list = following_list_stringified
 
     # unfollow handles on following not on followers
-    (following_list - followers_list).each do |handle|
+    # limit to 250 unfollows a day
+    (following_list - followers_list).take(250).each do |handle|
 
       p "Unfollowing " + handle.to_s
 
       user.unfollow(handle)
 
       sleep(3)
-    end
-  end
-
-  # direct message ppl who followed back
-  # as a result of twitter blast with type follow_handles
-  def direct_message_followers
-
-    if message.present? && user.present?
-  
-      # get list of followers of user
-      get_followers.each do |follower|
-
-        unless records.direct_messages.where(to: follower.screen_name).exists?
-          user.direct_message(follower.screen_name, message)
-          Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
-          sleep(rand(4))
-        end
-      end
     end
   end
 

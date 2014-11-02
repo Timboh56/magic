@@ -7,9 +7,15 @@ class User
   field :name, type: String
   field :oauth_token, type: String
   field :oauth_secret, type: String
+
+  field :direct_message, type: String
   has_many :twitter_blasts
 
   has_many :rss_feed_collections
+
+  has_many :records
+
+  default_scope lambda{ order(:created_at => :desc) }
 
   accepts_nested_attributes_for :rss_feed_collections
 
@@ -70,6 +76,24 @@ class User
       end
     end
     @streaming_client
+  end
+
+  # direct message ppl who followed back
+  # as a result of twitter blast with type follow_handles
+  def direct_message_followers
+
+    if direct_message.present?
+  
+      # get list of followers of user, limit to 250
+      get_followers.take(250).each do |follower|
+
+        unless records.direct_messages.where(to: follower.screen_name).exists?
+          direct_message(follower.screen_name, message)
+          Record.create!(record_type: "DirectMessage", text: direct_message, to: follower.screen_name)
+          sleep(rand(4))
+        end
+      end
+    end
   end
 
   def get_followers(handle = nil, twitter_blast = nil)

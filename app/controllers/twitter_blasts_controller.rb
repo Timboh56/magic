@@ -2,9 +2,11 @@ class TwitterBlastsController < ApplicationController
   before_action :check_current_user, only: [:create, :destroy, :update]
 
   def index
-    @twitter_blast = TwitterBlast.new
-    @twitter_blasts = TwitterBlast.all.order("created_at DESC")
-    @handle_lists = HandleList.all
+    if current_user.present?
+      @twitter_blast = TwitterBlast.new
+      @twitter_blasts = current_user.twitter_blasts
+      @handle_lists = HandleList.all
+    end
   end
 
   def create
