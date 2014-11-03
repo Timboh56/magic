@@ -8,6 +8,10 @@ $(document).on('click','.twitter-handles-btn', function () {
 	$('.active').removeClass('active');
 	$(this).addClass('active');
 	$(input).val(id);
+
+	// disable selector if text area button clicked
+	$('select#twitter_blast_handle_list_id').attr('disabled', (id === "textarea"));
+
 });
 
 $(document).ready( function () {
@@ -28,20 +32,25 @@ $(document).ready( function () {
 
 	$('select#twitter_blast_blast_type').change( function () {
 		var val = $(this).val();
+		$('.active').removeClass('active');
+		$('.option-group').hide();
 
 		switch(val) {
 
-			case "follow_handles":
+			case 'follow_handles':
+				$('a#list').show();
 				$('.message-row').show();
 				break;
 
 			// get followers of user(s) from textarea or handle list
 			case "get_followers":
+				$('a#list').hide();
 				$('.message-row').hide();
 				break;
 
 			// tweet to handles from textarea or handle list
 			case "tweet_to_handles":
+				$('a#list').show();
 				$('.message-row').show();
 				break;
 		}
@@ -49,6 +58,7 @@ $(document).ready( function () {
 	
 	$('select#twitter_blast_handle_list').on('change', function () {
 		var val = $(this).val();
+
 		$.ajax({
 			type: "GET",
 			url: "twitter_blast/get_handle_list",

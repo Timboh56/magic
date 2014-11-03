@@ -77,10 +77,12 @@ class TwitterBlast
     handle_list.handles.take(limit).map! { |h| h.text }
   end
 
+  # handles used for blast
   def handles
     @handles ||= handles_type == "textarea" ? twitter_handles.split(",") : handles_list_stringified
   end
 
+  # run background task
   def blast!
     Resque.enqueue(TwitterBlastWorker, id, user_id, limit)
   end
@@ -89,17 +91,24 @@ class TwitterBlast
     twitter_handles.present? ? twitter_handles.split(",") : nil
   end
 
+  # number of handles retrieved from blast
   def handle_records_count
     records.present? ? records.handles.count : 0
   end
 
+  # a twitter blast can use a handle list
+  # or create a handle list for use in the future
+  # create_handle_list creates a new handle list if
+  # action is to get followers of handle
   def create_handle_list
-    if handles_type == "list" && handle_list_id.nil?
+    if blast_type == "get_followers"
       handle_list = HandleList.new
       handle_list.name = name
       handle_list.handles = records.handles
       handle_list.save!
-      handle_list_id = handle_list.id
+      self.handle_list_id = handle_list.id
+      p handle_list.inspect
+      p "handle list created"
     end
   end
 end

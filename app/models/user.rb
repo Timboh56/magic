@@ -52,6 +52,20 @@ class User
     return nil
   end
 
+  def user_lookup(handle = nil)
+    handle ||= name
+    u = twitter_client.user(handle)
+  end
+
+  def following_count(handle = nil)
+    user_lookup(handle).friends_count
+  end
+
+  # return number of followers
+  def follower_count(handle = nil)
+    user_lookup(handle).friends_count
+  end
+
   def detect_follow_respond(&block)
     twitter_streaming_client.user do |object|
       case object

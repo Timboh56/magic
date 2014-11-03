@@ -1,6 +1,6 @@
 class TwitterBlastWorker
   require "mechanize"
-  @queue = :scraper_queue
+  @queue = :twitter_queue
 
   class << self
     def perform(id, user_id, limit = nil)
@@ -68,19 +68,29 @@ class TwitterBlastWorker
       end
     end
 
+    # follow handles on handle_list or from textarea
     def follow_handles
       p "Follow handles"
+      handles_followed = 0
+
       get_handles.each do |handle|
         record_params = { twitter_blast_id: @twitter_blast.id, text: handle, record_type: "Friendship" }
         
         begin
+
+          break if handles_followed > 1000
+          
+          # dont follow more than 250 handles per run
           unless Record.where(record_params).exists?
+            
             @user.follow(handle)
             r = Record.create!(record_params)
             p "Record created: " + r.inspect
 
+            handles_followed += 1
+
             # sleep for random secs (< 10)
-            sleep(rand(10))
+            sleep(rand(5))
             
           else
             p "User #{ handle } already followed, skipping.."

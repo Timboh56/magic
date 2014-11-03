@@ -34,7 +34,7 @@
 					.col-xs-3
 						%label Choose a handle list
 					.col-xs-9
-						= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name")
+						= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name"), { disabled: true }
 			.row.word-wrap.handle-list-handles
 		.row.message-row
 			.col-xs-12

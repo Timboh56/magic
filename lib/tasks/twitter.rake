@@ -18,4 +18,10 @@ namespace :twitter do
 			end
 		end
 	end
+
+	task :follow => :environment do
+		TwitterBlast.follow_handles.each do |twitter_blast|
+			twitter_blast.blast!
+		end
+	end
 end

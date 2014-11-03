@@ -59,6 +59,8 @@ gem 'omniauth-twitter'
 
 gem 'feedjira'
 
+gem "workless", "~> 1.1.3"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
