@@ -160,6 +160,7 @@ GEM
     origin (2.1.1)
     orm_adapter (0.5.0)
     pg (0.17.1)
+    phantomjs (1.9.7.1)
     polyglot (0.3.5)
     rack (1.5.2)
     rack-protection (1.5.3)
@@ -281,6 +282,7 @@ DEPENDENCIES
   nested_form
   omniauth-twitter
   pg
+  phantomjs
   rails (= 4.1.1)
   render_csv (~> 2.0.0)
   resque

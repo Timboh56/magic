@@ -1,5 +1,7 @@
 class TwitterBlastWorker
   require "mechanize"
+  require "resque/errors"
+  extend RetriedJob
   @queue = :twitter_queue
 
   class << self

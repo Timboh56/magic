@@ -3,6 +3,7 @@ class ScraperWorker
   require "json"
   require "pathname"
   require "resque"
+  require "resque/errors"
   attr_accessor :url, :output_filename
   @queue = :scraper_queue
 
@@ -174,6 +175,8 @@ class ScraperWorker
           push_to_defective @current_proxy
         end
         save_last_url(@url)
+      rescue Resque::TermException
+        Resque.enqueue(self, key)
       rescue Exception => e
         puts e.inspect
         @scrape.status = "Error"
