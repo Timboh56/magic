@@ -26,7 +26,7 @@ namespace :twitter do
 		end
 	end
 
-	task :run => :environment do
+	task :get_feeds => :environment do
 		RssFeedCollection.all.each do |rfc|
 			user = rfc.user
 			rfc.rss_feeds.each do |rsf|
