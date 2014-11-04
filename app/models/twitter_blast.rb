@@ -110,8 +110,11 @@ class TwitterBlast
       
       begin
 
-        break if handles_followed > limit
-        
+        if handles_followed > limit
+          p "More handles followed than limit! Stopping.."
+          break
+        end
+
         unless Record.where(record_params).exists?
           
           user.follow(handle)
@@ -155,13 +158,13 @@ class TwitterBlast
   # return array of handles of each record of
   # user followed
   def following_list_stringified
-    following.take(limit).map! { |h| h.text }
+    following.map! { |h| h.text }
   end
 
   # return array of handles of each record
   # of user acquired
   def handles_list_stringified
-    handle_list.handles.take(limit).map! { |h| h.text }
+    handle_list.handles.map! { |h| h.text }
   end
 
   # handles used for blast
