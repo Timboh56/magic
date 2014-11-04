@@ -59,40 +59,7 @@ class TwitterBlastWorker
 
     # follow handles on handle_list or from textarea
     def follow_handles
-      p "Follow handles"
-      handles_followed = 0
-
-      get_handles.each do |handle|
-        record_params = { twitter_blast_id: @twitter_blast.id, text: handle, record_type: "Friendship" }
-        
-        begin
-
-          break if handles_followed > 800
-          
-          unless Record.where(record_params).exists?
-            
-            @user.follow(handle)
-            r = Record.create!(record_params)
-            p "Record created: " + r.inspect
-
-            handles_followed += 1
-
-            # sleep for random secs (< 10)
-            sleep(rand(5))
-            
-          else
-            p "User #{ handle } already followed, skipping.."
-          end
-        rescue Twitter::Error::RequestTimeout, Twitter::Error::Forbidden
-          p "Request timeout/Forbidden.. Skipping"
-        rescue Twitter::Error::TooManyRequests => error
-          p error
-          p 'Sleep ' + error.rate_limit.reset_in.to_s
-          sleep error.rate_limit.reset_in
-          retry
-        end
-      end
-      p "Donezo"
+      @twitter_blast.follow_handles
     end
 
     def reset
