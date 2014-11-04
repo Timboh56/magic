@@ -16,7 +16,7 @@ class User
 
   has_many :records
 
-  default_scope lambda{ order(:created_at => :desc) }
+  default_scope lambda{ includes(:records).order(:created_at => :desc) }
 
   accepts_nested_attributes_for :rss_feed_collections
 
@@ -155,7 +155,7 @@ class User
   end
 
   def todays_follow_count
-    records.where("created_at >= ?", Time.zone.now.beginning_of_day)
+    records.where(:created_at.gte => Date.today)
   end
 
   def unfollow(handle)
