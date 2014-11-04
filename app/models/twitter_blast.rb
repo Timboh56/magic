@@ -28,6 +28,9 @@ class TwitterBlast
 
   before_create :create_handle_list
 
+  def direct_message_followers
+    user.direct_message_followers
+  end
 
   # unfollow any user we are following
   # not following us back
