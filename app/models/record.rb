@@ -16,7 +16,6 @@ class Record
 	belongs_to :rss_feed_collection
 
 	validates_presence_of :text
-	#validates_uniqueness_of :text, scope: [:record_type]
 
   scope :handles, lambda { where(record_type: "Handle") }
   scope :follows, lambda { where(record_type: "Friendship") }

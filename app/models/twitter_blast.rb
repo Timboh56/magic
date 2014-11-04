@@ -12,7 +12,7 @@ class TwitterBlast
   # get_followers, tweet_to_handles, follow_handles, unfollow_handles
   field :blast_type, type: String # followers or handles
   
-  field :limit, type: Integer, default: 1000
+  field :limit, type: Integer, default: 500
   field :handles_type, type: String, default: "textarea" # textarea or list
   
   validates_length_of :message, maximum: 140
@@ -42,9 +42,13 @@ class TwitterBlast
         unless records.direct_messages.where(to: follower.screen_name).exists?
           user.send_direct_message(follower.screen_name, message)
           Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
+          p "Direct message: #{ message }"
+          p "Sent to: #{ follower.screen_name } "
           self.messages_sent += 1
           save!
-          sleep(rand(5))
+
+          sleep_random
+        
         end
       end
     end
@@ -62,18 +66,38 @@ class TwitterBlast
 
     # unfollow handles on following not on followers
     # limit to 250 unfollows a day
-    (following_list - followers_list).take(250).each do |handle|
+    (following_list - followers_list).take(200).each do |handle|
 
       p "Unfollowing " + handle.to_s
 
       user.unfollow(handle)
 
-      sleep(3)
+      sleep_random
     end
+  end
+
+  def sleep_random
+    sleep(rand(5))
   end
 
   def get_followers(handle = nil)
     user.get_followers(handle, self)
+  end
+
+  def get_followers_from_handles
+    users = []
+
+    if handles_type == "textarea"
+      handles = twitter_handles.split(",")
+    else
+      handles = handle_list.handles.slice(0, limit)
+    end
+
+    handles.each do |handle|
+      users.concat user.get_followers(handle, self)
+      sleep_random
+    end
+    users
   end
 
   def following

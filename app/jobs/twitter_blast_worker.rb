@@ -19,21 +19,8 @@ class TwitterBlastWorker
       end
     end
 
-
     def get_followers
-      users = []
-
-      if @twitter_blast.handles_type == "textarea"
-        handles = @twitter_blast.twitter_handles.split(",")
-      else
-        handles = @twitter_blast.handle_list.handles.slice(0, @twitter_blast.limit)
-      end
-
-      handles.each do |handle|
-        users.concat @user.get_followers(handle, @twitter_blast)
-        sleep(3)
-      end
-      users
+      @twitter_blast.get_followers_from_handles
     end
 
     def tweet_to from, to, message
