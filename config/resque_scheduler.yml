@@ -1,5 +1,5 @@
 twitter_blaster_work:
-	every: 30s
-	class: TwitterBlastWorker
-	args:
-	description: Check every minute for new twitter blasts to run
+  every: 30s
+  class: TwitterBlastWorker
+  args:
+  description: Check every minute for new twitter blasts to run
