@@ -57,6 +57,12 @@ class TwitterBlast
     end
   end
 
+  def unfollow_handles
+    handles.each do |handle|
+      user.unfollow(handle)
+    end
+  end
+
   # unfollow any user we are following
   # not following us back
   def unfollow_following_not_followers
@@ -173,16 +179,22 @@ class TwitterBlast
     following.map! { |h| h.text }
   end
 
+  def tweet_to_handles
+    handles.each do |sn|
+      tweet_to(sn.strip)
+    end
+  end
+
   def tweet_to(to)
 
     # format with handle
     formatted_tweet = '@#{ to.gsub("@","") } #{ message }'
 
-    tweet_params {
+    tweet_params = {
       text: formatted_tweet,
       twitter_blast_id: id,
       record_type: "Tweet",
-      user_id: user.id,
+      user_id: user_id,
       to: to
     }
 

@@ -24,10 +24,7 @@ class TwitterBlastWorker
     end
 
     def tweet_to_handles
-      get_handles.each do |sn|
-        to = sn.strip
-        @twitter_blast.tweet_to(to)
-      end
+      @twitter_blast.tweet_to_handles
     end
 
     def get_handles
@@ -45,9 +42,7 @@ class TwitterBlastWorker
     end
 
     def unfollow_handles
-      get_handles.each do |handle|
-        @user.unfollow(handle)
-      end
+      @twitter_blast.unfollow_handles
     end
 
     # follow handles on handle_list or from textarea
