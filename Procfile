@@ -1,1 +1,1 @@
-worker: rake jobs:work
+worker: rake resque:scheduler
