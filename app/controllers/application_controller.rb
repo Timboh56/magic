@@ -27,5 +27,6 @@ class ApplicationController < ActionController::Base
   def show_errors(e)
     @errors = "Error(s): " + e.message
     p @errors.inspect
+    redirect_to request.env["HTTP_REFERER"] || root_url
   end
 end

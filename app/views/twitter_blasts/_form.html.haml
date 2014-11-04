@@ -34,7 +34,10 @@
 					.col-xs-3
 						%label Choose a handle list
 					.col-xs-9
-						= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name"), { disabled: true }
+						- if @handle_lists.present?
+							= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name"), { disabled: true }
+						- else
+							No handle lists
 			.row.word-wrap.handle-list-handles
 		.row.message-row
 			.col-xs-12
