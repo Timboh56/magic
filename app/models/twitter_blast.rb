@@ -42,7 +42,7 @@ class TwitterBlast
         unless records.direct_messages.where(to: follower.screen_name).exists?
           user.send_direct_message(follower.screen_name, message)
           Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
-          messages_sent += 1
+          self.messages_sent += 1
           save!
           sleep(rand(5))
         end
