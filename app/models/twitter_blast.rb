@@ -126,8 +126,12 @@ class TwitterBlast
         else
           p "User #{ handle } already followed, skipping.."
         end
-      rescue Twitter::Error::RequestTimeout, Twitter::Error::Forbidden
-        p "Request timeout/Forbidden.. Skipping"
+      rescue Twitter::Error::Forbidden => error
+        p "Twitter error: Forbidden"
+        p error.inspect
+      rescue Twitter::Error::RequestTimeout => error
+        p "Request timed out!"
+        p error.inspect
       rescue Twitter::Error::TooManyRequests => error
         p error
         p 'Sleep ' + error.rate_limit.reset_in.to_s
