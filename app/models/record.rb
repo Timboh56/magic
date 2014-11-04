@@ -21,4 +21,6 @@ class Record
   scope :handles, lambda { where(record_type: "Handle") }
   scope :follows, lambda { where(record_type: "Friendship") }
   scope :direct_messages, lambda { where(record_type: "DirectMessage") }
+  scope :tweets, lambda { where(record_type: "Tweet") }
+  scope :created_today, lambda { where(:created_at.gte => Date.today) }
 end

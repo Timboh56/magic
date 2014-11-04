@@ -35,23 +35,43 @@ class TwitterBlast
   # as a result of twitter blast with type follow_handles
   def direct_message_followers
 
+    # get count of all DMs sent so far today from user
+    todays_direct_messages_count = user.todays_direct_messages_count
+
     if message.present?
   
       # get list of followers of user, limit to 250
-      get_followers.take(250).each do |follower|
+      get_followers.each do |follower|
 
-        unless records.direct_messages.where(to: follower.screen_name).exists?
+        dm_params = {
+          user_id: user_id,
+          record_type: "DirectMessage",
+          text: message,
+          to: follower.screen_name
+          twitter_blast_id: id
+        }
+
+        if todays_direct_messages_count > limit || todays_direct_messages_count === RateLimits::DIRECT_MESSAGE_LIMIT
+          p "More handles direct messaged than daily limit! Stopping.."
+          break
+        end
+
+        unless records.direct_messages.where(dm_params).exists?
+          
           user.send_direct_message(follower.screen_name, message)
           
-          Record.create!(user_id: user_id, record_type: "DirectMessage", text: message, to: follower.screen_name)
+          Record.create!(dm_params)
           
           p "Direct message: #{ message }"
           p "Sent to: #{ follower.screen_name } "
+
           self.messages_sent += 1
           save!
 
+          # increment todays DM count
+          todays_direct_messages_count += 1
+
           sleep_random
-        
         end
       end
     end
@@ -75,7 +95,7 @@ class TwitterBlast
 
     # unfollow handles on following not on followers
     # limit to 250 unfollows a day
-    (following_list - followers_list).take(200).each do |handle|
+    (following_list - followers_list).take(RateLimits::UNFOLLOW_LIMIT).each do |handle|
 
       p "Unfollowing " + handle.to_s
 
@@ -111,8 +131,8 @@ class TwitterBlast
 
   def follow_handles
 
-    p "Follow handles"
-    handles_followed = 0
+    p "Following handles.."
+    handles_followed_today = user.todays_follow_count
 
     handles.each do |handle|
 
@@ -125,7 +145,7 @@ class TwitterBlast
       
       begin
 
-        if handles_followed > limit || user.todays_follow_count === RateLimits::FOLLOW_LIMIT
+        if handles_followed_today > limit || handles_followed_today === RateLimits::FOLLOW_LIMIT
           p "More handles followed than limit! Stopping.."
           break
         end
@@ -139,7 +159,7 @@ class TwitterBlast
 
           p "Record created: " + r.inspect
 
-          handles_followed += 1
+          handles_followed_today += 1
 
           # sleep for random secs (< 10)
           sleep_random

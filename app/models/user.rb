@@ -152,8 +152,16 @@ class User
     message
   end
 
+  def todays_tweets_count
+    @todays_tweets_count ||= records.tweets.created_today.count
+  end
+
+  def todays_direct_messages_count
+    @todays_direct_messages_count ||= records.direct_messages.created_today.count
+  end
+
   def todays_follow_count
-    records.where(:created_at.gte => Date.today).count
+    @todays_follow_count ||= records.follows.created_today.count
   end
 
   def unfollow(handle)
