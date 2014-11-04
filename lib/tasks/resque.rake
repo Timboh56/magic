@@ -8,9 +8,6 @@ task "resque:setup" => :environment do
   require 'resque_scheduler'
   require 'resque/scheduler'
 
-  # you probably already have this somewhere
-  Resque.redis = 'localhost:6379'
-
   Resque.schedule = YAML.load_file('config/resque_scheduler.yml')
 
 end
