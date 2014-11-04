@@ -41,7 +41,9 @@ class TwitterBlast
 
         unless records.direct_messages.where(to: follower.screen_name).exists?
           user.send_direct_message(follower.screen_name, message)
-          Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
+          
+          Record.create!(user_id: user_id, record_type: "DirectMessage", text: message, to: follower.screen_name)
+          
           p "Direct message: #{ message }"
           p "Sent to: #{ follower.screen_name } "
           self.messages_sent += 1
@@ -106,7 +108,13 @@ class TwitterBlast
     handles_followed = 0
 
     handles.each do |handle|
-      record_params = { twitter_blast_id: id, text: handle, record_type: "Friendship" }
+
+      record_params = {
+        twitter_blast_id: id,
+        text: handle,
+        record_type: "Friendship",
+        user_id: user_id
+      }
       
       begin
 
@@ -118,7 +126,10 @@ class TwitterBlast
         unless Record.where(record_params).exists?
           
           user.follow(handle)
+
+          # create record of follow
           r = Record.create!(record_params)
+
           p "Record created: " + r.inspect
 
           handles_followed += 1
@@ -174,7 +185,7 @@ class TwitterBlast
 
   # run background task
   def blast!
-    Resque.enqueue(TwitterBlastWorker, id, user_id, limit)
+    Resque.enqueue(TwitterBlastWorker, id, user_id)
   end
 
   def handles_array

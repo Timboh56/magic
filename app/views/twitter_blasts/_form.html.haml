@@ -16,7 +16,7 @@
 			.col-xs-12
 				.col-xs-9.col-xs-offset-3.center-aligned
 					.row
-						Enter twitter handles in textarea separated by commas, or choose a preexisting list of handles.
+						Enter twitter handles in textarea separated by commas, or choose a preexisting list of handles. Include a direct message if you want to direct message users when they follow you back.
 					%br
 					= f.hidden_field :handles_type, { value: "textarea", class: "handles_type_input"}
 					%a.btn.btn-default.twitter-handles-btn.active{ id: "textarea", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-text-container" } Twitter Handles (comma separated)

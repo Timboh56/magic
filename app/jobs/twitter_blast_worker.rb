@@ -5,7 +5,7 @@ class TwitterBlastWorker
   @queue = :twitter_queue
 
   class << self
-    def perform(id, user_id, limit = nil)
+    def perform(id, user_id)
       begin
         unless id.is_a? String
           @twitter_blast = TwitterBlast.find(id["$oid"])

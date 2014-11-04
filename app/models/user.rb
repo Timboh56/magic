@@ -154,6 +154,10 @@ class User
     message
   end
 
+  def todays_follow_count
+    records.where("created_at >= ?", Time.zone.now.beginning_of_day)
+  end
+
   def unfollow(handle)
     twitter_client.unfollow(handle)
   end

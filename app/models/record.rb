@@ -14,6 +14,7 @@ class Record
 	belongs_to :twitter_blast
 	belongs_to :handle_list
 	belongs_to :rss_feed_collection
+	belongs_to :user
 
 	validates_presence_of :text
 
