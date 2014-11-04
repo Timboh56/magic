@@ -195,6 +195,12 @@ GEM
       redis-namespace (~> 1.0)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
+    resque-scheduler (2.0.1)
+      redis (>= 2.0.1)
+      resque (>= 1.20.0)
+      rufus-scheduler
+    rufus-scheduler (2.0.18)
+      tzinfo (>= 0.3.23)
     rush (0.6.8)
       session
     sass (3.2.19)
@@ -286,6 +292,7 @@ DEPENDENCIES
   rails (= 4.1.1)
   render_csv (~> 2.0.0)
   resque
+  resque-scheduler
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   smarter_csv

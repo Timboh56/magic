@@ -80,9 +80,8 @@ class TwitterBlastWorker
         
         begin
 
-          break if handles_followed > 1000
+          break if handles_followed > 800
           
-          # dont follow more than 250 handles per run
           unless Record.where(record_params).exists?
             
             @user.follow(handle)

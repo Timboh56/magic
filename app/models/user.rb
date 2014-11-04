@@ -7,6 +7,7 @@ class User
   field :name, type: String
   field :oauth_token, type: String
   field :oauth_secret, type: String
+  field :role, type: String, default: "registered" # "registered", "admin"
 
   field :direct_message, type: String
   has_many :twitter_blasts
@@ -18,6 +19,14 @@ class User
   default_scope lambda{ order(:created_at => :desc) }
 
   accepts_nested_attributes_for :rss_feed_collections
+
+  def handle_lists
+    twitter_blasts.select! { |t| t.handle_list }
+  end
+
+  def admin?
+    role === "admin"
+  end
 
   def self.from_omniauth(auth)
     where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)

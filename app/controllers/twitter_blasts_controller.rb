@@ -4,8 +4,14 @@ class TwitterBlastsController < ApplicationController
   def index
     if current_user.present?
       @twitter_blast = TwitterBlast.new
-      @twitter_blasts = current_user.twitter_blasts
-      @handle_lists = HandleList.all
+
+      if current_user.admin?
+        @twitter_blasts = TwitterBlast.all
+        @handle_lists = HandleList.all
+      else
+        @twitter_blasts = current_user.twitter_blasts
+        @handle_lists = current_user.handle_lists
+      end
     end
   end
 
