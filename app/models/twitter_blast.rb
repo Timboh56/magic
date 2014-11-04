@@ -47,7 +47,7 @@ class TwitterBlast
           user_id: user_id,
           record_type: "DirectMessage",
           text: message,
-          to: follower.screen_name
+          to: follower.screen_name,
           twitter_blast_id: id
         }
 
