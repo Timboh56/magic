@@ -2,6 +2,7 @@ class TwitterBlast
   include Mongoid::Document
   include Mongoid::Timestamps
   include Runnable
+  include RateLimits
 
   field :name, type: String
   field :status, type: String
@@ -118,7 +119,7 @@ class TwitterBlast
       
       begin
 
-        if handles_followed > limit
+        if handles_followed > limit || user.todays_follow_count === RateLimits::FOLLOW_LIMIT
           p "More handles followed than limit! Stopping.."
           break
         end
@@ -170,6 +171,31 @@ class TwitterBlast
   # user followed
   def following_list_stringified
     following.map! { |h| h.text }
+  end
+
+  def tweet_to(to)
+
+    # format with handle
+    formatted_tweet = '@#{ to.gsub("@","") } #{ message }'
+
+    tweet_params {
+      text: formatted_tweet,
+      twitter_blast_id: id,
+      record_type: "Tweet",
+      user_id: user.id,
+      to: to
+    }
+
+    # unless user has been tweeted to before
+    unless Record.where(tweet_params).exists?
+
+      user.tweet(formatted_tweet, to)
+      
+      increment!(:messages_sent)
+
+      # create record of tweet
+      record = Record.create!(tweet_params)
+    end
   end
 
   # return array of handles of each record

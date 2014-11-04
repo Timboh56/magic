@@ -8,12 +8,10 @@ class User
   field :oauth_token, type: String
   field :oauth_secret, type: String
   field :role, type: String, default: "registered" # "registered", "admin"
-
   field :direct_message, type: String
+
   has_many :twitter_blasts
-
   has_many :rss_feed_collections
-
   has_many :records
 
   default_scope lambda{ includes(:records).order(:created_at => :desc) }
@@ -155,7 +153,7 @@ class User
   end
 
   def todays_follow_count
-    records.where(:created_at.gte => Date.today)
+    records.where(:created_at.gte => Date.today).count
   end
 
   def unfollow(handle)

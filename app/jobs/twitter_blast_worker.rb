@@ -23,17 +23,10 @@ class TwitterBlastWorker
       @twitter_blast.get_followers_from_handles
     end
 
-    def tweet_to from, to, message
-      message = from.tweet(message, to)
-      @twitter_blast.increment!(:messages_sent)
-      record = Record.create!(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet")
-    end
-
     def tweet_to_handles
       get_handles.each do |sn|
         to = sn.strip
-        message = '@#{ to } #{ @twitter_blast.message }'
-        tweet_to(@user, to, message) unless Record.where(text: message, twitter_blast_id: @twitter_blast.id, record_type: "Tweet").exists?
+        @twitter_blast.tweet_to(to)
       end
     end
 
