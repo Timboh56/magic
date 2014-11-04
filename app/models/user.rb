@@ -84,7 +84,7 @@ class User
     end
   end
 
-  def direct_message(handle, text)
+  def send_direct_message(handle, text)
     twitter_client.create_direct_message(handle, text)
   end
 
@@ -111,7 +111,7 @@ class User
       get_followers.take(250).each do |follower|
 
         unless records.direct_messages.where(to: follower.screen_name).exists?
-          direct_message(follower.screen_name, message)
+          send_direct_message(follower.screen_name, message)
           Record.create!(record_type: "DirectMessage", text: direct_message, to: follower.screen_name)
           sleep(rand(4))
         end
