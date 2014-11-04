@@ -13,6 +13,8 @@ class TwitterBlastsController < ApplicationController
         @handle_lists = current_user.handle_lists
       end
     end
+  rescue Exception => e
+    puts e.inspect
   end
 
   def create
