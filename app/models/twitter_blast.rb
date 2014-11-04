@@ -110,7 +110,7 @@ class TwitterBlast
       
       begin
 
-        break if handles_followed > 800
+        break if handles_followed > limit
         
         unless Record.where(record_params).exists?
           
