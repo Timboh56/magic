@@ -14,7 +14,9 @@ class TwitterBlast
   
   field :limit, type: Integer, default: 1000
   field :handles_type, type: String, default: "textarea" # textarea or list
+  
   validates_length_of :message, maximum: 140
+  validates_presence_of :user_id
 
   # records of twitter blast - a tweet, a direct message,
   # a follow, unfollow, or handle retrieved.
@@ -28,8 +30,24 @@ class TwitterBlast
 
   before_create :create_handle_list
 
+  # direct message ppl who followed back
+  # as a result of twitter blast with type follow_handles
   def direct_message_followers
-    user.direct_message_followers
+
+    if message.present?
+  
+      # get list of followers of user, limit to 250
+      get_followers.take(250).each do |follower|
+
+        unless records.direct_messages.where(to: follower.screen_name).exists?
+          user.send_direct_message(follower.screen_name, message)
+          Record.create!(record_type: "DirectMessage", text: message, to: follower.screen_name)
+          messages_sent += 1
+          save!
+          sleep(rand(5))
+        end
+      end
+    end
   end
 
   # unfollow any user we are following

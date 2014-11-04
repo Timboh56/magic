@@ -101,24 +101,6 @@ class User
     @streaming_client
   end
 
-  # direct message ppl who followed back
-  # as a result of twitter blast with type follow_handles
-  def direct_message_followers
-
-    if direct_message.present?
-  
-      # get list of followers of user, limit to 250
-      get_followers.take(250).each do |follower|
-
-        unless records.direct_messages.where(to: follower.screen_name).exists?
-          send_direct_message(follower.screen_name, message)
-          Record.create!(record_type: "DirectMessage", text: direct_message, to: follower.screen_name)
-          sleep(rand(4))
-        end
-      end
-    end
-  end
-
   def get_followers(handle = nil, twitter_blast = nil)
     followers = []
     handle ||= name
