@@ -26,15 +26,10 @@ class Scrape
   
   accepts_nested_attributes_for :data_sets
   before_create :generate_record_list
-
-  def generate_record_list
-    record_list = RecordList.new
-    record_list.name = filename
-    self.scraped_record_list = record_list
-  end
+  validate :check_parameterized_record_list
 
   def records_count
-    scraped_record_list.records.count rescue 0
+    scraped_record_list.records_count rescue 0
   end
 
   def root_data_set
@@ -105,4 +100,17 @@ class Scrape
       end
     end
   end
+
+  private
+
+  def check_parameterized_record_list
+    errors.add(:parameterized_record_list_id, ' must not be nil. ') if url_parameterization_type === "Data" && parameterized_record_list_id.nil?
+  end
+
+  def generate_record_list
+    record_list = RecordList.new
+    record_list.name = filename
+    self.scraped_record_list = record_list
+  end
+
 end

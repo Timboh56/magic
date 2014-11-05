@@ -50,14 +50,10 @@ class ScraperWorker
 
         if @scrape.url_parameterization_type === "Integer"
           
-          p "integer"
-
           # use URL parameters to find next
           url_param = (@scrape.page_interval * @page_index).to_s
         
         else
-
-          p "not int"
 
           # use next record in record list for parameter in URL
           url_param = (@scrape.parameterized_record_list.records[@page_index].text) rescue nil
@@ -120,7 +116,7 @@ class ScraperWorker
         csv_row = []
 
         # create a record set if a data set exists
-        record_set = RecordSet.create!(data_set_id: data_set.id, scrape_id: @scrape.id) if data_set
+        record_set = data_set ? RecordSet.create!(data_set_id: data_set.id, scrape_id: @scrape.id) : nil
 
         data_set.parameters.each do |parameter|
           data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
@@ -135,7 +131,7 @@ class ScraperWorker
             }
 
             unless Record.where(record_params).exists?
-              record = Record.create!(record_params.merge!({ record_set_id: record_set.id}))
+              record = Record.create!(record_params.merge!({ record_set_id: (record_set ? record_set.id : nil) }))
               puts "Whoop Whoop! Record added: " + record_params.inspect
             end
           else
@@ -157,6 +153,7 @@ class ScraperWorker
     end
 
     def perform(id, continue = false, root_url = nil)
+      p id.inspect
       @scrape = Scrape.find(id)
       @scrape.status = "Running.."
       @scrape.save!
@@ -196,8 +193,6 @@ class ScraperWorker
       Resque.enqueue(self, key)
     rescue Exception => e
       p e.inspect
-      @scrape.status = "Error"
-      @scrape.save!
     end
 
     def node_to_uri node
