@@ -13,7 +13,7 @@
 <script type="text/javascript">
   $(document).ready( function () {
 
-    setInterval(function () {
+    /**setInterval(function () {
       $.ajax({
         url: "scrape/get_scrapes",
         type: "GET",
@@ -22,7 +22,7 @@
           $('.recent-scrapes-update').html(xhr);
         }
       });
-    }, 5000);
+    }, 5000);**/
 
     $('.new_scrape').submit( function (event) {
       var loading_gif = $('<img />').attr('src','<%= image_url "ajax-loader.gif" %>');

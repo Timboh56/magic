@@ -16,6 +16,7 @@
         <th>Records collected</th>
         <th>Status</th>
         <th>View</th>
+        <th>Edit</th>
         <th>Run</th>
         <th>Restart</th>        
         <th>Download CSV</th>
@@ -26,9 +27,10 @@
           <tr>
             <td><%= scrape.created_at %></td>
             <td><%= scrape.filename %></td>
-            <td><%= scrape.records.count %></td>
+            <td><%= scrape.records_count %></td>
             <td><%= scrape.status %></td>
             <td><%= link_to "View", scrape_path(scrape), { class: "view_link"} %></td>
+            <td><%= link_to "Edit", edit_scrape_path(scrape), { class: "edit_link"} %></td>
             <td>
               <%= link_to fa_icon("play"), "/scrape/" + scrape.id.to_s + "/run", { method: :put, data: { remote: true }, alt: "run" } %>
             </td>

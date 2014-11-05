@@ -55,7 +55,18 @@
           </div>
           <div class='clear-fix'>
           </div>
-          <div class="row">
+          <div class="row description">
+            Choose a list of previously scraped data or a page number interval to pass into the parameterized url.
+          </div>
+          <div class="page-interval-container">
+            <div class='col-xs-2'>
+              <%= f.label "URL Parameter Data" %>
+            </div>
+            <div class="col-xs-9">
+              <%= select_tag "url_params_list", options_from_collection_for_select(@record_lists, "id", "name") %>
+            </div>
+          </div>
+          <div class="row page-interval-container">
             <div class='col-xs-2'>
               <%= f.label "Page interval" %>
             </div>

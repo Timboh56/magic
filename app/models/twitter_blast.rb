@@ -4,7 +4,6 @@ class TwitterBlast
   include Runnable
   include RateLimits
 
-  field :name, type: String
   field :status, type: String
   field :message, type: String
   field :messages_sent, type: Integer, default: 0

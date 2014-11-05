@@ -9,6 +9,7 @@ class ScrapesController < ApplicationController
   def index
     @scrape = Scrape.new
     @scrapes = Scrape.all.order("created_at DESC")
+    @record_lists = RecordList.all
   end
   
   def run
@@ -93,7 +94,7 @@ class ScrapesController < ApplicationController
   end
 
   def get_scrapes_table_info
-    @scrapes = Scrape.all
+    @scrapes = Scrape.all.cache
     render :partial => "scrapes/recent_scrapes_table"
   end
 

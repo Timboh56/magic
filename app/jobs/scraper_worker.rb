@@ -1,8 +1,6 @@
 class ScraperWorker
   require "mechanize"
-  require "json"
   require "pathname"
-  require "resque"
   require "resque/errors"
   attr_accessor :url, :output_filename
   @queue = :scraper_queue
@@ -27,6 +25,8 @@ class ScraperWorker
         # find links to pages to crawl on current page
         current_page.search(sub_page.link_selector.to_s).each do |link|
           begin
+
+            # convert node to uri string
             link_url = node_to_uri(link)
 
             puts "  Clicking link with text: " + link_url
@@ -42,10 +42,9 @@ class ScraperWorker
         end
       end
       
-      if @next_selector.present?
-        next_link = current_page.search(@next_selector).last
+      if @scrape.next_selector.present?
+        next_link = current_page.search(@scrape.next_selector).last
         @agent.get(node_to_uri(next_link)) 
-
       else
 
         @page_index += 1
@@ -106,15 +105,26 @@ class ScraperWorker
           data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
           unless data == "" || data.match(/^\s*$/i)
             csv_row.push data
-            params = { scrape_id: @scrape.id, parameter_id: parameter.id, text: data }
-            unless Record.where(params).exists?
-              record = Record.create!(params.merge!({ record_set_id: record_set.id}))
-              puts "Whoop Whoop! Record added: " + params.inspect
+
+            record_params = {
+              record_type: parameter.name,
+              record_list_id: @scrape.record_list.id,
+              parameter_id: parameter.id,
+              text: data
+            }
+
+            unless Record.where(record_params).exists?
+              record = Record.create!(record_params.merge!({ record_set_id: record_set.id}))
+              puts "Whoop Whoop! Record added: " + record_params.inspect
             end
           else
             raise "Not all parameters found in page. Skipping.."
           end
         end
+
+        # sleep for random 5 seconds
+        sleep(rand(5))
+        
       rescue Exception => e
         puts "Error crawling page: " + e.inspect
         record_set.destroy!
@@ -127,61 +137,52 @@ class ScraperWorker
 
     def perform(id, continue = false, root_url = nil)
       unless id.is_a? String
-        scrape = Scrape.find(id["$oid"])
+        @scrape = Scrape.find(id["$oid"])
       else
-        scrape = Scrape.find(id)
+        @scrape = Scrape.find(id)
       end
+      @scrape.status = "Running.."
+      @scrape.save!
+      
+      @sub_pages = @scrape.sub_pages_data_sets
 
-      begin
+      @proxies = []
 
-        @scrape = scrape
+      @current_proxy = {}
 
-        @scrape.status = "Running.."
+      @output_filename = @scrape["filename"] || DateTime.now.to_s
 
-        @scrape.save!
-        
-        @next_selector = scrape.next_selector
+      @url = continue == true ? @scrape.last_scanned_url : (root_url || @scrape["URL"])
 
-        @sub_pages = scrape.sub_pages_data_sets
+      @website_root = @url.match(/^((http|https):\/.+(\.(com|net|org|gov|it|biz)))/)[1]
 
-        @proxies = []
+      @id = @scrape["filename"] + DateTime.now.to_s
 
-        @current_proxy = {}
+      # if using parameters
+      @page_index = 0
 
-        @output_filename = scrape["filename"] || DateTime.now.to_s
+      @page_interval = @scrape.page_interval
 
-        @url = continue == true ? @scrape.last_scanned_url : (root_url || scrape["URL"])
+      puts "URL: " + @url.to_s
 
-        @website_root = @url.match(/^((http|https):\/.+(\.(com|net|org|gov|it|biz)))/)[1]
+      set_agent_with_proxy
+      @agent.get(URI(@url))
+      page = @agent.page
+      scrape_page
 
-        @id = scrape["filename"] + DateTime.now.to_s
-
-        # if using parameters
-        @page_index = 0
-
-        @page_interval = scrape.page_interval
-
-        puts "URL: " + @url.to_s
-
-        set_agent_with_proxy
-        @agent.get(URI(@url))
-        page = @agent.page
-        scrape_page
-
-      rescue Timeout::Error, Mechanize::ResponseCodeError
-        if @scrape.use_proxies
-          puts "Unable to get to website with IP, trying again with other proxy.."
-          puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
-          push_to_defective @current_proxy
-        end
-        save_last_url(@url)
-      rescue Resque::TermException
-        Resque.enqueue(self, key)
-      rescue Exception => e
-        puts e.inspect
-        @scrape.status = "Error"
-        @scrape.save!
+    rescue Timeout::Error, Mechanize::ResponseCodeError
+      if @scrape.use_proxies
+        puts "Unable to get to website with IP, trying again with other proxy.."
+        puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
+        push_to_defective @current_proxy
       end
+      save_last_url(@url)
+    rescue Resque::TermException
+      Resque.enqueue(self, key)
+    rescue Exception => e
+      p e.inspect
+      @scrape.status = "Error"
+      @scrape.save!
     end
 
     def node_to_uri node

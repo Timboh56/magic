@@ -13,10 +13,24 @@ class Scrape
 
   has_many :data_sets
 
-  has_many :records
+  # record set is a "row" of data, scraped from individual page
   has_many :record_sets
+
+  # record list is all the records
+  has_one :record_list, :autosave => true
   
   accepts_nested_attributes_for :data_sets
+  before_create :generate_record_list
+
+  def generate_record_list
+    record_list = RecordList.new
+    record_list.name = name
+    self.record_list = record_list
+  end
+
+  def records_count
+    record_list.records.count rescue 0
+  end
 
   def root_data_set
     data_sets.select { |d| !d.link_selector.present? }.first
@@ -47,13 +61,14 @@ class Scrape
     p "Done with proxies csv."
   end
 
-	def run
+  def run
     open_proxies_csv if use_proxies
-		Resque.enqueue(ScraperWorker, id, last_scanned_url.present?)
-	end
+    puts id.inspect
+    Resque.enqueue(ScraperWorker, id.to_s, last_scanned_url.present?)
+  end
 
   def restart
-    open_proxies_csv
+    open_proxies_csv if use_proxies
     record_sets.destroy_all
     Resque.enqueue(ScraperWorker, id)
   end
