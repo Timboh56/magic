@@ -32,7 +32,6 @@ class ScrapesController < ApplicationController
   def show
     begin
       scrape = Scrape.find(params[:id])
-      puts "Scrape found"
       respond_to do |format|
         format.csv do
           send_data scrape.format_to_downloadable_csv
@@ -52,6 +51,7 @@ class ScrapesController < ApplicationController
 
   # GET /scrapes/1/edit
   def edit
+    @record_lists = RecordList.all
   end
 
   # POST /scrapes
@@ -62,6 +62,7 @@ class ScrapesController < ApplicationController
       
       respond_to do |format|
         if @scrape.save!
+
           @scrape.run
 
           #format.csv { render text: @products.to_csv }
@@ -125,7 +126,7 @@ class ScrapesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def scrape_params
       params.require(:scrape).permit(
-        :URL, :id, :_id, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
+        :URL, :id, :_id, :pagination_type, :url_parameterization_type, :parameterized_record_list_id, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
         :data_sets_attributes => [
           :id, :_id, :link_selector, :_destroy, :parameters_attributes => [
             :id, :_id, :name, :text_to_remove, :include_whitespace, :selector, :_destroy

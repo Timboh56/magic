@@ -2,13 +2,10 @@
 
 .show-container
 	.row
-		%h2 Twitter handles
+		%h2 Twitter handles scraped
 	.row
 		.col-xs-12.word-wrap
 			- if @twitter_blast.records.length > 0
 				#{ @twitter_blast.records.map { |record| record.text }.join(",") }
 			- else
 				None to show.
-	.row
-		%br
-		= link_to "Back", "/twitter_blaster", class: "btn btn-default"

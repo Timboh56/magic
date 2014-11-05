@@ -6,4 +6,8 @@ module Runnable
     field :name, type: String
     has_many :records, dependent: :destroy
   end
+
+  def records_count
+  	records.count
+  end
 end

@@ -12,3 +12,6 @@
 					= a[0].gsub("_", " ").capitalize
 			.col-xs-10.left-aligned
 				= a[1]
+	.row
+		%br
+		= link_to "Back", send("#{obj.class.name.underscore.downcase}s_path"), class: "btn btn-default"

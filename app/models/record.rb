@@ -15,6 +15,7 @@ class Record
 	belongs_to :handle_list
 	belongs_to :rss_feed_collection
 	belongs_to :user
+	belongs_to :record_list
 
 	validates_presence_of :text
 

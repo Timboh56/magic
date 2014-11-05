@@ -42,20 +42,38 @@ class ScraperWorker
         end
       end
       
-      if @scrape.next_selector.present?
-        next_link = current_page.search(@scrape.next_selector).last
-        @agent.get(node_to_uri(next_link)) 
+      if @scrape.pagination_type === "PageLink"
+        next_link = node_to_uri(current_page.search(@scrape.next_selector).last) rescue nil
       else
-
+        
         @page_index += 1
 
-        # use URL parameters to find next
-        next_link = @scrape.page_parameterized_url.gsub(":page", (@page_interval * @page_index).to_s)
+        if @scrape.url_parameterization_type === "Integer"
+          
+          p "integer"
 
-        @agent.get(next_link)
+          # use URL parameters to find next
+          url_param = (@scrape.page_interval * @page_index).to_s
+        
+        else
+
+          p "not int"
+
+          # use next record in record list for parameter in URL
+          url_param = (@scrape.parameterized_record_list.records[@page_index].text) rescue nil
+        
+        end
+
+        p url_param.inspect
+
+        next_link = url_param ? @scrape.page_parameterized_url.gsub(":page", url_param) : nil
+
       end
 
       unless next_link.nil?
+
+        @agent.get(next_link)
+
         puts "Clicked next link: " + next_link.to_s
         scrape_page
       else
@@ -100,7 +118,10 @@ class ScraperWorker
       begin
         puts "Crawling page for data parameters"
         csv_row = []
-        record_set = RecordSet.create!(data_set_id: data_set.id, scrape_id: @scrape.id)
+
+        # create a record set if a data set exists
+        record_set = RecordSet.create!(data_set_id: data_set.id, scrape_id: @scrape.id) if data_set
+
         data_set.parameters.each do |parameter|
           data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
           unless data == "" || data.match(/^\s*$/i)
@@ -108,7 +129,7 @@ class ScraperWorker
 
             record_params = {
               record_type: parameter.name,
-              record_list_id: @scrape.record_list.id,
+              record_list_id: @scrape.scraped_record_list.id,
               parameter_id: parameter.id,
               text: data
             }
@@ -136,11 +157,7 @@ class ScraperWorker
     end
 
     def perform(id, continue = false, root_url = nil)
-      unless id.is_a? String
-        @scrape = Scrape.find(id["$oid"])
-      else
-        @scrape = Scrape.find(id)
-      end
+      @scrape = Scrape.find(id)
       @scrape.status = "Running.."
       @scrape.save!
       
@@ -160,8 +177,6 @@ class ScraperWorker
 
       # if using parameters
       @page_index = 0
-
-      @page_interval = @scrape.page_interval
 
       puts "URL: " + @url.to_s
 

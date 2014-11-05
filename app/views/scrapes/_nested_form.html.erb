@@ -1,4 +1,7 @@
 <%= nested_form_for @scrape, { remote: (@scrape.new_record? ? true : false) } do |f| %>
+  <%= f.hidden_field :pagination_type, { class: "pagination-type" } %>
+  <%= f.hidden_field :url_parameterization_type, { class: "url-parameterization-type" } %>
+
   <div class="scrapeape_container">
     <div class="row">
       <div class="col-lg-12">
@@ -41,10 +44,10 @@
           </div>
         </div>
         <div class="row">
-          <a id="page_paginator" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a page paginator</a>
-          <a id="url_parameters" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a URL parameter</a>
+          <a id="PageLink" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a page link paginator</a>
+          <a id="URL" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a URL parameter</a>
         </div>
-        <div id="url_parameters" class="row pagination-type hide">
+        <div id="URL" class="row pagination-type hide">
           <div class="row">
             <div class='col-xs-2'>
               <%= f.label "Parameterized URL" %>
@@ -58,15 +61,23 @@
           <div class="row description">
             Choose a list of previously scraped data or a page number interval to pass into the parameterized url.
           </div>
-          <div class="page-interval-container">
+          <div class="row">
+            <a id="Data" class="btn btn-default toggle-btn" data-toggle=".url-parameterization-type">Use Data List</a>
+            <a id="Integer" class="btn btn-default toggle-btn" data-toggle=".url-parameterization-type">Use Number Interval</a>
+          </div>
+          <div id="Data" class="row url-parameterization-type hide">
             <div class='col-xs-2'>
               <%= f.label "URL Parameter Data" %>
             </div>
             <div class="col-xs-9">
-              <%= select_tag "url_params_list", options_from_collection_for_select(@record_lists, "id", "name") %>
+              <% if @record_lists %>
+                <%= f.select :parameterized_record_list_id, options_from_collection_for_select(@record_lists, "id", "name") %>
+              <% else %>
+                No record lists.
+              <% end %>
             </div>
           </div>
-          <div class="row page-interval-container">
+          <div id="Integer" class="row url-parameterization-type hide">
             <div class='col-xs-2'>
               <%= f.label "Page interval" %>
             </div>
@@ -75,7 +86,7 @@
             </div>
           </div>
         </div>
-        <div id="page_paginator" class="row pagination-type hide">
+        <div id="PageLink" class="row pagination-type hide">
           <div class='col-xs-2'>
             <%= f.label "Paginator selector" %>
           </div>
@@ -83,12 +94,12 @@
             <%= f.text_field "next_selector", { placeholder: "e.g. a.next-btn"} %>
           </div>
         </div>
+        <hr />
         <div class="row" style="margin: 2em 0;">
           <div class="col-xs-8 col-xs-offset-2">
             Add a <b>data set</b> and indicate a <b> link selector</b> for ScrapeApe to click to crawl a page, or leave <b>link selector</b> to crawl the page of the <b> root url</b>.
           </div>
         </div>
-        <hr />
         <%= f.fields_for :data_sets do |dsf| %>
           <div class="row">
             <div class='col-xs-2'>

@@ -40,8 +40,11 @@ $(document).ready (function () {
 $(document).on('click', '.toggle-btn', function () {
 	var klass = $(this).data('toggle');
 	var id = $(this).attr('id');
+	$('.active').removeClass('active');
+	$(this).toggleClass('active');
 	$(klass).addClass('hide');
 	$('#' + id + klass).toggleClass('hide');
+	$('input' + klass).val(id);
 });
 
 function set_bounce() {
