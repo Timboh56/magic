@@ -4,7 +4,6 @@ class TwitterBlast
   include Runnable
   include RateLimits
 
-  field :status, type: String
   field :message, type: String
   field :messages_sent, type: Integer, default: 0
   field :twitter_handles, type: String
@@ -168,14 +167,15 @@ class TwitterBlast
         end
       rescue Twitter::Error::Forbidden => error
         p "Twitter error: Forbidden"
-        p error.inspect
+        update_attributes!(status: error.inspect)
       rescue Twitter::Error::RequestTimeout => error
         p "Request timed out!"
-        p error.inspect
+        update_attributes!(status: error.inspect)
       rescue Twitter::Error::TooManyRequests => error
         p error
         p 'Sleep ' + error.rate_limit.reset_in.to_s
         sleep error.rate_limit.reset_in
+        update_attributes!(status: error.inspect)
         retry
       end
     end
