@@ -7,11 +7,11 @@ namespace :twitter do
 		end
 	end
 
-	# run weekly
+	# run every three days
 	task :unfollow_following_not_followers => :environment do
 
-		# only run on fridays, weekly job
-		if Time.now.friday? # previous answer: Date.today.wday == 5
+		# run fridays, mondays, wednesdays
+		if Time.now.monday? || Time.now.wednesday? || Time.now.friday?
 			
 			TwitterBlast.follow_handles.each do |twitter_blast|
 				twitter_blast.unfollow_following_not_followers

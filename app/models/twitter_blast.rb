@@ -111,6 +111,10 @@ class TwitterBlast
     user.get_followers(handle, self)
   end
 
+  def daily_follow_rate_limit
+    @daily_follow_rate_limit ||= user.follower_count < 2000 ? RateLimits::FOLLOW_LIMIT_UNDER_2000 : RateLimits::FOLLOW_LIMIT
+  end
+
   def get_followers_from_handles
     users = []
 
@@ -130,7 +134,12 @@ class TwitterBlast
   def follow_handles
 
     p "Following handles.."
+
+    # number of handles already followed today from other accounts
     handles_followed_today = user.todays_follow_count
+
+    # manual limit on how many follows a day
+    follow_limit = daily_follow_rate_limit
 
     handles.each do |handle|
 
@@ -143,7 +152,7 @@ class TwitterBlast
       
       begin
 
-        if handles_followed_today > limit || handles_followed_today === RateLimits::FOLLOW_LIMIT
+        if handles_followed_today > limit || handles_followed_today === follow_limit
           p "More handles followed than limit! Stopping.."
           break
         end
