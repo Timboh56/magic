@@ -94,12 +94,13 @@ class ScraperWorker
         agent.max_history = 3
 
         if @scrape.use_proxies
-          puts "Setting Proxy"
           @current_proxy = proxy.nil? ? get_random_proxy : proxy
           puts @current_proxy.to_s
           puts "Using proxy ip: " + @current_proxy.ip.to_s + ":" + @current_proxy.port.to_s
           agent.set_proxy @current_proxy.ip, @current_proxy.port
         end
+
+        p "Agent set."
       }
     end
 
@@ -181,7 +182,7 @@ class ScraperWorker
 
       # print response from agent
       p response.inspect
-      
+
       page = @agent.page
       scrape_page
 
