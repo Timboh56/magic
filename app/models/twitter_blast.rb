@@ -98,6 +98,13 @@ class TwitterBlast
       p "Unfollowing " + handle.to_s
 
       user.unfollow(handle)
+      
+      r = Record.create!({
+        twitter_blast_id: id,
+        text: handle,
+        record_type: "Unfollow",
+        user_id: user_id
+      })
 
       sleep_random
     end
@@ -108,7 +115,7 @@ class TwitterBlast
   end
 
   def get_followers(handle = nil)
-    user.get_followers(handle, self)
+    user.get_followers_or_following("followers", handle, self)
   end
 
   def daily_follow_rate_limit
@@ -125,7 +132,7 @@ class TwitterBlast
     end
 
     handles.each do |handle|
-      users.concat user.get_followers(handle, self)
+      users.concat user.get_followers_or_following("followers", handle, self)
       sleep_random
     end
     users
@@ -191,12 +198,13 @@ class TwitterBlast
     p "Donezo"
   end
 
-  def following
-    records.follows
+  def get_following(handle = nil)
+    #records.follows
+    user.get_followers_or_following("friends", handle, self)
   end
 
   # return array of handles of each 
-  # user that followed back
+  # user that followedget_followers_or_following back
   def followers_list_stringified
     get_followers.map! { |f| f.screen_name }
   end
@@ -204,7 +212,7 @@ class TwitterBlast
   # return array of handles of each record of
   # user followed
   def following_list_stringified
-    following.map! { |h| h.text }
+    get_following.map! { |f| f.screen_name }
   end
 
   def tweet_to_handles

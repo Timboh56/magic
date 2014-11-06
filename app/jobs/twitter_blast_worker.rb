@@ -35,12 +35,6 @@ class TwitterBlastWorker
       @follows ||= @twitter_blast.following_list_stringified
     end
 
-    def unfollow_followed
-      get_follows.each do |handle|
-        @user.unfollow(handle)
-      end
-    end
-
     def unfollow_handles
       @twitter_blast.unfollow_handles
     end

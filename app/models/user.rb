@@ -99,28 +99,33 @@ class User
     @streaming_client
   end
 
-  def get_followers(handle = nil, twitter_blast = nil)
-    followers = []
+  def get_followers_or_following(followers_or_friends, handle = nil, twitter_blast = nil)
+    handles = []
     handle ||= name
-    results = twitter_client.follower_ids(handle).to_a
 
-    p "Getting followers of: " + handle.to_s
+    if followers_or_friends == "followers"
+      results = twitter_client.follower_ids(handle).to_a
+    else
+      results = twitter_client.friend_ids(handle).to_a
+    end
+
+    p "Getting #{ followers_or_friends } of: #{ handle.to_s }"
 
     puts results.length
 
-    results.each_slice(100).each do |follower_ids|
+    results.each_slice(100).each do |uids|
 
       p "Batch of 100"
 
-      follower_profiles = twitter_client.users(follower_ids)
+      user_profiles = twitter_client.users(uids)
 
-      follower_profiles.each do |follower|
+      user_profiles.each do |u|
 
-        p "Got follower information: " + follower.screen_name
+        p "Got #{ followers_or_friends } information: " + u.screen_name
       
         record_params = {
           record_type: "Handle",
-          text: follower.screen_name,
+          text: u.screen_name,
         }
 
         unless (record = Record.where(record_params).first).present?
@@ -136,10 +141,10 @@ class User
           p "Created record: " + record.inspect
         end
 
-        followers << follower
+        handles << u
       end
     end
-    followers
+    handles
   rescue Twitter::Error::TooManyRequests => error
     p error
     p 'Sleep ' + error.rate_limit.reset_in.to_s

@@ -5,6 +5,13 @@ class ScraperWorker
   attr_accessor :url, :output_filename
   @queue = :scraper_queue
 
+  AGENTS = [
+    'Mac Firefox',
+    'Mac Safari',
+    'Linux Mozilla',
+    'Windows IE 6'
+  ]
+  
   class << self
     def scrape_page
       page_uri = @agent.page.uri.to_s
