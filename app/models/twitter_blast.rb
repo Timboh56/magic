@@ -86,14 +86,16 @@ class TwitterBlast
   def unfollow_following_not_followers
 
     # get list of followers
-    followers_list = get_followers.map { |f| f.screen_name }
+    followers_list = followers_list_stringified
     
     # get list of following
     following_list = following_list_stringified
 
+    rate_limit = following_list.count > 2000 ? RateLimits::UNFOLLOW_LIMIT :  RateLimits::UNFOLLOW_LIMIT_UNDER_2000
+
     # unfollow handles on following not on followers
     # limit to 250 unfollows a day
-    (following_list - followers_list).take(RateLimits::UNFOLLOW_LIMIT).each do |handle|
+    (following_list - followers_list).take(rate_limit).each do |handle|
 
       p "Unfollowing " + handle.to_s
 
