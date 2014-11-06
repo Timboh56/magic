@@ -186,13 +186,16 @@ class ScraperWorker
       page = @agent.page
       scrape_page
 
-    rescue Timeout::Error, Mechanize::ResponseCodeError
+    rescue Mechanize::ResponseCodeError => r
       if @scrape.use_proxies
-        puts "Unable to get to website with IP, trying again with other proxy.."
+        puts "Unable to get to website with IP."
         puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
         push_to_defective @current_proxy
       end
+      p r.inspect
       save_last_url(@url)
+    rescue Timeout::Error => t
+      p "Timeout error: " + t.inspect
     rescue Resque::TermException
       Resque.enqueue(self, key)
     rescue Exception => e
