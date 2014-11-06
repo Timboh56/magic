@@ -153,7 +153,6 @@ class ScraperWorker
     end
 
     def perform(id, continue = false, root_url = nil)
-      p id.inspect
       @scrape = Scrape.find(id)
       @scrape.status = "Running.."
       @scrape.save!
@@ -178,7 +177,11 @@ class ScraperWorker
       puts "URL: " + @url.to_s
 
       set_agent_with_proxy
-      @agent.get(URI(@url))
+      response = @agent.get(URI(@url))
+
+      # print response from agent
+      p response.inspect
+      
       page = @agent.page
       scrape_page
 
