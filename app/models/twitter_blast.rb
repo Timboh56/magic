@@ -179,6 +179,10 @@ class TwitterBlast
         end
       rescue Twitter::Error::Forbidden => error
         p "Twitter error: Forbidden"
+
+        # create record so we can skip this user
+        r = Record.create!(record_params)
+
         update_attributes!(status: error.inspect)
       rescue Twitter::Error::RequestTimeout => error
         p "Request timed out!"
@@ -199,7 +203,6 @@ class TwitterBlast
   end
 
   def get_following(handle = nil)
-    #records.follows
     user.get_followers_or_following("friends", handle, self)
   end
 
