@@ -194,6 +194,10 @@ class TwitterBlast
     p "Donezo"
   end
 
+  def following
+    records.follows
+  end
+
   def get_following(handle = nil)
     #records.follows
     user.get_followers_or_following("friends", handle, self)
