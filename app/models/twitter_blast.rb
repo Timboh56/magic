@@ -75,12 +75,6 @@ class TwitterBlast
     end
   end
 
-  def unfollow_handles
-    handles.each do |handle|
-      user.unfollow(handle)
-    end
-  end
-
   # unfollow any user we are following
   # not following us back
   def unfollow_following_not_followers
