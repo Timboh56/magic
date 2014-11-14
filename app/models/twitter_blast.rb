@@ -149,6 +149,8 @@ class TwitterBlast
       
       handles.slice(follow_index, (handles.count - 1)).each do |handle|
 
+        p "Follow index: #{ follow_index } "
+
         record_params = {
           twitter_blast_id: id,
           text: handle,
@@ -176,13 +178,15 @@ class TwitterBlast
 
             # sleep for random secs (< 10)
             sleep_random
-
-            # increment follow index
-            increment!(follow_index)
             
           else
             p "User #{ handle } already followed, skipping.."
           end
+
+          # increment follow index
+          self.follow_index += 1
+          save!
+
         rescue Twitter::Error::Forbidden => error
           p "Twitter error: Forbidden"
 
