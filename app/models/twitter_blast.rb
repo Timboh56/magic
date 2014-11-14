@@ -7,7 +7,8 @@ class TwitterBlast
   field :message, type: String
   field :messages_sent, type: Integer, default: 0
   field :twitter_handles, type: String
-  
+  field :follow_index, type: Integer, default: 0
+
   # get_followers, tweet_to_handles, follow_handles, unfollow_handles
   field :blast_type, type: String # followers or handles
   
@@ -138,62 +139,70 @@ class TwitterBlast
 
     p "Following handles.."
 
-    # number of handles already followed today from other accounts
-    handles_followed_today = user.todays_follow_count
+    if follow_index > (handles.count - 1)
 
-    # manual limit on how many follows a day
-    follow_limit = daily_follow_rate_limit
+      # number of handles already followed today from other accounts
+      handles_followed_today = user.todays_follow_count
 
-    handles.each do |handle|
-
-      record_params = {
-        twitter_blast_id: id,
-        text: handle,
-        record_type: "Friendship",
-        user_id: user_id
-      }
+      # manual limit on how many follows a day
+      follow_limit = daily_follow_rate_limit
       
-      begin
+      handles.slice(follow_index, (handles.count - 1)).each do |handle|
 
-        if handles_followed_today > limit || handles_followed_today === follow_limit
-          p "More handles followed than limit! Stopping.."
-          break
-        end
+        record_params = {
+          twitter_blast_id: id,
+          text: handle,
+          record_type: "Friendship",
+          user_id: user_id
+        }
+        
+        begin
 
-        unless Record.where(record_params).exists?
-          
-          user.follow(handle)
+          if handles_followed_today > limit || handles_followed_today === follow_limit
+            p "More handles followed than limit! Stopping.."
+            break
+          end
 
-          # create record of follow
+          unless Record.where(record_params).exists?
+            
+            user.follow(handle)
+
+            # create record of follow
+            r = Record.create!(record_params)
+
+            p "Record created: " + r.inspect
+
+            handles_followed_today += 1
+
+            # sleep for random secs (< 10)
+            sleep_random
+
+            # increment follow index
+            increment!(follow_index)
+            
+          else
+            p "User #{ handle } already followed, skipping.."
+          end
+        rescue Twitter::Error::Forbidden => error
+          p "Twitter error: Forbidden"
+
+          # create record so we can skip this user
           r = Record.create!(record_params)
 
-          p "Record created: " + r.inspect
-
-          handles_followed_today += 1
-
-          # sleep for random secs (< 10)
-          sleep_random
-          
-        else
-          p "User #{ handle } already followed, skipping.."
+          update_attributes!(status: error.inspect)
+        rescue Twitter::Error::RequestTimeout => error
+          p "Request timed out!"
+          update_attributes!(status: error.inspect)
+        rescue Twitter::Error::TooManyRequests => error
+          p error
+          p 'Sleep ' + error.rate_limit.reset_in.to_s
+          sleep error.rate_limit.reset_in
+          update_attributes!(status: error.inspect)
+          retry
         end
-      rescue Twitter::Error::Forbidden => error
-        p "Twitter error: Forbidden"
-
-        # create record so we can skip this user
-        r = Record.create!(record_params)
-
-        update_attributes!(status: error.inspect)
-      rescue Twitter::Error::RequestTimeout => error
-        p "Request timed out!"
-        update_attributes!(status: error.inspect)
-      rescue Twitter::Error::TooManyRequests => error
-        p error
-        p 'Sleep ' + error.rate_limit.reset_in.to_s
-        sleep error.rate_limit.reset_in
-        update_attributes!(status: error.inspect)
-        retry
       end
+    else
+      p "All handles followed."
     end
     p "Donezo"
   end
