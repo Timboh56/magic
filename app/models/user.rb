@@ -19,7 +19,7 @@ class User
   accepts_nested_attributes_for :rss_feed_collections
 
   def handle_lists
-    twitter_blasts.select! { |t| t.handle_list }
+    twitter_blasts.select { |t| t.handle_list }
   end
 
   def admin?
