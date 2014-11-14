@@ -139,7 +139,7 @@ class TwitterBlast
 
     p "Following handles.."
 
-    if follow_index > (handles.count - 1)
+    if follow_index < (handles.count - 1)
 
       # number of handles already followed today from other accounts
       handles_followed_today = user.todays_follow_count
