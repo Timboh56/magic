@@ -89,7 +89,6 @@ class TwitterBlast
     rate_limit = following_list.count > 2000 ? RateLimits::UNFOLLOW_LIMIT :  RateLimits::UNFOLLOW_LIMIT_UNDER_2000
 
     # unfollow handles on following not on followers
-    # limit to 250 unfollows a day
     (following_list - followers_list).take(rate_limit).each do |handle|
 
       p "Unfollowing " + handle.to_s
@@ -147,7 +146,7 @@ class TwitterBlast
       # manual limit on how many follows a day
       follow_limit = daily_follow_rate_limit
       
-      handles.slice(follow_index, (handles.count - 1)).each do |handle|
+      handles.slice(follow_index, (follow_index + follow_limit).each do |handle|
 
         p "Follow index: #{ follow_index } "
 
