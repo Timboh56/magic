@@ -146,7 +146,7 @@ class TwitterBlast
       # manual limit on how many follows a day
       follow_limit = daily_follow_rate_limit
       
-      handles.slice(follow_index, (follow_index + follow_limit).each do |handle|
+      handles.slice(follow_index, (follow_index + follow_limit)).each do |handle|
 
         p "Follow index: #{ follow_index } "
 
