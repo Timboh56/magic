@@ -5,7 +5,7 @@ class TwitterBlastWorker
   @queue = :twitter_queue
 
   class << self
-    def perform(id, user_id)
+    def perform(id, user_id, perform = nil)
       begin
         unless id.is_a? String
           @twitter_blast = TwitterBlast.find(id["$oid"])
@@ -13,7 +13,10 @@ class TwitterBlastWorker
           @twitter_blast = TwitterBlast.find(id)
         end
         @user = User.find(user_id["$oid"])
-        blast!
+
+        @perform = perform
+
+        run_job
       rescue Exception => e
         puts e.inspect
       end
@@ -35,8 +38,8 @@ class TwitterBlastWorker
       @follows ||= @twitter_blast.following_list_stringified
     end
 
-    def unfollow_handles
-      @twitter_blast.unfollow_handles
+    def unfollow
+      @twitter_blast.unfollow_following_not_followers
     end
 
     # follow handles on handle_list or from textarea
@@ -44,15 +47,11 @@ class TwitterBlastWorker
       @twitter_blast.follow_handles
     end
 
-    def reset
-      @twitter_blast.records.destroy_all
-    end
-
-    def blast!
+    def run_job
 
       @twitter_blast.update_attributes(status: "Running")
       
-      send(@twitter_blast.blast_type)
+      send(@perform || @twitter_blast.blast_type)
 
       @twitter_blast.status = "Stopped"
       @twitter_blast.save!

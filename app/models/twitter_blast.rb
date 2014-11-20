@@ -273,8 +273,13 @@ class TwitterBlast
   end
 
   # run background task
-  def blast!
-    Resque.enqueue(TwitterBlastWorker, id, user_id)
+  def run
+    Resque.enqueue(TwitterBlastWorker, id, user_id, blast_type)
+  end
+
+  # run background task for unfolow
+  def unfollow
+    Resque.enqueue(TwitterBlastWorker, id, user_id, "unfollow")    
   end
 
   def handles_array

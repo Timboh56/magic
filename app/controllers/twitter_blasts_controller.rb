@@ -27,7 +27,7 @@ class TwitterBlastsController < ApplicationController
   def run
     begin
       @twitter_blast = TwitterBlast.find(params[:id])
-      @twitter_blast.blast!
+      @twitter_blast.run
       render "create"
     rescue Exception => e
       puts e.inspect

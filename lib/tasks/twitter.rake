@@ -14,7 +14,7 @@ namespace :twitter do
 		if Time.now.sunday? || Time.now.monday? || Time.now.wednesday? || Time.now.friday?
 			
 			TwitterBlast.follow_handles.each do |twitter_blast|
-				twitter_blast.unfollow_following_not_followers
+				twitter_blast.unfollow
 			end
 		end
 	end
@@ -22,7 +22,7 @@ namespace :twitter do
 	# run daily
 	task :follow => :environment do
 		TwitterBlast.follow_handles.each do |twitter_blast|
-			twitter_blast.blast!
+			twitter_blast.run
 		end
 	end
 
