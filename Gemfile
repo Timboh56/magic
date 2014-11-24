@@ -64,6 +64,9 @@ gem "workless", "~> 1.1.3"
 gem "resque-scheduler"
 
 gem "phantomjs"
+
+gem 'newrelic_rpm'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
