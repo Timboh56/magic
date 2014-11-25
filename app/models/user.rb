@@ -69,7 +69,7 @@ class User
     u = twitter_client.user(handle)
   end
 
-  def send_sms(to, message_body, from)
+  def send_sms(to, message_body, from = nil)
     from = from || phone_number
     [from, to].each { |n| n.gsub!(/\D/m,"") }
     twilio_client.messages.create(
