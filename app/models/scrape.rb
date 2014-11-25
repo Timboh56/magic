@@ -1,8 +1,10 @@
 class Scrape
   include Mongoid::Document
   include Mongoid::Timestamps
+  require "mechanize"
+  require "pathname"
 
-  field :URL, :type => String
+  field :url, :type => String
   field :page_parameterized_url, :type => String
   field :pagination_type, :type => String, :default => "PageLink" # "PageLink" or "URL"
   field :url_parameterization_type, :type => String # "Data" or "Integer"
@@ -101,6 +103,32 @@ class Scrape
     end
   end
 
+  def init(continue, root_url = nil)
+    @proxies = []
+
+    @current_proxy = {}
+
+    @output_filename = filename || DateTime.now.to_s
+
+    starting_url = continue == true ? last_scanned_url : root_url || url
+
+    @website_root = starting_url.match(/^((http|https):\/.+(\.(com|net|org|gov|it|biz)))/)[1]
+
+    # if using parameters
+    @page_index = 0
+
+    puts "URL: " + starting_url.to_s
+
+    set_agent_with_proxy
+    response = @agent.get(URI(starting_url))
+
+    # print response from agent
+    p response.inspect
+
+    page = @agent.page
+    scrape_page
+  end
+
   private
 
   def check_parameterized_record_list
@@ -113,4 +141,156 @@ class Scrape
     self.scraped_record_list = record_list
   end
 
+  def scrape_page
+    page_uri = @agent.page.uri.to_s
+    url = URI(page_uri)
+    current_page = @agent.page
+    puts "Scraping page: " + url.to_s
+
+    set_agent_with_proxy
+
+    save_last_url(url)
+
+    # if root url has any parameters to scrape..
+    scrape_sub_page(current_page, root_data_set) if root_data_set.present?
+
+    sub_pages_data_sets.each do |sub_page|
+      puts "Looking for link with selector: " + sub_page.link_selector.to_s + "..."
+
+      # find links to pages to crawl on current page
+      current_page.search(sub_page.link_selector.to_s).each do |link|
+        begin
+
+          # convert node to uri string
+          link_url = node_to_uri(link)
+
+          puts "  Clicking link with text: " + link_url
+
+          @agent.get(link_url)
+
+          # scrape individual page
+          scrape_sub_page(@agent.page, sub_page)
+        rescue Exception => e
+          puts "Unable to get page " + link_url + ": " + e.inspect
+          puts "Skipping"
+        end
+      end
+    end
+    
+    if pagination_type === "PageLink"
+      next_link = node_to_uri(current_page.search(next_selector).last) rescue nil
+    else
+      
+      @page_index += 1
+
+      if url_parameterization_type === "Integer"
+        
+        # use URL parameters to find next
+        url_param = (page_interval * @page_index).to_s
+      
+      else
+
+        # use next record in record list for parameter in URL
+        url_param = (parameterized_record_list.records[@page_index].text) rescue nil
+      
+      end
+
+      p url_param.inspect
+
+      next_link = url_param ? page_parameterized_url.gsub(":page", url_param) : nil
+
+    end
+
+    unless next_link.nil?
+
+      @agent.get(next_link)
+
+      puts "Clicked next link: " + next_link.to_s
+      scrape_page
+    else
+      puts "------------------- END ----------------"
+    end
+  end
+
+  def set_agent_with_proxy(proxy = nil)
+    @agent = Mechanize.new { |agent|
+      agent.user_agent_alias = 'Mac Safari'
+      agent.keep_alive = true
+      agent.open_timeout = 3
+      agent.read_timeout = 3
+      agent.max_history = 3
+
+      if use_proxies
+        @current_proxy = proxy.nil? ? get_random_proxy : proxy
+        puts @current_proxy.to_s
+        puts "Using proxy ip: " + @current_proxy.ip.to_s + ":" + @current_proxy.port.to_s
+        agent.set_proxy @current_proxy.ip, @current_proxy.port
+      end
+
+      p "Agent set."
+    }
+  end
+
+  def get_random_proxy
+    working_proxies = ProxyHost.where(:working => true)
+    raise "There are no working proxies. " if working_proxies.count == 0
+    rand_no = Random.rand(working_proxies.count)
+    proxy = working_proxies[rand_no]
+  end
+
+  def scrape_sub_page(page, data_set)
+    begin
+      puts "    Crawling page for data parameters"
+      csv_row = []
+
+      # create a record set if a data set exists
+      record_set = data_set ? RecordSet.create!(data_set_id: data_set.id, scrape_id: id) : nil
+
+      data_set.parameters.each do |parameter|
+        data = page.search(parameter.selector).text.gsub("\t","").gsub("\n","").gsub(parameter.text_to_remove, "")
+        unless data == "" || data.match(/^\s*$/i)
+          csv_row.push data
+
+          record_params = {
+            record_type: parameter.name,
+            record_list_id: scraped_record_list.id,
+            parameter_id: parameter.id,
+            text: data
+          }
+
+          unless Record.where(record_params).exists?
+            record = Record.create!(record_params.merge!({ record_set_id: (record_set ? record_set.id : nil) }))
+            puts "Whoop Whoop! Record added: " + record_params.inspect
+          end
+        else
+          raise "Not all parameters found in page. Skipping.."
+        end
+      end
+
+      # sleep for random 5 seconds
+      sleep(rand(5))
+      
+    rescue Exception => e
+      puts "Error crawling page: " + e.inspect
+      record_set.destroy!
+    end
+  end
+
+  def push_to_defective proxy
+    proxy.update_attributes!(:working => false)
+  end
+
+  def node_to_uri node
+    uri = URI(node.attributes['href'].value.to_s).to_s
+    if uri.match(/^(http|https):\/.+(\.(com|net|org|gov|it|biz))/).nil?
+      @website_root + uri
+    else
+      uri
+    end
+  end
+
+  def save_last_url(url = nil)
+    last_scanned_url = url || @agent.page.uri.to_s
+    save!
+  end
 end

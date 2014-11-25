@@ -9,6 +9,7 @@ class User
   field :oauth_secret, type: String
   field :role, type: String, default: "registered" # "registered", "admin"
   field :direct_message, type: String
+  field :phone_number, type: String
 
   has_many :twitter_blasts
   has_many :rss_feed_collections
@@ -59,9 +60,23 @@ class User
     return nil
   end
 
+  def twilio_client
+    @twilio_client ||= Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SSID"], ENV["TWILIO_AUTH_TOKEN"]
+  end
+
   def user_lookup(handle = nil)
     handle ||= name
     u = twitter_client.user(handle)
+  end
+
+  def send_sms(to, message_body, from)
+    from = from || phone_number
+    [from, to].each { |n| n.gsub!(/\D/m,"") }
+    twilio_client.messages.create(
+      from: "+1#{from}",
+      to: "+1#{to}",
+      body: message_body
+    )
   end
 
   def following_count(handle = nil)

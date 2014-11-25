@@ -1,2 +1,28 @@
 .container
 	%h1 SMS Blaster
+
+	.row
+		Enter a bunch of phone numbers:
+
+= form_tag "/text" do
+	.row
+		.col-xs-3
+			Send from (your Twilio number):
+		.col-xs-9
+			= text_field_tag "from_phone_number", current_user.phone_number, { placeholder: "10 digit number", class: "full-width" }
+	.row
+		.col-xs-3
+			Phone Numbers:
+		.col-xs-9
+			= text_area_tag "phone_numbers", "", { placeholder: "10 digit numbers", class: "full-width" }
+	.row
+		.col-xs-3
+			Text Message:
+		.col-xs-9
+			= text_area_tag "text_message_body", "", { placeholder: "e.g. Hi! Check out dopemagic! www.dopemagic.com", class: "full-width" }
+	.row
+		= submit_tag "Submit"			
+
+.container
+	%h1 Text Messages received:
+	.row

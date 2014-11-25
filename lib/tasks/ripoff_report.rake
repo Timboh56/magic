@@ -48,10 +48,6 @@ namespace :ripoff_report do
 
 	def run
 		open_proxies_csv
-		#root_url = "http://www.ripoffreport.com/c/56/outrageous-popular-rip-off/lawyers?pg=68"
-		#root_url = "http://www.ripoffreport.com/c/496/community/attorneys-general"
-		#root_url = "http://www.ripoffreport.com/c/381/health-fitness/dental-services?pg=44"
-		#root_url = "http://www.ripoffreport.com/c/559/health-fitness/doctors?pg=83"
 		root_url = "http://www.ripoffreport.com/c/235/finance/insurance-agencies"
 		page = scrape_with_new_proxy(root_url)
 	end

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   put '/rss/save' => "static_pages#save_rss_feeds"
   put '/scrape/:id/run' => "scrapes#run"
   put '/scrape/:id/restart' => "scrapes#restart"
+  post '/text' => "sms_blasts#text"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
