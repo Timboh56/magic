@@ -13,10 +13,11 @@
 		to a list of handles with an
 		%b
 			included message.
-	- if current_user.nil?
-		%div#user_nav
-			= link_to "Sign in with Twitter", "/auth/twitter", { class: "btn btn-default" }
-	- else
+	- if current_user
 		= render :partial => "twitter_blasts/form"
 		.recent-blasts-update
 			= render :partial => "twitter_blasts/recent_blasts_table"
+
+	- else
+		%div#user_nav
+			= link_to "Sign in with Twitter", "/auth/twitter", { class: "btn btn-default" }

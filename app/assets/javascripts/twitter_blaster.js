@@ -30,6 +30,7 @@ $(document).ready( function () {
 	}, 5000);**/
 
 
+
 	$('select#twitter_blast_blast_type').change( function () {
 		var val = $(this).val();
 		$('.active').removeClass('active');
@@ -53,6 +54,9 @@ $(document).ready( function () {
 				$('a#list').show();
 				$('.message-row').show();
 				break;
+			case "dm_followers":
+				$('.message-row').show();
+				$('.twitter-handle-actions').hide();
 		}
 	});
 	

@@ -5,40 +5,41 @@
 				.col-xs-3
 					= f.label "Type:"
 				.col-xs-9
-					= f.select :blast_type, options_for_select([["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"]], ["Unfollow handle(s)", "unfollow_handles"]), :selected => f.object.blast_type
-		.row
-			.col-xs-12
-				.col-xs-3
-					= f.label "Name this action"
-				.col-xs-9
-					= f.text_field :name
-		.row
-			.col-xs-12
-				.col-xs-9.col-xs-offset-3.center-aligned
-					.row
-						Enter twitter handles in textarea separated by commas, or choose a preexisting list of handles. Include a direct message if you want to direct message users when they follow you back.
-					%br
-					= f.hidden_field :handles_type, { value: "textarea", class: "handles_type_input"}
-					%a.btn.btn-default.twitter-handles-btn.active{ id: "textarea", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-text-container" } Twitter Handles (comma separated)
-					%a.btn.btn-default.twitter-handles-btn{ id: "list", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-list-container"} Twitter Handles from saved list
-					%br
-		.row.option-group.twitter-handles-text-container
-			.col-xs-12
-				.col-xs-3
-					%label Type Twitter handles (comma separated)
-				.col-xs-9
-					= f.text_area :twitter_handles
-		.option-group.twitter-handles-list-container{style: "display: none; "}
+					= f.select :blast_type, options_for_select([["Follow handle(s)", "follow_handles"], ["Get Followers of handle(s)", "get_followers"], ["Tweet To handle(s)", "tweet_to_handles"], ["Direct Message Followers", "dm_followers"], ["Unfollow handle(s)", "unfollow_handles"]]), :selected => f.object.blast_type
+		.twitter-handle-actions
 			.row
 				.col-xs-12
 					.col-xs-3
-						%label Choose a handle list
+						= f.label "Name this action"
 					.col-xs-9
-						- if @handle_lists.present?
-							= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name"), { disabled: true }
-						- else
-							No handle lists
-			.row.word-wrap.handle-list-handles
+						= f.text_field :name
+			.row
+				.col-xs-12
+					.col-xs-9.col-xs-offset-3.center-aligned
+						.row
+							Enter twitter handles in textarea separated by commas, or choose a preexisting list of handles. Include a direct message if you want to direct message users when they follow you back.
+						%br
+						= f.hidden_field :handles_type, { value: "textarea", class: "handles_type_input"}
+						%a.btn.btn-default.twitter-handles-btn.active{ id: "textarea", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-text-container" } Twitter Handles (comma separated)
+						%a.btn.btn-default.twitter-handles-btn{ id: "list", "data-update" => ".handles_type_input", "data-target" => ".twitter-handles-list-container"} Twitter Handles from saved list
+						%br
+			.row.option-group.twitter-handles-text-container
+				.col-xs-12
+					.col-xs-3
+						%label Type Twitter handles (comma separated)
+					.col-xs-9
+						= f.text_area :twitter_handles
+			.option-group.twitter-handles-list-container{style: "display: none; "}
+				.row
+					.col-xs-12
+						.col-xs-3
+							%label Choose a handle list
+						.col-xs-9
+							- if @handle_lists.present?
+								= f.select :handle_list_id, options_from_collection_for_select(@handle_lists, "id", "name"), { disabled: true }
+							- else
+								No handle lists
+				.row.word-wrap.handle-list-handles
 		.row.message-row
 			.col-xs-12
 				.col-xs-3

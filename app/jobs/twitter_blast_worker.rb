@@ -47,11 +47,15 @@ class TwitterBlastWorker
       @twitter_blast.follow_handles
     end
 
+    def dm_followers
+      @twitter_blast.direct_message_followers
+    end
+
     def run_job
 
       @twitter_blast.update_attributes(status: "Running")
       
-      send(@perform || @twitter_blast.blast_type)
+      send(@twitter_blast.blast_type)
 
       @twitter_blast.status = "Stopped"
       @twitter_blast.save!

@@ -33,7 +33,7 @@ class TwitterBlast
   # direct message ppl who followed back
   # as a result of twitter blast with type follow_handles
   def direct_message_followers(message_body = nil)
-    user.direct_message_followers(message, handle, self) if message.present?
+    user.direct_message_followers(message, user.name, self) if message.present?
   end
 
   # unfollow any user we are following

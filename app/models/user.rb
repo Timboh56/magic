@@ -20,12 +20,13 @@ class User
 
   accepts_nested_attributes_for :rss_feed_collections
 
-  def direct_message_followers(message, handle = nil, twitter_blast = nil, limit = nil)
-    
+  def direct_message_followers(message, handle = nil, twitter_blast = nil)
+    handle ||= name
+
     # get count of all DMs sent so far today from user
     todays_direct_messages_count = todays_direct_messages_count
 
-    limit ||= RateLimits::DIRECT_MESSAGE_LIMIT
+    limit = twitter_blast.limit || RateLimits::DIRECT_MESSAGE_LIMIT
   
     # get list of followers of user, limit to 250
     get_followers_or_following("followers", handle, twitter_blast).each do |follower|
@@ -38,6 +39,8 @@ class User
         twitter_blast_id: twitter_blast.id
       }
 
+      puts todays_direct_messages_count.inspect
+      puts limit.inspect
       if todays_direct_messages_count > limit
         p "More handles direct messaged than daily limit! Stopping.."
         break
@@ -193,7 +196,7 @@ class User
 
           record_params.merge!({
             twitter_blast_id: twitter_blast.id,
-            handle_list_id: twitter_blast.handle_list.id
+            handle_list_id: (twitter_blast.handle_list ? twitter_blast.handle_list.id : nil)
           }) if twitter_blast
 
           # create a record
@@ -223,7 +226,7 @@ class User
   end
 
   def todays_direct_messages_count
-    @todays_direct_messages_count ||= records.direct_messages.created_today.count
+    @todays_direct_messages_count ||= records.direct_messages.created_today.count rescue 0
   end
 
   def todays_follow_count
