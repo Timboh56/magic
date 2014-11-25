@@ -24,7 +24,7 @@ class User
     handle ||= name
 
     # get count of all DMs sent so far today from user
-    todays_direct_messages_count = todays_direct_messages_count
+    dm_count = todays_direct_messages_count
 
     limit = twitter_blast.limit || RateLimits::DIRECT_MESSAGE_LIMIT
   
@@ -39,9 +39,9 @@ class User
         twitter_blast_id: twitter_blast.id
       }
 
-      puts todays_direct_messages_count.inspect
+      puts dm_count.inspect
       puts limit.inspect
-      if todays_direct_messages_count > limit
+      if dm_count > limit
         p "More handles direct messaged than daily limit! Stopping.."
         break
       end
@@ -61,7 +61,7 @@ class User
         end
 
         # increment todays DM count
-        todays_direct_messages_count += 1
+        dm_count += 1
 
         sleep_random
       end
