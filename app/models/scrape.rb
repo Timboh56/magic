@@ -119,14 +119,7 @@ class Scrape
 
     puts "URL: " + starting_url.to_s
 
-    set_agent_with_proxy
-    response = @agent.get(URI(starting_url))
-
-    # print response from agent
-    p response.inspect
-
-    page = @agent.page
-    scrape_page
+    scrape_page(starting_url)
   end
 
   private
@@ -141,15 +134,22 @@ class Scrape
     self.scraped_record_list = record_list
   end
 
-  def scrape_page
-    page_uri = @agent.page.uri.to_s
-    url = URI(page_uri)
-    current_page = @agent.page
-    puts "Scraping page: " + url.to_s
+  def scrape_page(url)
 
     set_agent_with_proxy
+    uri = URI(url)
+    response = @agent.get(uri)
 
-    save_last_url(url)
+    # print response from agent
+    p response.inspect
+
+    page = @agent.page
+    page_uri = @agent.page.uri.to_s
+
+    current_page = @agent.page
+    puts "Scraping page: " + uri.to_s
+
+    save_last_url(uri)
 
     # if root url has any parameters to scrape..
     scrape_sub_page(current_page, root_data_set) if root_data_set.present?
@@ -176,6 +176,28 @@ class Scrape
         end
       end
     end
+
+    next_page(current_page, page_interval)
+  rescue Net::HTTPNotFound
+    next_page(current_page, page_interval)
+  rescue Mechanize::ResponseCodeError => r
+    if use_proxies
+      puts "Unable to get to website with IP."
+      puts "Proxy with IP " + @current_proxy.ip + " defective, deleting poxy.."
+      push_to_defective @current_proxy
+    end
+    p r.inspect
+    save_last_url(url)
+  rescue Timeout::Error => t
+    p "Timeout error: " + t.inspect
+    sleep(3)
+    retry
+  rescue Exception => e
+    p e.inspect
+  end
+
+  def next_page(current_page, page_interval)
+
     
     if pagination_type === "PageLink"
       next_link = node_to_uri(current_page.search(next_selector).last) rescue nil
@@ -202,11 +224,8 @@ class Scrape
     end
 
     unless next_link.nil?
-
-      @agent.get(next_link)
-
       puts "Clicked next link: " + next_link.to_s
-      scrape_page
+      scrape_page(next_link)
     else
       puts "------------------- END ----------------"
     end
@@ -290,7 +309,7 @@ class Scrape
   end
 
   def save_last_url(url = nil)
-    last_scanned_url = url || @agent.page.uri.to_s
+    last_scanned_url = url.to_s || @agent.page.uri.to_s
     save!
   end
 end

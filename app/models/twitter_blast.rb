@@ -32,48 +32,8 @@ class TwitterBlast
 
   # direct message ppl who followed back
   # as a result of twitter blast with type follow_handles
-  def direct_message_followers
-
-    # get count of all DMs sent so far today from user
-    todays_direct_messages_count = user.todays_direct_messages_count
-
-    if message.present?
-  
-      # get list of followers of user, limit to 250
-      get_followers.each do |follower|
-
-        dm_params = {
-          user_id: user_id,
-          record_type: "DirectMessage",
-          text: message,
-          to: follower.screen_name,
-          twitter_blast_id: id
-        }
-
-        if todays_direct_messages_count > limit || todays_direct_messages_count === RateLimits::DIRECT_MESSAGE_LIMIT
-          p "More handles direct messaged than daily limit! Stopping.."
-          break
-        end
-
-        unless records.direct_messages.where(dm_params).exists?
-          
-          user.send_direct_message(follower.screen_name, message)
-          
-          Record.create!(dm_params)
-          
-          p "Direct message: #{ message }"
-          p "Sent to: #{ follower.screen_name } "
-
-          self.messages_sent += 1
-          save!
-
-          # increment todays DM count
-          todays_direct_messages_count += 1
-
-          sleep_random
-        end
-      end
-    end
+  def direct_message_followers(message_body = nil)
+    user.direct_message_followers(message, handle, self) if message.present?
   end
 
   # unfollow any user we are following
@@ -104,10 +64,6 @@ class TwitterBlast
 
       sleep_random
     end
-  end
-
-  def sleep_random
-    sleep(rand(5))
   end
 
   def get_followers(handle = nil)

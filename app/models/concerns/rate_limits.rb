@@ -9,4 +9,7 @@ module RateLimits
 	TWEET_LIMIT = 2400
 	DIRECT_MESSAGE_LIMIT = 250
 
+  def sleep_random
+    sleep(rand(5))
+  end
 end

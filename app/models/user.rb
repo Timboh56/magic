@@ -1,6 +1,7 @@
 class User
   include Mongoid::Document
   include Mongoid::Timestamps
+  include RateLimits
 
   field :uid, type: String
   field :provider, type: String
@@ -18,6 +19,51 @@ class User
   default_scope lambda{ includes(:records).order(:created_at => :desc) }
 
   accepts_nested_attributes_for :rss_feed_collections
+
+  def direct_message_followers(message, handle = nil, twitter_blast = nil, limit = nil)
+    
+    # get count of all DMs sent so far today from user
+    todays_direct_messages_count = todays_direct_messages_count
+
+    limit ||= RateLimits::DIRECT_MESSAGE_LIMIT
+  
+    # get list of followers of user, limit to 250
+    get_followers_or_following("followers", handle, twitter_blast).each do |follower|
+
+      dm_params = {
+        user_id: id,
+        record_type: "DirectMessage",
+        text: message,
+        to: follower.screen_name,
+        twitter_blast_id: twitter_blast.id
+      }
+
+      if todays_direct_messages_count > limit
+        p "More handles direct messaged than daily limit! Stopping.."
+        break
+      end
+
+      unless records.direct_messages.where(dm_params).exists?
+        
+        send_direct_message(follower.screen_name, message)
+        
+        Record.create!(dm_params)
+        
+        p "Direct message: #{ message }"
+        p "Sent to: #{ follower.screen_name } "
+
+        if twitter_blast
+          twitter_blast.messages_sent += 1
+          twitter_blast.save!
+        end
+
+        # increment todays DM count
+        todays_direct_messages_count += 1
+
+        sleep_random
+      end
+    end
+  end
 
   def handle_lists
     twitter_blasts.select { |t| t.handle_list }
