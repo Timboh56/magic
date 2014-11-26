@@ -39,8 +39,6 @@ class User
         twitter_blast_id: twitter_blast.id
       }
 
-      puts dm_count.inspect
-      puts limit.inspect
       if dm_count > limit
         p "More handles direct messaged than daily limit! Stopping.."
         break
