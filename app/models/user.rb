@@ -34,7 +34,6 @@ class User
       dm_params = {
         user_id: id,
         record_type: "DirectMessage",
-        text: message,
         to: follower.screen_name,
         twitter_blast_id: twitter_blast.id
       }
@@ -50,7 +49,7 @@ class User
 
         send_direct_message(follower.screen_name, message)
         
-        Record.create!(dm_params)
+        Record.create!(dm_params.merge!{ text: message })
         
         p "Direct message: #{ message }"
         p "Sent to: #{ follower.screen_name } "
