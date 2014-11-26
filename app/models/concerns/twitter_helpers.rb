@@ -1,4 +1,4 @@
-module RateLimits
+module TwitterHelpers
 
 	# daily rate limits on twitter
 

@@ -2,7 +2,7 @@ class TwitterBlast
   include Mongoid::Document
   include Mongoid::Timestamps
   include Runnable
-  include RateLimits
+  include TwitterHelpers
 
   field :message, type: String
   field :messages_sent, type: Integer, default: 0
