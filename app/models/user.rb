@@ -30,8 +30,6 @@ class User
   
     # get list of followers of user, limit to 250
     get_followers_or_following("followers", handle, twitter_blast).each do |follower|
-
-      message = "Hey #{ follower.screen_name }," + message
       
       dm_params = {
         user_id: id,
@@ -48,7 +46,9 @@ class User
 
       unless records.direct_messages.where(dm_params).exists?
         
-        send_direct_message(follower.screen_name, randomize_string(message))
+        message = "Hey #{ follower.screen_name }," + message
+
+        send_direct_message(follower.screen_name, message)
         
         Record.create!(dm_params)
         
