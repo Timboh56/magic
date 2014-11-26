@@ -188,6 +188,7 @@ class User
         record_params = {
           record_type: "Handle",
           text: u.screen_name,
+          user_id: id
         }
 
         unless (record = Record.where(record_params).first).present?

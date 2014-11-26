@@ -10,6 +10,6 @@ module RateLimits
 	DIRECT_MESSAGE_LIMIT = 1000
 
   def sleep_random
-    sleep(rand(7))
+    sleep(rand(8))
   end
 end
