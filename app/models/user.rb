@@ -49,7 +49,7 @@ class User
 
         send_direct_message(follower.screen_name, message)
         
-        Record.create!(dm_params.merge!({ text: message })
+        Record.create!(dm_params.merge!({ text: message }))
         
         p "Direct message: #{ message }"
         p "Sent to: #{ follower.screen_name } "
