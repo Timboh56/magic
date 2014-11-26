@@ -26,7 +26,7 @@ class User
     # get count of all DMs sent so far today from user
     dm_count = todays_direct_messages_count
 
-    limit = twitter_blast.limit || RateLimits::DIRECT_MESSAGE_LIMIT
+    limit = twitter_blast.limit || TwitterHelpers::DIRECT_MESSAGE_LIMIT
   
     # get list of followers of user, limit to 250
     get_followers_or_following("followers", handle, twitter_blast).each do |follower|

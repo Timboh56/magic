@@ -46,7 +46,7 @@ class TwitterBlast
     # get list of following
     following_list = following_list_stringified
 
-    rate_limit = following_list.count > 2000 ? RateLimits::UNFOLLOW_LIMIT :  RateLimits::UNFOLLOW_LIMIT_UNDER_2000
+    rate_limit = following_list.count > 2000 ? TwitterHelpers::UNFOLLOW_LIMIT :  TwitterHelpers::UNFOLLOW_LIMIT_UNDER_2000
 
     # unfollow handles on following not on followers
     (following_list - followers_list).take(rate_limit).each do |handle|
@@ -71,7 +71,7 @@ class TwitterBlast
   end
 
   def daily_follow_rate_limit
-    @daily_follow_rate_limit ||= user.follower_count < 2000 ? RateLimits::FOLLOW_LIMIT_UNDER_2000 : RateLimits::FOLLOW_LIMIT
+    @daily_follow_rate_limit ||= user.follower_count < 2000 ? TwitterHelpers::FOLLOW_LIMIT_UNDER_2000 : TwitterHelpers::FOLLOW_LIMIT
   end
 
   def get_followers_from_handles
