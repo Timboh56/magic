@@ -21,7 +21,7 @@ gem 'jquery-rails'
 
 gem 'jquery-ui-rails', '~> 5.0.2'
 
-gem 'mechanize', '~> 1.0.0'
+gem 'mechanize'
 gem 'smarter_csv'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'

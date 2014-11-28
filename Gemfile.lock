@@ -271,7 +271,7 @@ DEPENDENCIES
   jquery-datatables-rails
   jquery-rails
   jquery-ui-rails (~> 5.0.2)
-  mechanize (~> 1.0.0)
+  mechanize
   mongoid (~> 4.0.0)
   nested_form
   newrelic_rpm
