@@ -20,7 +20,7 @@ class User
 
   accepts_nested_attributes_for :rss_feed_collections
 
-  def direct_message_followers(message, handle = nil, twitter_blast = nil)
+  def direct_message_followers(message_body, handle = nil, twitter_blast = nil)
     handle ||= name
 
     # get count of all DMs sent so far today from user
@@ -45,7 +45,7 @@ class User
 
       unless records.direct_messages.where(dm_params).exists?
         
-        message = "Hey #{ follower.screen_name }, #{ message }"
+        message = "Hey #{ follower.screen_name }, #{ message_body }"
 
         send_direct_message(follower.screen_name, message)
         
