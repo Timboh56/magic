@@ -39,31 +39,7 @@ class TwitterBlast
   # unfollow any user we are following
   # not following us back
   def unfollow_following_not_followers
-
-    # get list of followers
-    followers_list = followers_list_stringified
-    
-    # get list of following
-    following_list = following_list_stringified
-
-    rate_limit = following_list.count > 2000 ? TwitterHelpers::UNFOLLOW_LIMIT :  TwitterHelpers::UNFOLLOW_LIMIT_UNDER_2000
-
-    # unfollow handles on following not on followers
-    (following_list - followers_list).take(rate_limit).each do |handle|
-
-      p "Unfollowing " + handle.to_s
-
-      user.unfollow(handle)
-      
-      r = Record.create!({
-        twitter_blast_id: id,
-        text: handle,
-        record_type: "Unfollow",
-        user_id: user_id
-      })
-
-      sleep_random
-    end
+    user.unfollow_following_not_followers
   end
 
   def get_followers(handle = nil)
@@ -172,18 +148,6 @@ class TwitterBlast
 
   def get_following(handle = nil)
     user.get_followers_or_following("friends", handle, self)
-  end
-
-  # return array of handles of each 
-  # user that followedget_followers_or_following back
-  def followers_list_stringified
-    get_followers.map! { |f| f.screen_name }
-  end
-
-  # return array of handles of each record of
-  # user followed
-  def following_list_stringified
-    get_following.map! { |f| f.screen_name }
   end
 
   def tweet_to_handles

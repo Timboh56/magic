@@ -20,6 +20,33 @@ class User
 
   accepts_nested_attributes_for :rss_feed_collections
 
+  def unfollow_following_not_followers
+
+    # get list of followers
+    followers_list = followers_list_stringified
+    
+    # get list of following
+    following_list = following_list_stringified
+
+    rate_limit = following_list.count > 2000 ? TwitterHelpers::UNFOLLOW_LIMIT :  TwitterHelpers::UNFOLLOW_LIMIT_UNDER_2000
+
+    # unfollow handles on following not on followers
+    (following_list - followers_list).take(rate_limit).each do |handle|
+
+      p "Unfollowing " + handle.to_s
+
+      user.unfollow(handle)
+      
+      r = Record.create!({
+        text: handle,
+        record_type: "Unfollow",
+        user_id: id
+      })
+
+      sleep_random
+    end
+  end
+
   def direct_message_followers(message_body, handle = nil, twitter_blast = nil)
     handle ||= name
 
@@ -66,6 +93,21 @@ class User
       end
     end
   end
+
+  # return array of handles of each 
+  # user that followedget_followers_or_following back
+  def followers_list_stringified(handle = nil)
+    handle ||= name
+    get_followers_or_following("followers", handle).map! { |f| f.screen_name }
+  end
+
+  # return array of handles of each record of
+  # user followed
+  def following_list_stringified(handle = nil)
+    handle ||= name
+    get_followers_or_following("friends", handle).map! { |f| f.screen_name }
+  end
+
 
   def handle_lists
     twitter_blasts.select { |t| t.handle_list }
