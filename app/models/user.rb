@@ -40,7 +40,7 @@ class User
 
       p "Unfollowing " + handle.to_s
 
-      user.unfollow(handle)
+      unfollow(handle)
       
       r = Record.create!({
         text: handle,
