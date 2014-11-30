@@ -36,12 +36,6 @@ class TwitterBlast
     user.direct_message_followers(message, user.name, self) if message.present?
   end
 
-  # unfollow any user we are following
-  # not following us back
-  def unfollow_following_not_followers
-    user.unfollow_following_not_followers
-  end
-
   def get_followers(handle = nil)
     user.get_followers_or_following("followers", handle, self)
   end
@@ -195,11 +189,6 @@ class TwitterBlast
   # run background task
   def run
     Resque.enqueue(TwitterBlastWorker, id, user_id, blast_type)
-  end
-
-  # run background task for unfolow
-  def unfollow
-    Resque.enqueue(TwitterBlastWorker, id, user_id, "unfollow")    
   end
 
   def handles_array

@@ -37,11 +37,7 @@ class TwitterBlastWorker
     def get_follows
       @follows ||= @twitter_blast.following_list_stringified
     end
-
-    def unfollow
-      @twitter_blast.unfollow_following_not_followers
-    end
-
+    
     # follow handles on handle_list or from textarea
     def follow_handles
       @twitter_blast.follow_handles

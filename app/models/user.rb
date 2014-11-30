@@ -20,6 +20,11 @@ class User
 
   accepts_nested_attributes_for :rss_feed_collections
 
+  # run background task for unfolow
+  def enqueue_unfollow
+    Resque.enqueue(UserWorker, id, "unfollow_following_not_followers")    
+  end
+
   def unfollow_following_not_followers
 
     # get list of followers

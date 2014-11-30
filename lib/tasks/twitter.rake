@@ -13,8 +13,8 @@ namespace :twitter do
 		# run fridays, mondays, wednesdays
 		if Time.now.sunday? || Time.now.monday? || Time.now.wednesday? || Time.now.friday?
 			
-			TwitterBlast.follow_handles.each do |twitter_blast|
-				twitter_blast.unfollow
+			User.all.each do |user|
+				user.enqueue_unfollow
 			end
 		end
 	end
