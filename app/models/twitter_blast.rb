@@ -140,7 +140,7 @@ class TwitterBlast
     records.follows
   end
 
-  def get_following(handle = nil)
+  def get_following(handle = nil, store = false)
     user.get_followers_or_following("friends", handle, self)
   end
 

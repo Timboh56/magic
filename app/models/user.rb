@@ -4,7 +4,7 @@ class User
   include TwitterHelpers
 
   field :uid, type: String
-  field :provider, type: String
+  field :provider, type: String # Facebook or Twitter
   field :name, type: String
   field :oauth_token, type: String
   field :oauth_secret, type: String
@@ -239,18 +239,18 @@ class User
           user_id: id
         }
 
-        unless (record = Record.where(record_params).first).present?
+        #unless (record = Record.where(record_params).first).present?
 
-          record_params.merge!({
-            twitter_blast_id: twitter_blast.id,
-            handle_list_id: (twitter_blast.handle_list ? twitter_blast.handle_list.id : nil)
-          }) if twitter_blast
+        #  record_params.merge!({
+        #    twitter_blast_id: twitter_blast.id,
+        #    handle_list_id: (twitter_blast.handle_list ? twitter_blast.handle_list.id : nil)
+        #  }) if twitter_blast
 
-          # create a record
-          record = Record.create!(record_params)
+        #  # create a record
+        #  record = Record.create!(record_params)
         
-          p "Created record: " + record.inspect
-        end
+        #  p "Created record: " + record.inspect
+        #end
 
         handles << u
       end

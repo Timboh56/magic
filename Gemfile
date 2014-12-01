@@ -57,6 +57,10 @@ gem 'font-awesome-rails'
 
 gem 'omniauth-twitter'
 
+gem 'omniauth-facebook'
+
+gem 'tinderbot'
+
 gem 'feedjira'
 
 gem "workless", "~> 1.1.3"
