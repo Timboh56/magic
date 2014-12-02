@@ -11,10 +11,14 @@ class User
   field :role, type: String, default: "registered" # "registered", "admin"
   field :direct_message, type: String
   field :phone_number, type: String
+  field :tinder_auth_token, type: String
+  field :email, type: String
 
   has_many :twitter_blasts
   has_many :rss_feed_collections
   has_many :records
+
+  has_one :user_tinder_bot
 
   default_scope lambda{ includes(:records).order(:created_at => :desc) }
 
@@ -123,10 +127,16 @@ class User
   end
 
   def self.from_omniauth(auth)
-    where(auth.slice("provider", "uid")).first || create_from_omniauth(auth)
+    if (user = where(auth.slice("provider", "uid")).first)
+      user.update_from_omniauth!(auth)
+      user
+    else
+      create_from_omniauth(auth)
+    end
   end
 
   def update_from_omniauth!(auth)
+    self.email = auth["info"]["email"]
     self.oauth_token = auth["credentials"]["token"]
     self.oauth_secret = auth["credentials"]["secret"]
     save!
@@ -136,7 +146,8 @@ class User
     create! do |user|
       user.provider = auth["provider"]
       user.uid = auth["uid"]
-      user.name = auth["info"]["nickname"]
+      user.email = auth["info"]["email"]
+      user.name = auth["info"]["nickname"] || auth["info"]["name"]
       user.oauth_token = auth["credentials"]["token"]
       user.oauth_secret = auth["credentials"]["secret"]
     end

@@ -1,0 +1,49 @@
+.container-fluid
+	%h1 Tinder Bot
+
+	- if current_user.user_tinder_bot
+		You are signed into Tinder!
+		Status: 
+		%b
+			= current_user.user_tinder_bot.status
+		.row
+			%h1
+				Settings
+		.row
+			%h1 Tinder Profile
+	- else
+		.row
+			Sign in as 
+			%b
+				= current_user.name
+		.row
+			.description
+				The Tinderbot requires that you have already registered on Tinder with a Facebook account and phone number associated to it.
+		.row
+			= button_to "Stop bot", "user_tinder_bots/#{ current_user.id }/stop", { method: :get, remote: true, class: "btn btn-default" }
+	.row
+		= form_for @tinderbot do |f|
+			.col-xs-12
+				.col-xs-3
+					= label_tag "My Facebook Email"
+				.col-xs-9
+					= current_user.email
+			.col-xs-12
+				%i
+					We need your password to log into Tinder. This will not be stored on DopeMagic.
+			.col-xs-12
+				.col-xs-3
+					= label_tag "Facebook password (not saved):"
+				.col-xs-9
+					= password_field_tag :password
+			.col-xs-12
+				.col-xs-3
+					= f.label "Autolike?"
+				.col-xs-9
+					= f.check_box :autolike
+			.col-xs-12
+				.col-xs-3
+					= f.label "Direct Message on match?"
+				.col-xs-9
+					= f.text_area :message
+			= submit_tag "Save and run", { class: "btn btn-default" }

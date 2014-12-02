@@ -6,8 +6,12 @@ Rails.application.routes.draw do
   resources :scrapes
   resources :twitter_blasts
   resources :rss_feed_collections
+  resources :user_tinder_bots
 
   get '/scrape_ape' => "scrapes#index"
+  get '/tinder_bot' => "user_tinder_bots#index"
+  get '/user_tinder_bots/run' => "user_tinder_bots#run"
+
   get '/twitter_blaster' => "twitter_blasts#index"
   get '/craig_crammer' => "static_pages#craig_crammer"
   get '/sms_blaster' => "static_pages#sms_blaster"
