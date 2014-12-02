@@ -33,6 +33,11 @@
 					We need your password to log into Tinder. This will not be stored on DopeMagic.
 			.col-xs-12
 				.col-xs-3
+					= label_tag "Access Token:"
+				.col-xs-9
+					= text_field_tag :access_token
+			.col-xs-12
+				.col-xs-3
 					= label_tag "Facebook password (not saved):"
 				.col-xs-9
 					= password_field_tag :password

@@ -14,7 +14,7 @@ namespace :twitter do
 		if Time.now.sunday? || Time.now.monday? || Time.now.wednesday? || Time.now.friday?
 			
 			User.all.each do |user|
-				user.enqueue_unfollow
+				user.enqueue_unfollow if unfollowing == true
 			end
 		end
 	end

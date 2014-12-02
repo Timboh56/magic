@@ -21,7 +21,6 @@ class UserTinderBotsController < ApplicationController
     @user_tinder_bot = UserTinderBot.new(user_tinder_bot_params)
     @user_tinder_bot.user_id = current_user.id
     @user_tinder_bot.save!
-    @user_tinder_bot.signin(params[:password])
     @user_tinder_bot.enqueue_task("like_recommended_users")
     redirect_to "/tinder_bot"
   end

@@ -14,10 +14,13 @@ class UserTinderBot
     @tinder_bot ||= Tinderbot::Bot.new tinder_client
   end
 
-  def signin(password)
-    facebook_authentication_token, facebook_user_id = Tinderbot::Facebook.get_credentials user.email, password
+  def signin
+    #facebook_authentication_token, facebook_user_id = Tinderbot::Facebook.get_credentials user.email, password
+    facebook_authentication_token = user.oauth_token
+    facebook_user_id = user.uid
     tinder_authentication_token = tinder_client.get_authentication_token facebook_authentication_token, facebook_user_id
     user.update_attributes!(tinder_auth_token: tinder_authentication_token )
+    p "Tinder authentication token: #{tinder_authentication_token}"
     tinder_client.sign_in tinder_authentication_token
   end
 
@@ -25,11 +28,12 @@ class UserTinderBot
     @tinder_client ||= Tinderbot::Client.new({ logs_enabled: true })
   end
 
-  def enqueue_task(action) 
-  	Resque.enqueue(TinderBotWorker, id, action)
+  def enqueue_task(action)
+  	Resque.enqueue(TinderBotWorker, id.to_s, action)
   end
 
   def like_recommended_users
-  	@tinder_bot.like_recommended_users
+    p tinder_bot.inspect
+  	tinder_bot.like_recommended_users
   end
 end

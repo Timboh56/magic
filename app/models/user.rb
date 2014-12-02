@@ -13,6 +13,7 @@ class User
   field :phone_number, type: String
   field :tinder_auth_token, type: String
   field :email, type: String
+  field :unfollowing, type: Boolean, default: false
 
   has_many :twitter_blasts
   has_many :rss_feed_collections

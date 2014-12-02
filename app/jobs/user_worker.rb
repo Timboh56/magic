@@ -1,6 +1,6 @@
 class UserWorker
 	require "resque/errors"
-  extend RetriedJob
+  # extend RetriedJob
   @queue = :user_queue
 
   class << self

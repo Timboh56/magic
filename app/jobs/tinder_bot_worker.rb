@@ -5,8 +5,13 @@ class TinderBotWorker
   @queue = :tinder_bot_worker
 
   class << self
-    def perform(id, action)
-      @user_tinder_bot = UserTinderBot.find(id)
+    def perform(obj_id, action)
+      unless obj_id.is_a? String
+        @user_tinder_bot = UserTinderBot.find(obj_id["$oid"])
+      else
+        @user_tinder_bot = UserTinderBot.find(obj_id)
+      end
+      @user_tinder_bot.signin
       @user_tinder_bot.send(action)
     end
   end
