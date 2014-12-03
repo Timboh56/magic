@@ -36,5 +36,7 @@ class UserTinderBot
 
   def like_recommended_users
     tinder_bot.like_recommended_users
+  rescue
+    tinder_bot.like_recommended_users
   end
 end
