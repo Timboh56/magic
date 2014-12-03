@@ -16,8 +16,6 @@ class UserTinderBot
   end
 
   def signin
-    #facebook_authentication_token, facebook_user_id = Tinderbot::Facebook.get_credentials user.email, password
-    #facebook_authentication_token = user.oauth_token
     facebook_user_id = user.uid
     p user.uid
     p fb_access_token
