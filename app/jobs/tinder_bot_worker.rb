@@ -6,6 +6,7 @@ class TinderBotWorker
 
   class << self
     def perform(obj_id, action)
+      p obj_id.inspect
       unless obj_id.is_a? String
         @user_tinder_bot = UserTinderBot.find(obj_id["$oid"])
       else

@@ -20,8 +20,11 @@ class UserTinderBotsController < ApplicationController
   def create
     @user_tinder_bot = UserTinderBot.new(user_tinder_bot_params)
     @user_tinder_bot.user_id = current_user.id
-    @user_tinder_bot.save!
-    @user_tinder_bot.enqueue_task("like_recommended_users")
+    if @user_tinder_bot.save
+      @user_tinder_bot.enqueue_task("like_recommended_users")
+    else
+      p "An error occurred: #{ @user_tinder_bot.errors.inspect }"
+    end
     redirect_to "/tinder_bot"
   end
 
@@ -36,7 +39,8 @@ class UserTinderBotsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_tinder_bot_params
     params.require(:user_tinder_bot).permit(
-      :autolike, :message, :status, :fb_access_token
+      :autolike, :message, :status, :fb_access_token,
+      :messages_attributes => [ :text, :id, :_id, :_destroy ]
     )
   end
 end

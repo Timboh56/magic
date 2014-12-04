@@ -10,25 +10,29 @@ class UserTinderBot
   field :fb_access_token, type: String
 
   belongs_to :user
+  has_many :messages
 
+  accepts_nested_attributes_for :messages
   def tinder_bot
     @tinder_bot ||= Tinderbot::Bot.new tinder_client
   end
 
   def signin
     facebook_user_id = user.uid
-    p user.uid
-    p fb_access_token
-
     @client = tinder_client
 
     if user.tinder_auth_token
       tinder_authentication_token = user.tinder_auth_token
     else
-      tinder_authentication_token = @client.get_authentication_token fb_access_token, facebook_user_id
+      if fb_access_token
+        tinder_authentication_token = @client.get_authentication_token fb_access_token, facebook_user_id
+      else
+        raise "FB Access Token is invalid"
+      end
     end
-    
+
     p "Tinder authentication token: #{tinder_authentication_token}"
+    
     user.update_attributes!(tinder_auth_token: tinder_authentication_token )
     @client.sign_in tinder_authentication_token
   end
@@ -47,10 +51,18 @@ class UserTinderBot
 
   def dm_matches
     signin
-    if message
+    unless messages.empty?
       get_matches.each do |match|
         uid = match["_id"]
-        tinder_client.send_message(uid, message)
+        messages.each do |message|
+          params = { text: message, to: uid, user_id: user.id }
+          unless Record.where(params).exists?
+            tinder_client.send_message(uid, message)
+            Record.create!(params)
+          else
+            p "Already sent a message to #{ uid }, skipping.."
+          end
+        end
       end
     end
   rescue Exception => e

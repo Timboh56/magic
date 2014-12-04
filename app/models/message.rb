@@ -3,4 +3,5 @@ class Message
   include Mongoid::Timestamps
   field :text, type: String
   belongs_to :twitter_blast
+  belongs_to :user_tinder_bot
 end

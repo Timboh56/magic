@@ -21,18 +21,20 @@
 				The Tinderbot requires that you have already registered on Tinder with a Facebook account and phone number associated to it.
 		.row
 			= button_to "Stop bot", "user_tinder_bots/#{ current_user.id }/stop", { method: :get, remote: true, class: "btn btn-default" }
-	.row
-		= form_for @tinderbot do |f|
+	= nested_form_for @tinderbot do |f|
+		.row
 			.col-xs-12
 				.col-xs-3
 					= label_tag "My Facebook Email"
 				.col-xs-9
 					= current_user.email
 			.col-xs-12
+				.col-xs-6
 				%i
 					Get your access token here:
-			.row.full-width
-				%a{href: "https://www.facebook.com/dialog/oauth?client_id=464891386855067&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=basic_info,email,public_profile,user_about_me,user_activities,user_birthday,user_education_history,user_friends,user_interests,user_likes,user_location,user_photos,user_relationship_details&response_type=token"} Copy and paste this URL
+				.row.full-width
+					%a{href: "https://www.facebook.com/dialog/oauth?client_id=464891386855067&redirect_uri=https://www.facebook.com/connect/login_success.html&scope=basic_info,email,public_profile,user_about_me,user_activities,user_birthday,user_education_history,user_friends,user_interests,user_likes,user_location,user_photos,user_relationship_details&response_type=token"} Copy and paste this URL
+			%br
 			.col-xs-12
 				.col-xs-3
 					= label_tag "Access Token:"
@@ -43,9 +45,18 @@
 					= f.label "Autolike?"
 				.col-xs-9
 					= f.check_box :autolike
-			.col-xs-12
-				.col-xs-3
-					= f.label "Direct Message on match?"
-				.col-xs-9
-					= f.text_area :message
+			.row
+				Direct Message to matches:
+			= f.fields_for :messages do |mf|
+				.row
+					.col-xs-12
+						.col-xs-3
+							= mf.label "Text:"
+						.col-xs-6
+							= mf.text_field :text
+						.col-xs-3
+							= mf.link_to_remove "Delete"
+		.row
+			= f.link_to_add "Add message", :messages, { class: "btn btn-default" }
+		.row
 			= submit_tag "Save and run", { class: "btn btn-default" }
