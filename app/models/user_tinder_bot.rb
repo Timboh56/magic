@@ -2,6 +2,7 @@ class UserTinderBot
   include Mongoid::Document
   include Mongoid::Timestamps
   require 'tinderbot'
+  require 'TwitterHelpers'
 
 
   field :autolike, type: Boolean, default: false
@@ -71,6 +72,7 @@ class UserTinderBot
           else
             p "Already sent a message to #{ uid }, skipping.."
           end
+          sleep_random
         end
       end
     end

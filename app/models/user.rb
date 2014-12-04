@@ -2,6 +2,7 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include TwitterHelpers
+  require "timeout"
 
   field :uid, type: String
   field :provider, type: String # Facebook or Twitter
@@ -187,11 +188,19 @@ class User
   def send_sms(to, message_body, from = nil)
     from = from || phone_number
     [from, to].each { |n| n.gsub!(/\D/m,"") }
-    twilio_client.messages.create(
-      from: "+1#{from}",
-      to: "+1#{to}",
-      body: message_body
-    )
+
+    status = Timeout::timeout(5) {
+      twilio_client.messages.create(
+        from: "+1#{from}",
+        to: "+1#{to}",
+        body: message_body
+      )
+      p "Message sent from #{ from } to #{ to }: #{ message_body }"
+    }
+
+    p status
+  rescue Exception => e
+    p e.inspect
   end
 
   def following_count(handle = nil)

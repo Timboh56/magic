@@ -7,10 +7,10 @@
 		%b
 			= current_user.user_tinder_bot.status
 		.row
-			%h1
+			%h3
 				Settings
 		.row
-			%h1 Tinder Profile
+			%h3 Tinder Profile
 	- else
 		.row
 			Sign in as 
@@ -47,7 +47,7 @@
 				.col-xs-9
 					= f.check_box :autolike
 			.row
-				%b Set Location
+				%h3 Set Location
 			.row
 				.col-xs-12
 					.col-xs-3
@@ -60,7 +60,8 @@
 					.col-xs-9
 						= f.text_field :long
 			.row
-				Direct Message to matches:
+				.col-xs-12
+					%h3 Direct Message to matches:
 			= f.fields_for :messages do |mf|
 				.row
 					.col-xs-12
