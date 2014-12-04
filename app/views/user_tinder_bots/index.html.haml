@@ -46,6 +46,19 @@
 				.col-xs-9
 					= f.check_box :autolike
 			.row
+				Set Location
+			.row
+				.col-xs-12
+					.col-xs-3
+						= f.label "Latitude: "
+					.col-xs-9
+						= f.text_field :lat
+				.col-xs-12
+					.col-xs-3
+						= f.label "Longitude: "
+					.col-xs-9
+						= f.text_field :long
+			.row
 				Direct Message to matches:
 			= f.fields_for :messages do |mf|
 				.row

@@ -8,11 +8,18 @@ class UserTinderBot
   field :message, type: String
   field :status, type: String
   field :fb_access_token, type: String
+  field :lat, type: String
+  field :long, type: String 
 
   belongs_to :user
   has_many :messages
 
   accepts_nested_attributes_for :messages
+
+  def update_location
+    tinder_client.update_location("#{ lat }, #{ long }")
+  end
+
   def tinder_bot
     @tinder_bot ||= Tinderbot::Bot.new tinder_client
   end
@@ -35,6 +42,8 @@ class UserTinderBot
     
     user.update_attributes!(tinder_auth_token: tinder_authentication_token )
     @client.sign_in tinder_authentication_token
+
+    update_location if lat && long
   end
 
   def tinder_client

@@ -39,7 +39,7 @@ class UserTinderBotsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_tinder_bot_params
     params.require(:user_tinder_bot).permit(
-      :autolike, :message, :status, :fb_access_token,
+      :autolike, :message, :status, :fb_access_token, :lat, :long,
       :messages_attributes => [ :text, :id, :_id, :_destroy ]
     )
   end
