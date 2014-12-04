@@ -25,6 +25,14 @@ class User
 
   accepts_nested_attributes_for :rss_feed_collections
 
+  def twitter_user?
+    provider == "twitter"
+  end
+
+  def facebook_user?
+    provider == "facebook"
+  end
+
   # run background task for unfolow
   def enqueue_unfollow
     Resque.enqueue(UserWorker, id, "unfollow_following_not_followers")    
