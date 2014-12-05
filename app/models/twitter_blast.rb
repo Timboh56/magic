@@ -36,10 +36,6 @@ class TwitterBlast
     user.direct_message_followers(message, user.name, self) if message.present?
   end
 
-  def get_followers(handle = nil)
-    user.get_followers_or_following("followers", handle, self)
-  end
-
   def daily_follow_rate_limit
     @daily_follow_rate_limit ||= user.follower_count < 2000 ? TwitterHelpers::FOLLOW_LIMIT_UNDER_2000 : TwitterHelpers::FOLLOW_LIMIT
   end
@@ -142,6 +138,10 @@ class TwitterBlast
 
   def get_following(handle = nil, store = false)
     user.get_followers_or_following("friends", handle, self)
+  end
+
+  def get_followers(handle = nil)
+    user.get_followers_or_following("followers", handle, self)
   end
 
   def tweet_to_handles

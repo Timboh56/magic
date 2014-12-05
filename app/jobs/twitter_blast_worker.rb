@@ -22,8 +22,12 @@ class TwitterBlastWorker
       end
     end
 
-    def get_followers
+    def get_followers(handle = nil)
       @twitter_blast.get_followers_from_handles
+    end
+
+    def get_following(handle = nil)
+      @twitter_blast.get_following(handle)
     end
 
     def tweet_to_handles
