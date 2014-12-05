@@ -64,10 +64,10 @@ class UserTinderBot
     unless messages.empty?
       get_matches.each do |match|
         uid = match["_id"]
-        messages.each do |message|
-          params = { text: message, to: uid, user_id: user.id }
+        messages.each do |m|
+          params = { text: m.text, to: uid, user_id: user.id }
           unless Record.where(params).exists?
-            tinder_client.send_message(uid, message.text)
+            tinder_client.send_message(uid, m.text)
             Record.create!(params)
           else
             p "Already sent a message to #{ uid }, skipping.."
