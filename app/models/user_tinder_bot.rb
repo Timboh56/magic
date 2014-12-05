@@ -1,8 +1,8 @@
 class UserTinderBot
   include Mongoid::Document
   include Mongoid::Timestamps
+  include TwitterHelpers
   require 'tinderbot'
-  require 'TwitterHelpers'
 
 
   field :autolike, type: Boolean, default: false
