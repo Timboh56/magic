@@ -41,6 +41,14 @@ class TwitterBlast
   end
 
   def get_followers_from_handles
+    get_followers_following_from_handles("followers")
+  end
+
+  def get_following_from_handles
+    get_followers_following_from_handles("friends")
+  end
+
+  def get_followers_following_from_handles(followers_or_following)
     users = []
 
     if handles_type == "textarea"
@@ -50,7 +58,7 @@ class TwitterBlast
     end
 
     handles.each do |handle|
-      users.concat user.get_followers_or_following("followers", handle, self, true)
+      users.concat user.get_followers_or_following(followers_or_following, handle, self, true)
       sleep_random
     end
     users
