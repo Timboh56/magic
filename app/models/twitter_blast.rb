@@ -50,7 +50,7 @@ class TwitterBlast
     end
 
     handles.each do |handle|
-      users.concat user.get_followers_or_following("followers", handle, self)
+      users.concat user.get_followers_or_following("followers", handle, self, true)
       sleep_random
     end
     users
@@ -137,11 +137,11 @@ class TwitterBlast
   end
 
   def get_following(handle = nil, store = false)
-    user.get_followers_or_following("friends", handle, self)
+    user.get_followers_or_following("friends", handle, self, true)
   end
 
   def get_followers(handle = nil)
-    user.get_followers_or_following("followers", handle, self)
+    user.get_followers_or_following("followers", handle, self, true)
   end
 
   def tweet_to_handles

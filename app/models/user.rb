@@ -238,7 +238,7 @@ class User
     @streaming_client
   end
 
-  def get_followers_or_following(followers_or_friends, handle = nil, twitter_blast = nil)
+  def get_followers_or_following(followers_or_friends, handle = nil, twitter_blast = nil, store = false)
     handles = []
     handle ||= name
 
@@ -268,18 +268,20 @@ class User
           user_id: id
         }
 
-        #unless (record = Record.where(record_params).first).present?
+        if store
+          unless (record = Record.where(record_params).first).present?
 
-        #  record_params.merge!({
-        #    twitter_blast_id: twitter_blast.id,
-        #    handle_list_id: (twitter_blast.handle_list ? twitter_blast.handle_list.id : nil)
-        #  }) if twitter_blast
+            record_params.merge!({
+              twitter_blast_id: twitter_blast.id,
+              handle_list_id: (twitter_blast.handle_list ? twitter_blast.handle_list.id : nil)
+            }) if twitter_blast
 
-        #  # create a record
-        #  record = Record.create!(record_params)
-        
-        #  p "Created record: " + record.inspect
-        #end
+            # create a record
+            record = Record.create!(record_params)
+          
+            p "Created record: " + record.inspect
+          end
+        end
 
         handles << u
       end
