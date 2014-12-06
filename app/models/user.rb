@@ -91,7 +91,7 @@ class User
 
       unless records.direct_messages.where(dm_params).exists?
         
-        message = "Hey #{ follower.screen_name }, #{ message_body }"
+        message = "#{ message_body }"
 
         send_direct_message(follower.screen_name, message)
         
