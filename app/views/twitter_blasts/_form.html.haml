@@ -51,14 +51,14 @@
 						= f.link_to_add "Add message", :messages, { class: "btn btn-default" }
 
 						= f.fields_for :messages do |mf|
-					.row
-						.col-xs-12
-							.col-xs-3
-								%label Tweet/Msg text
-							.col-xs-8
-								= mf.text_area :text
-							.col-xs-1
-								= mf.link_to_remove "X"
+							.row
+								.col-xs-12
+									.col-xs-3
+										%label Tweet/Msg text
+									.col-xs-8
+										= mf.text_area :text
+									.col-xs-1
+										= mf.link_to_remove "X"
 		.row.message-row
 			.col-xs-12
 				.col-xs-3
