@@ -156,12 +156,16 @@ class TwitterBlast
     handles.each do |sn|
       tweet_to(sn.strip)
     end
+  rescue Twitter::Error::TooManyRequests
+    p "Rate limit exceeded: too many requests."
   end
 
   def tweet_to(to)
 
+    to = to.gsub("@","")
+
     # format with handle
-    formatted_tweet = '@#{ to.gsub("@","") } #{ message }'
+    formatted_tweet = "@#{ to } #{ message }"
 
     tweet_params = {
       text: formatted_tweet,
@@ -180,6 +184,10 @@ class TwitterBlast
 
       # create record of tweet
       record = Record.create!(tweet_params)
+
+      p "Tweeted: #{ formatted_tweet }"
+
+      sleep_random
     end
   end
 
