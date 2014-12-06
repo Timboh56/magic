@@ -9,4 +9,8 @@ class HandleList
   def handles_limited
   	handles.limit(1000)
   end
+
+  def handles_count
+  	handles.count
+  end
 end	
