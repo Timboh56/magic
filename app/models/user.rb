@@ -109,9 +109,11 @@ class User
           # increment todays DM count
           dm_count += 1
 
-          sleep_random
         end
       end
+
+      sleep_random
+
     end
   end
 

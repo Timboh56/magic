@@ -15,7 +15,7 @@ class TwitterBlastWorker
         @user = User.find(user_id["$oid"])
 
         @perform = perform
-
+        p "performing.."
         run_job
       rescue Exception => e
         puts e.inspect
