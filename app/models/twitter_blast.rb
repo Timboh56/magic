@@ -34,8 +34,8 @@ class TwitterBlast
 
   # direct message ppl who followed back
   # as a result of twitter blast with type follow_handles
-  def direct_message_followers(message_body = nil)
-    user.direct_message_followers(message, user.name, self) if message.present?
+  def direct_message_followers
+    user.direct_message_followers(random_message, user.name, self) unless messages.empty?
   end
 
   def daily_follow_rate_limit
