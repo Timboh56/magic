@@ -2,16 +2,14 @@ class TwitterBlastsController < ApplicationController
   before_action :check_current_user, only: [:create, :destroy, :update]
 
   def index
-    if current_user.present?
-      @twitter_blast = TwitterBlast.new
+    @twitter_blast = TwitterBlast.new
 
-      if current_user.admin?
-        @twitter_blasts = TwitterBlast.all
-        #@handle_lists = HandleList.all
-      else
-        @twitter_blasts = current_user.twitter_blasts
-        @handle_lists = current_user.handle_lists
-      end
+    if current_user.admin?
+      @twitter_blasts = TwitterBlast.all
+      @handle_lists = HandleList.all
+    else
+      @twitter_blasts = current_user.twitter_blasts
+      @handle_lists = current_user.handle_lists
     end
   rescue Exception => e
     puts e.inspect
