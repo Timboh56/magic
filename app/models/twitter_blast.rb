@@ -158,16 +158,12 @@ class TwitterBlast
     handles.each do |sn|
       tweet_to(sn.strip)
     end
-  rescue Twitter::Error::TooManyRequests
-    p "Rate limit exceeded: too many requests."
-  rescue Twitter::Error::Forbidden
-    p "Forbidden"
   rescue Exception => e
     p e.inspect
   end
 
   def random_message
-    messages[rand(messages.count - 1)].text
+    messages[rand(messages.count)].text
   end
 
   def tweet_to(to)
