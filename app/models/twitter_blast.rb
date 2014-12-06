@@ -184,16 +184,22 @@ class TwitterBlast
     # unless user has been tweeted to before
     unless Record.where(tweet_params).exists?
 
-      user.tweet(formatted_tweet)
+      begin 
+        user.tweet(formatted_tweet)
       
-      update_attributes!(messages_sent: (messages_sent + 1))
+        update_attributes!(messages_sent: (messages_sent + 1))
 
-      # create record of tweet
-      record = Record.create!(tweet_params)
+        # create record of tweet
+        record = Record.create!(tweet_params)
 
-      p "Tweeted: #{ formatted_tweet }"
+        p "Tweeted: #{ formatted_tweet }"
 
-      sleep_random
+        sleep_random
+
+      rescue Twitter::Error::Forbidden
+        p "This request looks like it might be automated. To protect our users from spam and other malicious activity, we can't complete this action right now. Please try again later"
+        sleep 15
+      end
     end
   end
 
