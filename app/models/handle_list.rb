@@ -5,4 +5,8 @@ class HandleList
   field :name, type: String
   has_many :twitter_blasts
   has_many :handles, :class_name => "Record"
-end
+
+  def handles_limited
+  	handles.limit(1000)
+  end
+end	
