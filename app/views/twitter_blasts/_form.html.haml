@@ -1,5 +1,5 @@
 .twitter-blast-get-followers-form.twitter-blast-form
-	= form_for @twitter_blast do |f|
+	= nested_form_for @twitter_blast do |f|
 		.row
 			.col-xs-12
 				.col-xs-3
@@ -41,14 +41,24 @@
 								No handle lists
 				.row.word-wrap.handle-list-handles
 		.row.message-row
-			.col-xs-12
-				.col-xs-9.col-xs-offset-3
-					%i Your message will begin with "Hey [username]!"
-			.col-xs-12
+			.col-xs-12.row
 				.col-xs-3
-					%label Message
+					%label Messages/Tweets
 				.col-xs-9
-					= f.text_area :message
+					%i Your direct messages will begin with "Hey [username]!", your tweets will include twitter handle "@handle". TwitterBlaster will alternate between messages/tweets randomly to avoid being detected for automation.
+					%br
+					.row
+						= f.link_to_add "Add message", :messages, { class: "btn btn-default" }
+
+			= f.fields_for :messages do |mf|
+				.row
+					.col-xs-12
+						.col-xs-3
+							%label Tweet/Msg text
+						.col-xs-8
+							= mf.text_area :text
+						.col-xs-1
+							= mf.link_to_remove "X"
 		.row.message-row
 			.col-xs-12
 				.col-xs-3

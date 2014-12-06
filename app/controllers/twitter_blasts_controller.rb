@@ -88,7 +88,8 @@ class TwitterBlastsController < ApplicationController
   def twitter_blast_params
     params.require(:twitter_blast).permit(
       :name, :user_id, :handles_type, :blast_type, :twitter_handles, :user_handle,
-      :handle_list_id, :limit, :status, :message, :messages_sent
+      :handle_list_id, :limit, :status, :message, :messages_sent,
+      :messages_attributes => [ :text, :destroy, :_destroy, :id ]
     )
   end
 end

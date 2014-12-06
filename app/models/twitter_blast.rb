@@ -30,6 +30,8 @@ class TwitterBlast
 
   before_create :create_handle_list
 
+  accepts_nested_attributes_for :messages
+
   # direct message ppl who followed back
   # as a result of twitter blast with type follow_handles
   def direct_message_followers(message_body = nil)
@@ -158,6 +160,14 @@ class TwitterBlast
     end
   rescue Twitter::Error::TooManyRequests
     p "Rate limit exceeded: too many requests."
+  rescue Twitter::Error::Forbidden
+    p "Forbidden"
+  rescue Exception => e
+    p e.inspect
+  end
+
+  def random_message
+    messages[rand(messages.count - 1)].text
   end
 
   def tweet_to(to)
@@ -165,7 +175,7 @@ class TwitterBlast
     to = to.gsub("@","")
 
     # format with handle
-    formatted_tweet = "@#{ to } #{ message }"
+    formatted_tweet = "@#{ to } #{ random_message }"
 
     tweet_params = {
       text: formatted_tweet,
