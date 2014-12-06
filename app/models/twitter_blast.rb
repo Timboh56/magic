@@ -155,8 +155,13 @@ class TwitterBlast
   end
 
   def tweet_to_handles
+    @forbids = 0
     handles.each do |sn|
-      tweet_to(sn.strip)
+      if @forbids > 4
+        raise "Max number of forbids allowed, existing.."
+      else
+        tweet_to(sn.strip)
+      end
     end
   rescue Exception => e
     p e.inspect
@@ -198,6 +203,7 @@ class TwitterBlast
 
       rescue Twitter::Error::Forbidden
         p "This request looks like it might be automated. To protect our users from spam and other malicious activity, we can't complete this action right now. Please try again later"
+        @forbids += 1
         sleep 15
       end
     end
