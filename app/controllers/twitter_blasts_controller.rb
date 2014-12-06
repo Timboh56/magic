@@ -7,7 +7,7 @@ class TwitterBlastsController < ApplicationController
 
       if current_user.admin?
         @twitter_blasts = TwitterBlast.all
-        @handle_lists = HandleList.all
+        #@handle_lists = HandleList.all
       else
         @twitter_blasts = current_user.twitter_blasts
         @handle_lists = current_user.handle_lists

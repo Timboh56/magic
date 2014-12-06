@@ -213,7 +213,7 @@ class TwitterBlast
   # create_handle_list creates a new handle list if
   # action is to get followers of handle
   def create_handle_list
-    if blast_type == "get_followers"
+    if blast_type == "get_followers" || blast_type == "get_following"
       handle_list = HandleList.new
       handle_list.name = name
       handle_list.handles = records.handles
