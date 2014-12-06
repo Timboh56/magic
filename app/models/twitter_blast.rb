@@ -174,7 +174,7 @@ class TwitterBlast
     # unless user has been tweeted to before
     unless Record.where(tweet_params).exists?
 
-      user.tweet(formatted_tweet, to)
+      user.tweet(formatted_tweet)
       
       increment!(:messages_sent)
 
@@ -205,7 +205,7 @@ class TwitterBlast
 
   # number of handles retrieved from blast
   def handle_records_count
-    handle_list ? handle_list.handles.count : 0
+    handle_list ? handle_list.handles_count : 0
   end
 
   # a twitter blast can use a handle list
