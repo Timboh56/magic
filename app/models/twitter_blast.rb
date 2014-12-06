@@ -176,7 +176,7 @@ class TwitterBlast
 
       user.tweet(formatted_tweet)
       
-      increment!(:messages_sent)
+      update_attributes!(messages_sent: (messages_sent + 1))
 
       # create record of tweet
       record = Record.create!(tweet_params)
