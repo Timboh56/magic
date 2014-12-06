@@ -3,6 +3,11 @@
 .twitter_blaster_container
 	%h1 
 		= fa_icon "twitter",  text: "Twitter Blaster"
+	.row
+		Currently signed in as
+		%b
+			= current_user.name
+	%hr
 	.row.description
 		Get a user's followers, follow a list of handles with a 
 		%b
