@@ -66,7 +66,7 @@ class User
     end
   end
 
-  def direct_message_followers(message_body, handle = nil, twitter_blast = nil)
+  def direct_message_followers(messages, handle = nil, twitter_blast = nil)
     handle ||= name
 
     # get count of all DMs sent so far today from user
@@ -77,38 +77,40 @@ class User
     # get list of followers of user, limit to 250
     get_followers_or_following("followers", handle, twitter_blast).each do |follower|
       
-      dm_params = {
-        user_id: id,
-        record_type: "DirectMessage",
-        to: follower.screen_name,
-        twitter_blast_id: twitter_blast.id
-      }
+      # for each direct message, send
+      messages.each do |msg|
 
-      if dm_count > limit
-        p "More handles direct messaged than daily limit! Stopping.."
-        break
-      end
+        dm_params = {
+          user_id: id,
+          record_type: "DirectMessage",
+          to: follower.screen_name,
+          twitter_blast_id: twitter_blast.id
+        }
 
-      unless records.direct_messages.where(dm_params).exists?
-        
-        message = "#{ message_body }"
-
-        send_direct_message(follower.screen_name, message)
-        
-        Record.create!(dm_params.merge!({ text: message }))
-        
-        p "Direct message: #{ message }"
-        p "Sent to: #{ follower.screen_name } "
-
-        if twitter_blast
-          twitter_blast.messages_sent += 1
-          twitter_blast.save!
+        if dm_count > limit
+          p "More handles direct messaged than daily limit! Stopping.."
+          break
         end
 
-        # increment todays DM count
-        dm_count += 1
+        unless records.direct_messages.where(dm_params).exists?
+          
+          send_direct_message(follower.screen_name, msg.text)
+          
+          Record.create!(dm_params.merge!({ text: msg.text }))
+          
+          p "Direct message: #{ msg.text }"
+          p "Sent to: #{ follower.screen_name } "
 
-        sleep_random
+          if twitter_blast
+            twitter_blast.messages_sent += 1
+            twitter_blast.save!
+          end
+
+          # increment todays DM count
+          dm_count += 1
+
+          sleep_random
+        end
       end
     end
   end
