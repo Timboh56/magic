@@ -205,7 +205,7 @@ class TwitterBlast
 
   # number of handles retrieved from blast
   def handle_records_count
-    records.present? ? records.handles.count : 0
+    handle_list ? handle_list.handles.count : 0
   end
 
   # a twitter blast can use a handle list
