@@ -84,7 +84,8 @@ class User
           user_id: id,
           record_type: "DirectMessage",
           to: follower.screen_name,
-          twitter_blast_id: twitter_blast.id
+          twitter_blast_id: twitter_blast.id,
+          text: msg.text
         }
 
         if dm_count > limit
@@ -96,7 +97,7 @@ class User
           
           send_direct_message(follower.screen_name, msg.text)
           
-          Record.create!(dm_params.merge!({ text: msg.text }))
+          Record.create!(dm_params)
           
           p "Direct message: #{ msg.text }"
           p "Sent to: #{ follower.screen_name } "
