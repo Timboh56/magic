@@ -77,6 +77,11 @@ class User
     # get list of followers of user, limit to 250
     get_followers_or_following("followers", handle, twitter_blast).each do |follower|
       
+      if dm_count > limit
+        p "More handles direct messaged than daily limit! Stopping.."
+        break
+      end
+
       # for each direct message, send
       messages.each do |msg|
 
@@ -87,11 +92,6 @@ class User
           twitter_blast_id: twitter_blast.id,
           text: msg.text
         }
-
-        if dm_count > limit
-          p "More handles direct messaged than daily limit! Stopping.."
-          break
-        end
 
         unless records.direct_messages.where(dm_params).exists?
           
