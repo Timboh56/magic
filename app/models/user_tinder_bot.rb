@@ -59,25 +59,39 @@ class UserTinderBot
     @matches ||= tinder_client.updates["matches"]
   end
 
-  def dm_matches
+  def dm_matches_with_convos(msg)
     signin
-    unless messages.empty?
+    matches_with_convos = get_matches.select { |match| match["messages"].present? }
+    matches_with_convos.each do |match|
+      dm_match(match["_id"], msg)
+    end
+  end
+
+  def dm_matches(msg = nil)
+    signin
+    unless messages.empty? && msg.nil?
       get_matches.each do |match|
-        uid = match["_id"]
-        messages.each do |m|
-          params = { text: m.text, to: uid, user_id: user.id }
-          unless Record.where(params).exists?
-            tinder_client.send_message(uid, m.text)
-            Record.create!(params)
-          else
-            p "Already sent a message to #{ uid }, skipping.."
-          end
-          sleep_random
+        if messages.present?
+          messages.each { |m| dm_match(match["_id"], m) }
+        else
+          dm_match(match["_id"], msg)
         end
       end
     end
   rescue Exception => e
     "Error: #{ e.message }"
+  end
+
+  def dm_match(tinder_id, msg = nil)
+    msg = msg.is_a? Message ? msg.text : msg
+    params = { record_type: "TinderDM", text: msg, to: tinder_id, user_id: user.id }
+    unless Record.where(params).exists?
+      tinder_client.send_message(tinder_id, msg)
+      Record.create!(params)
+      sleep_random
+    else
+      p "Already sent a message to #{ tinder_id }, skipping.."
+    end
   end
 
   def like_recommended_users
