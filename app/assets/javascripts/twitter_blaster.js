@@ -10,7 +10,7 @@ $(document).on('click','.twitter-handles-btn', function () {
 	$(input).val(id);
 
 	// disable selector if text area button clicked
-	$('select#twitter_blast_handle_list_id').val((id === "textarea" ? "nil" : val));
+	$('select#twitter_blast_handle_list_id').val((id === "textarea" ? "" : val));
 
 });
 
