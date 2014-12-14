@@ -41,12 +41,15 @@ $(document).ready( function () {
 			case 'follow_handles':
 				$('a#list').show();
 				$('.message-row').show();
+				$('.twitter-handle-actions').show();
+
 				break;
 
 			// get followers of user(s) from textarea or handle list
 			case "get_followers":
 				$('a#list').hide();
 				$('.message-row').hide();
+				$('.twitter-handle-actions').show();
 				$('..twitter-handles-text-container').show();
 				break;
 
