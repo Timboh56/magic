@@ -47,6 +47,7 @@ $(document).ready( function () {
 			case "get_followers":
 				$('a#list').hide();
 				$('.message-row').hide();
+				$('..twitter-handles-text-container').show();
 				break;
 
 			// tweet to handles from textarea or handle list
