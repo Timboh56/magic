@@ -54,7 +54,7 @@
 									.col-xs-3
 										%label Tweet/Msg text
 									.col-xs-8
-										= mf.text_area :text, required: true
+										= mf.text_area :text, { placeholder: "Required" }
 									.col-xs-1
 										= mf.link_to_remove "X"
 						= f.link_to_add "Add message", :messages, { class: "btn btn-default" }

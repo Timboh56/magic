@@ -26,7 +26,7 @@ class Scrape
   # record list of records created by scrape
   has_one :scraped_record_list, class_name: "RecordList", autosave: true, inverse_of: :created_in_scraper, dependent: :destroy
   
-  accepts_nested_attributes_for :data_sets
+  accepts_nested_attributes_for :data_sets, allow_destroy: true
   before_create :generate_record_list
   validate :check_parameterized_record_list
 

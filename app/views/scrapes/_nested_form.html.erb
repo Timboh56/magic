@@ -47,7 +47,7 @@
           <a id="PageLink" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a page link paginator</a>
           <a id="URL" class="btn btn-default toggle-btn" data-toggle=".pagination-type">Use a URL parameter</a>
         </div>
-        <div id="URL" class="row pagination-type hide">
+        <div id="URL" class="row pagination-type <%= 'hide' unless @scrape.page_parameterized_url.present? %>">
           <div class="row">
             <div class='col-xs-2'>
               <%= f.label "Parameterized URL" %>
@@ -65,7 +65,7 @@
             <a id="Data" class="btn btn-default toggle-btn" data-toggle=".url-parameterization-type">Use Data List</a>
             <a id="Integer" class="btn btn-default toggle-btn" data-toggle=".url-parameterization-type">Use Number Interval</a>
           </div>
-          <div id="Data" class="row url-parameterization-type hide">
+          <div id="Data" class="row url-parameterization-type <%= 'hide' unless @scrape.parameterized_record_list_id.present? %>">
             <div class='col-xs-2'>
               <%= f.label "URL Parameter Data" %>
             </div>
@@ -77,7 +77,7 @@
               <% end %>
             </div>
           </div>
-          <div id="Integer" class="row url-parameterization-type hide">
+          <div id="Integer" class="row url-parameterization-type <%= 'hide' unless @scrape.page_interval.present? %>">
             <div class='col-xs-2'>
               <%= f.label "Page interval" %>
             </div>
@@ -86,7 +86,7 @@
             </div>
           </div>
         </div>
-        <div id="PageLink" class="row pagination-type hide">
+        <div id="PageLink" class="row pagination-type <%= "hide" unless @scrape.next_selector.present? %>">
           <div class='col-xs-2'>
             <%= f.label "Paginator selector" %>
           </div>

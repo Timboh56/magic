@@ -30,7 +30,7 @@ class TwitterBlast
 
   before_create :create_handle_list
 
-  accepts_nested_attributes_for :messages
+  accepts_nested_attributes_for :messages, allow_destroy: true
 
   # direct message ppl who followed back
   # as a result of twitter blast with type follow_handles
