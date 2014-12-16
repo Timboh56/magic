@@ -5,7 +5,7 @@ class TwitterBlastsController < ApplicationController
     @twitter_blast = TwitterBlast.new
 
     if current_user.admin?
-      @twitter_blasts = TwitterBlast.all
+      @twitter_blasts = TwitterBlast.includes(:handle_list).all
       @handle_lists = HandleList.all
     else
       @twitter_blasts = current_user.twitter_blasts
