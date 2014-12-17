@@ -34,7 +34,7 @@ class CraigCram
 		if emails.present? && messages.present?
 			city_links = get_us_city_links
 			(1..cities_a_day).each do |i|
-				post_to_form(emails[i % emails.length], messages[i % messages.length], city_links[i % city_links.lengths])
+				post_to_form(emails[i % emails.length], messages[i % messages.length], city_links[i % city_links.length])
 			end
 		end
 	end
