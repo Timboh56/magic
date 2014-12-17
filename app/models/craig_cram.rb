@@ -23,18 +23,18 @@ class CraigCram
     Resque.enqueue(CramJob, id)
 	end
 
-	def get_us_city_links
+	def get_us_cities
 		agent = Mechanize.new
 		agent.get(CRAIGSLIST_CITIES)
-		city_links = agent.page.search("li").to_a[0,413].map { |li| li.children.first.attributes["href"].value }
+		city_links = agent.page.search("li").to_a[0,413].map { |li| { city_name: li.children.first.children.first.text , url: li.children.first.attributes["href"].value } }
 	end
 
 	# scheduled to run daily
 	def post_to_cities
 		if emails.present? && messages.present?
-			city_links = get_us_city_links
+			us_cities = get_us_cities
 			(1..cities_a_day).each do |i|
-				post_to_form(emails[i % emails.length], messages[i % messages.length], city_links[i % city_links.length])
+				post_to_form(emails[i % emails.length], messages[i % messages.length], us_cities[i % us_cities.length])
 			end
 		end
 	end
@@ -43,12 +43,13 @@ class CraigCram
 		city_name.to_zip.first rescue raise "Couldn't find a postal code from city name #{ city_name }"
 	end
 
-	def post_to_form(email_address, body, city_url, city_name = nil)
-		p "Posting to: #{ city_url }"
+	def post_to_form(email_address, body, city)
+		p "Posting to: #{ city[:city_name] }"
+		p "Posting to url: #{ city[:url] } "
 		p "Email: #{ email_address }"
 		p "Body: #{ body }"
 		agent = Mechanize.new
-		agent.get(city_url)
+		agent.get(city[:url] )
 		agent.click(agent.page.link_with(:text => /post to classifieds/))
 		agent.page.forms[0].radiobuttons_with(:value => "so").first.click()
 		agent.page.forms[0].submit
@@ -65,7 +66,7 @@ class CraigCram
 		agent.page.forms[0].fields[3].value = ad_contact_name
 		agent.page.forms[0].fields[4].value = ad_title
 		agent.page.forms[0].fields[6].value = ad_postal_code || get_ad_postal_code(city_name) # required
-		agent.page.forms[0].fields[9].value = ad_city || city_name
+		agent.page.forms[0].fields[9].value = ad_city || city[:city_name] 
 		agent.page.forms[0].fields[13].value = body
 		agent.page.forms[0].submit
 		sleep_random
