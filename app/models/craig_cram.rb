@@ -40,10 +40,13 @@ class CraigCram
 	end
 
 	def get_ad_postal_code(city_name)
-		"90065"
+		city_name.to_zip
 	end
 
-	def post_to_form(email, body, city_url, city_name = nil)
+	def post_to_form(email_address, body, city_url, city_name = nil)
+		p "Posting to: #{ city_url }"
+		p "Email: #{ email_address }"
+		p "Body: #{ body }"
 		agent = Mechanize.new
 		agent.get(city_url)
 		agent.click(agent.page.link_with(:text => /post to classifieds/))
@@ -67,5 +70,6 @@ class CraigCram
 		agent.page.forms[0].submit
 		sleep_random
 		agent.page.forms[0].submit
+		p "Complete!"
 	end
 end

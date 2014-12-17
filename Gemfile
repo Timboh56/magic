@@ -75,6 +75,8 @@ gem 'twilio-ruby', '~> 3.12'
 
 gem 'geocoder'
 
+gem 'area'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
