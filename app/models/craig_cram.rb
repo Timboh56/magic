@@ -40,7 +40,7 @@ class CraigCram
 	end
 
 	def get_ad_postal_code(city_name)
-		city_name.to_zip
+		city_name.to_zip.first rescue raise "Get ad postal code failed!"
 	end
 
 	def post_to_form(email_address, body, city_url, city_name = nil)
@@ -71,5 +71,7 @@ class CraigCram
 		sleep_random
 		agent.page.forms[0].submit
 		p "Complete!"
+	rescue Exception => e
+		p "Error: #{ e.inspect }"
 	end
 end
