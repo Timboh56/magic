@@ -1,0 +1,11 @@
+= render :partial => "shared/view", locals: { obj: @cram_job }
+.container-fluid
+	%h2 Posts
+	- @cram_job.messages.each do |msg|
+		.row
+			= msg.text
+.container-fluid
+	%h2 Emails
+	- @cram_job.emails.each do |email|
+		.row
+			= email.email

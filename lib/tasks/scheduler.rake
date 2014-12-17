@@ -20,6 +20,14 @@ namespace :scheduler do
 	end
 
 	# run daily
+	task :craig_cram => :environment do
+		CraigCram.all.each do |cram_job|
+			cram_job.run
+		end
+
+	end
+
+	# run daily
 	task :follow => :environment do
 		TwitterBlast.follow_handles.each do |twitter_blast|
 			twitter_blast.run

@@ -1,0 +1,42 @@
+.recent-cram-job-container.bottom-table.full-width
+	.row
+		%h1 Recent CramJobs
+	%table.full-width{ id: "recent-cram-jobs-table" }
+		%thead
+			%th
+				Contact name
+			%th
+				Listing title
+			%th
+				Listing Phone #
+			%th
+				View
+			%th
+				Edit
+			%th
+				Delete
+		%tbody
+			- @cram_jobs.each do |cram_job|
+				%tr
+					%td
+						= cram_job.ad_contact_name
+					%td
+						= cram_job.ad_title
+					%td
+						= cram_job.ad_phone_number
+					%td
+						= link_to "View", craig_cram_path(cram_job)
+					%td
+						= link_to "Edit", edit_craig_cram_path(cram_job)
+					%td
+						= link_to fa_icon("trash-o"), craig_cram_path(cram_job), method: :delete, data: { confirm: "Do you really wanna delete this? " }
+:javascript
+	$(document).ready( function () {
+
+		$('#recent-cram-jobs-table').dataTable({
+			sPaginationType: "full",
+			bJQueryUI: true,
+			responsive: true,
+			"order": [[ 0, "desc" ]]
+		});
+	});

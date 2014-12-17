@@ -7,13 +7,14 @@ Rails.application.routes.draw do
   resources :twitter_blasts
   resources :rss_feed_collections
   resources :user_tinder_bots
+  resources :craig_crams
 
   get '/scrape_ape' => "scrapes#index"
   get '/tinder_bot' => "user_tinder_bots#index"
   get '/user_tinder_bots/run' => "user_tinder_bots#run"
 
   get '/twitter_blaster' => "twitter_blasts#index"
-  get '/craig_crammer' => "static_pages#craig_crammer"
+  get '/craig_crammer' => "craig_crams#index"
   get '/sms_blaster' => "static_pages#sms_blaster"
   get '/rss_retweeter' => "rss_feed_collections#index"
   put '/rss/save' => "static_pages#save_rss_feeds"

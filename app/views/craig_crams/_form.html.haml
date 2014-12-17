@@ -1,0 +1,74 @@
+- if @cram_job.errors.any?
+	.alert.alert-danger
+		@cram_job.errors.full_messages.join("\n")
+.row
+	Create some ads, ads will be posted daily.
+= nested_form_for(@cram_job) do |f|
+	.row
+		.col-xs-3
+			= f.label :ad_contact_name
+		.col-xs-9
+			= f.text_field :ad_contact_name, class: "full-width"
+	.row
+		.col-xs-3
+			= f.label :ad_title
+		.col-xs-9
+			= f.text_field :ad_title, class: "full-width"
+	.row
+		.col-xs-3
+			= f.label :ad_phone_number
+		.col-xs-9
+			= f.text_field :ad_phone_number, class: "full-width"
+	.row
+		.col-xs-3
+			= f.label :ad_postal_code
+		.col-xs-9
+			= f.text_field :ad_postal_code, class: "full-width"
+	.row
+		.col-xs-3
+			= f.label :ad_street
+		.col-xs-9
+			= f.text_field :ad_street, class: "full-width"
+	.row
+		.col-xs-3
+			= f.label :ad_city
+		.col-xs-9
+			= f.text_field :ad_city, class: "full-width"
+	.row
+		.col-xs-3
+			= f.label "Cities/day"
+		.col-xs-9
+			= f.number_field :cities_a_day, class: "full-width"
+	.row
+		%h3
+			Emails *
+	.row
+		Add some emails
+	= f.fields_for :emails do |ef|
+		.row
+			.col-xs-3
+				= ef.label :email
+			.col-xs-6
+				= ef.text_field :email, class: "full-width"
+			.col-xs-3
+				= ef.link_to_remove "Delete", class: "btn btn-default"
+	= f.link_to_add "Add Email", :emails, class: "btn btn-default"
+	.row
+		%h3
+			Post Bodies *
+	.row
+		Add some text to cycle between cram jobs.
+	= f.fields_for :messages do |mf|
+		.row
+			.col-xs-3
+				= mf.label :text
+			.col-xs-6
+				= mf.text_area :text, class: "full-width"
+			.col-xs-3
+				= mf.link_to_remove "Delete", class: "btn btn-default"
+	= f.link_to_add "Add Listing body", :messages, class: "btn btn-default"
+	.row.italic
+		* Indicates a required field.
+
+	.row
+		= f.submit "Submit", class: "btn btn-default"

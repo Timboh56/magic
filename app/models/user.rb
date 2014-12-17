@@ -19,6 +19,7 @@ class User
   has_many :twitter_blasts
   has_many :rss_feed_collections
   has_many :records
+  has_many :craig_crams
 
   has_one :user_tinder_bot
 

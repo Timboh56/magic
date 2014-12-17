@@ -6,8 +6,4 @@ class StaticPagesController < ApplicationController
   def index
     
   end
-
-  def craig_crammer
-
-  end
 end
