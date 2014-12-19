@@ -41,6 +41,9 @@ class CraigCramsController < ApplicationController
           email.save!
         end
       end
+    else
+      @craig_cram.emails = []
+      @craig_cram.save!
     end
   end
 
