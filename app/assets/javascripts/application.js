@@ -36,6 +36,12 @@ $(document).ready (function () {
 		}
 	});
 });
+
+$(document).on('click', '.hide-btn', function () {
+	var hideElement = $(this).data('toggle');
+	$(hideElement).addClass('hide');
+});
+
 $(document).on('click', '.toggle-btn', function () {
 	var klass = $(this).data('toggle');
 	var id = $(this).attr('id');

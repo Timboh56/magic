@@ -9,10 +9,13 @@
 			%b
 				= current_user.name
 		%hr
-
-		%h2
-			New Rss Feed Collection
-		= render :partial => "rss_feed_collections/form", locals: { rfc: @rss_feed_collection }
+		.row
+			%a.btn.btn-default.toggle-btn{ id: "nfc", "data-toggle" => ".new-feed-collection" }
+				New Rss Feed Collection
+		.new-feed-collection.hide{ id: "nfc" }
+			%h2
+				New Rss Feed Collection
+			= render :partial => "rss_feed_collections/form", locals: { rfc: @rss_feed_collection }
 		- if @rss_feed_collections.present?
 			%hr
 				%h2

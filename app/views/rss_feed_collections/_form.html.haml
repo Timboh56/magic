@@ -24,4 +24,8 @@
 			= button_tag "Save", { type: "submit", class: "btn btn-default" }
 	.row
 		.col-xs-12
-			= link_to 'Destroy',  rfc, { remote: true, method: :delete, class: "btn btn-default", data: { confirm: 'Are you sure?' } } unless rfc.new_record?
+			- if rfc.new_record?
+				%a.btn.btn-default.hide-btn{ "data-toggle" => ".new-feed-collection" }
+					Cancel
+			- else
+				= link_to 'Destroy',  rfc, { remote: true, method: :delete, class: "btn btn-default", data: { confirm: 'Are you sure?' } }
