@@ -12,6 +12,7 @@ class CraigCram
 	field :city_index, type: Integer, default: 1
 	field :category, type: String
 	field :posting_type, type: String, default: "go"
+	field :textarea_or_db, type: String, default: "db"
 	has_many :messages
 	has_many :emails
 	belongs_to :user

@@ -4,7 +4,7 @@
 .row
 	Create some ads, ads will be posted daily.
 = nested_form_for(@cram_job) do |f|
-	.row
+	.row.margin-top-45
 		.col-xs-3
 			= f.label :posting_type
 		.col-xs-9
@@ -50,40 +50,60 @@
 		.col-xs-9
 			= f.number_field :cities_a_day, class: "full-width"
 	.row
-		%h3
-			Emails *
+		.col-xs-9.col-xs-offset-3
+			%h3
+				Emails *
+			Add emails to post ads OR use Email database
 	.row
-		Add some emails
-	= f.fields_for :emails do |ef|
+		.col-xs-3
+			= f.label "Email options"
+		.col-xs-9
+			.btn-default.btn.toggle-btn{ "data-toggle" => ".add-email-form", id: "db", class: ("active" if @cram_job.textarea_or_db == "db" ) }
+				Use email database
+			.btn-default.btn.toggle-btn{ "data-toggle" => ".add-email-form", id: "textarea", class: ("active" if @cram_job.textarea_or_db == "textarea" )}
+				Add emails manually
+	.add-email-form{id: "textarea", class: ("hide" if @cram_job.textarea_or_db == "db" ) }
+		.row
+			.col-xs-9.col-xs-offset-3
+				%h3
+					Add Emails
+				= f.hidden_field :textarea_or_db, { class: "add-email-form" }
 		.row
 			.col-xs-3
-				= ef.label :email
-			.col-xs-6
-				= ef.text_field :email, class: "full-width"
+				%b Format
+			.col-xs-9
+				%b
+					email1@provider.com, password
+					%br
+					email2@provider.com, password2
+		.row
 			.col-xs-3
-				= ef.link_to_remove "Delete", class: "btn btn-default"
-	= f.link_to_add "Add Email", :emails, class: "btn btn-default"
+				= label_tag "Email"
+			.col-xs-9
+				= text_area_tag :emails, (@cram_job.emails.present? ? @cram_job.emails.map { |e| "#{ e.email }, #{ e.password }" }.join("\n") : ""), { class: "full-width" }
 	.row
-		%h3
-			Post Bodies *
-	.row
-		Add some text to cycle between cram jobs.
+		.col-xs-9.col-xs-offset-3
+			%h3
+				Post Bodies *
+			Add some text to cycle between cram jobs.
 	= f.fields_for :messages do |mf|
 		.row
 			.col-xs-3
 				= mf.label :title
 			.col-xs-6
 				= mf.text_field :title, class: "full-width"
+			.col-xs-3
+				= mf.link_to_remove "Delete", class: "btn btn-default"
 		.row
 			.col-xs-3
 				= mf.label :text
-			.col-xs-6
+			.col-xs-9
 				= mf.text_area :text, class: "full-width"
-			.col-xs-3
-				= mf.link_to_remove "Delete", class: "btn btn-default"
-	= f.link_to_add "Add Listing body", :messages, class: "btn btn-default"
-	.row.italic
-		* Indicates a required field.
+	.row
+		.col-xs-9.col-xs-offset-3
+			= f.link_to_add "Add Listing body", :messages, class: "btn btn-default"
+			.italic
+				* Indicates a required field.
 
 	.row
 		= f.submit "Submit", class: "btn btn-default"
