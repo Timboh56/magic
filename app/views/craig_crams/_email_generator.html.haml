@@ -1,0 +1,10 @@
+%h1
+  Mail Creator
+.row
+  .col-xs-3
+    Emails needed
+  .col-xs-9
+    = number_field_tag :no_emails
+.row
+  %button{ class: "btn btn-default", onclick: "createEmails();"}
+    Create Emails

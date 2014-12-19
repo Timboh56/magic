@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :rss_feed_collections
   resources :user_tinder_bots
   resources :craig_crams
+  resources :emails
 
   get '/scrape_ape' => "scrapes#index"
   get '/tinder_bot' => "user_tinder_bots#index"

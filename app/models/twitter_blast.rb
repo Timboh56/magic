@@ -3,6 +3,7 @@ class TwitterBlast
   include Mongoid::Timestamps
   include Runnable
   include TwitterHelpers
+  include ScrapeHelpers
 
   field :message, type: String
   field :messages_sent, type: Integer, default: 0

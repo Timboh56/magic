@@ -53,9 +53,9 @@ class RssFeedCollectionsController < ApplicationController
 
     @rss_feed_collection.name = params[:rss_feed_collection][:name] if params[:rss_feed_collection][:name]
     @rss_feed_collection.rss_feeds = rss_feeds
+    @rss_feed_collection.no_tags = params[:rss_feed_collection][:no_tags]
     @rss_feed_collection.tags = tags
     @rss_feed_collection.save!
 
   end
-  #render "shared/success"
 end

@@ -74,7 +74,7 @@ width: 90%;
 margin: 10px 5%;
 }
 
-textarea { resize: none; }
+textarea { resize: none; min-height: 300px; }
 .static-page-container, .home-container, .scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
 	//background-color: rgba(244,244,244,.8);
 	padding: 0 20px;

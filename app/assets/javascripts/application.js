@@ -23,10 +23,9 @@ var btn, curr_val;
 
 $(document).ready (function () {
 	$('form').submit( function () {
-		var loading_gif = $('<img />').attr('src','#{ image_url "ajax-loader.gif" }');
 		btn = $(this).find('input[type=submit], button');
 		curr_val = btn.html() || btn.val();
-		btn.html(loading_gif);
+		btn.html("Saving..");
 		btn.prop('disabled', true);
 	});
 

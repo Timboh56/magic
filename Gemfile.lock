@@ -57,6 +57,9 @@ GEM
     connection_pool (2.0.0)
     curb (0.8.6)
     dalli (2.6.4)
+    deathbycaptcha (4.1.5)
+      json (>= 1.4.6)
+      rest-client (~> 1.6.1)
     delayed_job (4.0.4)
       activesupport (>= 3.0, < 4.2)
     delayed_job_mongoid (2.1.0)
@@ -225,6 +228,9 @@ GEM
       redis (>= 2.0.1)
       resque (>= 1.20.0)
       rufus-scheduler
+    rest-client (1.6.8)
+      mime-types (~> 1.16)
+      rdoc (>= 2.4.2)
     rubyzip (1.1.6)
     rufus-scheduler (2.0.18)
       tzinfo (>= 0.3.23)
@@ -320,6 +326,7 @@ DEPENDENCIES
   area
   coffee-rails (~> 4.0.0)
   dalli
+  deathbycaptcha
   delayed_job_mongoid
   devise
   feedjira

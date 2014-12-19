@@ -6,6 +6,16 @@
 = nested_form_for(@cram_job) do |f|
 	.row
 		.col-xs-3
+			= f.label :posting_type
+		.col-xs-9
+			= f.select :posting_type, options_for_select([['Gig Offered', 'go']]), required: true
+	.row
+		.col-xs-3
+			= f.label :category
+		.col-xs-9
+			= f.select :category, options_for_select(['computer gigs', 'creative gigs', 'crew gigs', 'domestic gigs', 'event gigs', 'labor gigs', 'talent gigs', 'writing gigs']), required: true
+	.row
+		.col-xs-3
 			= f.label :ad_contact_name
 		.col-xs-9
 			= f.text_field :ad_contact_name, class: "full-width"
@@ -59,6 +69,11 @@
 	.row
 		Add some text to cycle between cram jobs.
 	= f.fields_for :messages do |mf|
+		.row
+			.col-xs-3
+				= mf.label :title
+			.col-xs-6
+				= mf.text_field :title, class: "full-width"
 		.row
 			.col-xs-3
 				= mf.label :text

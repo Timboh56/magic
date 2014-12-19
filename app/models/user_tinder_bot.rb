@@ -1,7 +1,7 @@
 class UserTinderBot
   include Mongoid::Document
   include Mongoid::Timestamps
-  include TwitterHelpers
+  include ScrapeHelpers
   require 'tinderbot'
 
 

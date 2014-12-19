@@ -27,13 +27,21 @@ class CraigCramsController < ApplicationController
     redirect_to @craig_cram
   end
 
+  def destroy
+    CraigCram.find(params[:id]).destroy
+    respond_to do |format|
+      format.html { redirect_to "/craig_crammer", notice: 'Your cramjob was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
   private
 
   def craig_cram_params
   	params.require(:craig_cram).permit(:ad_contact_name, 
   		:ad_email_address, :ad_title, :ad_phone_number, 
-  		:cities_a_day, :ad_postal_code, :ad_street, :ad_city, :ad_region,
-  		:messages_attributes => [ :text, :id, :_id, :destroy, :_destroy],
+  		:category, :posting_type, :cities_a_day, :ad_postal_code, :ad_street, :ad_city, :ad_region,
+  		:messages_attributes => [ :title, :text, :id, :_id, :destroy, :_destroy],
   		:emails_attributes => [ :email, :id, :_id, :destroy, :_destroy],
   	)
 
