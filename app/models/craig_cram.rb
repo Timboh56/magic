@@ -36,7 +36,7 @@ class CraigCram
 
   def set_emails
     if textarea_or_db == "db"
-      (0..cities_a_day).each do |i|
+      (1..(cities_a_day - 1)).each do |i|
         emails << Email.unused[i]
       end
       save!
@@ -49,17 +49,20 @@ class CraigCram
   end
 
   # scheduled to run daily
-  def post_to_cities
+  # there should roughly be as many cities as there are emails
+  def post_to_cities!
     set_emails
     cl_uris = []
     if emails.present? && messages.present?
       us_cities = get_us_cities
-      (city_index..cities_a_day).each do |i|
-        p = post_to_city(emails[i % emails.length].email, messages[i % messages.length], us_cities[i % us_cities.length])
-        emails[i % emails.length].update_attributes!(used: true)
+      (0..(cities_a_day - 1)).each do |i|
+        p = post_to_city(emails[(city_index + i) % emails.length].email, messages[i % messages.length], us_cities[(i + city_index) % us_cities.length])
+        emails[(city_index + i) % emails.length].update_attributes!(used: true)
         cl_uris << p.uri
       end
+      self.city_index += cities_a_day
     end
+    save!
     cl_uris
   end
 
@@ -107,7 +110,9 @@ class CraigCram
 
     p "Filling form.."
 
-    fill_form(agent.page.forms[0], email_address, listing.title || ad_title, city, listing.text, get_ad_postal_code(city[:city_name]) || ad_postal_code)
+    listing_body = listing.text + " \n " + sentence_rearranger(listing.randomized_text) + " \n " + random_greetings
+    
+    fill_form(agent.page.forms[0], email_address, listing.title || ad_title, city, listing_body, get_ad_postal_code(city[:city_name]) || ad_postal_code,)
   
     sleep_random
 
@@ -121,6 +126,38 @@ class CraigCram
   rescue Exception => e
     p "Error: #{ e.inspect }"
     agent.page
+  end
+
+  def sentence_rearranger(txt)
+    if txt.present?
+      sentences = txt.split(/\./)
+      new_txt = ""
+      arr = []
+
+      sentences.each do |s|
+        arr = assign_random_sentence_pos(arr, sentences, s)
+      end
+      return arr.join(".")
+    end
+  end
+
+  def assign_random_sentence_pos(arr, sentences, sentence)
+    sentence_pos = rand(sentences.count)
+
+    unless arr[sentence_pos].present?
+      arr[sentence_pos] = sentence
+    else
+      arr = assign_random_sentence_pos(arr, sentences, sentence)
+    end
+    arr
+  end
+
+  def random_greetings
+    ["Have a good one.", "Thanks.", "Thank you.", "Hope to hear from you soon", "God bless."]
+  end
+
+  def random_compensation
+    " $#{ rand(90) + 20 }/hr "
   end
 
   # recursively clicks on "next/continue/publish" buttons until
@@ -176,7 +213,7 @@ class CraigCram
     fill_form_fields(form.fields, "body", body)
     fill_form_fields(form.fields, "contact_name", ad_contact_name)
     fill_form_fields(form.fields, "postingtitle", title)
-    fill_form_fields(form.fields, "remuneration", "$50/hr")
+    fill_form_fields(form.fields, "remuneration", random_compensation)
     find_radio_button(form, "pay").click rescue p "No radio button for paying found."
   end
 

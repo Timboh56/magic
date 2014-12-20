@@ -81,29 +81,33 @@
 				= label_tag "Email"
 			.col-xs-9
 				= text_area_tag :emails, (@cram_job.emails.present? ? @cram_job.emails.map { |e| "#{ e.email }, #{ e.password }" }.join("\n") : ""), { class: "full-width" }
-	.row
-		.col-xs-9.col-xs-offset-3
-			%h3
-				Post Bodies *
-			Add some text to cycle between cram jobs.
-	= f.fields_for :messages do |mf|
 		.row
-			.col-xs-3
-				= mf.label :title
-			.col-xs-6
-				= mf.text_field :title, class: "full-width"
-			.col-xs-3
-				= mf.link_to_remove "Delete", class: "btn btn-default"
-		.row
-			.col-xs-3
-				= mf.label :text
-			.col-xs-9
-				= mf.text_area :text, class: "full-width"
+			.col-xs-9.col-xs-offset-3
+				%h3
+					Post Bodies *
+				Add some text to cycle between cram jobs.
+		= f.fields_for :messages do |mf|
+			.row
+				.col-xs-3
+					= mf.label :title
+				.col-xs-6
+					= mf.text_field :title, class: "full-width"
+				.col-xs-3
+					= mf.link_to_remove "Delete", class: "btn btn-default"
+			.row
+				.col-xs-3
+					= mf.label :text
+				.col-xs-9
+					= mf.text_area :text, class: "full-width"
+			.row
+				.col-xs-3
+					= mf.label "Randomized sentences"
+				.col-xs-9
+					= mf.text_area :randomized_text, class: "full-width"
 	.row
-		.col-xs-9.col-xs-offset-3
-			= f.link_to_add "Add Listing body", :messages, class: "btn btn-default"
-			.italic
-				* Indicates a required field.
+		= f.link_to_add "Add Listing body", :messages, class: "btn btn-default"
+		.italic
+			* Indicates a required field.
 
 	.row
 		= f.submit "Submit", class: "btn btn-default"

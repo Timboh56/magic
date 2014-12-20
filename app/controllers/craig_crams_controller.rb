@@ -33,6 +33,7 @@ class CraigCramsController < ApplicationController
       params[:emails].split("\n").each do |e|
         email_address = e.split(",")[0].strip
         email_pwd = e.split(",")[1].strip
+        @craig_cram.emails = []
 
         unless (email = Email.where(email: email_address, password: email_pwd).first).present?
           email = Email.create!(craig_cram_id: params[:id] ,email: email_address, password: email_pwd)
@@ -41,8 +42,6 @@ class CraigCramsController < ApplicationController
           email.save!
         end
       end
-    else
-      @craig_cram.emails = []
       @craig_cram.save!
     end
   end
@@ -60,8 +59,8 @@ class CraigCramsController < ApplicationController
   def craig_cram_params
     params.require(:craig_cram).permit(:ad_contact_name, 
       :ad_email_address, :ad_title, :ad_phone_number, 
-      :category, :posting_type, :cities_a_day, :ad_postal_code, :ad_street, :ad_city, :ad_region,
-      :messages_attributes => [ :title, :text, :id, :_id, :destroy, :_destroy],
+      :category, :textarea_or_db, :posting_type, :cities_a_day, :ad_postal_code, :ad_street, :ad_city, :ad_region,
+      :messages_attributes => [ :randomized_text, :title, :text, :id, :_id, :destroy, :_destroy],
       :emails_attributes => [ :email, :id, :_id, :destroy, :_destroy],
     )
 
