@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   put '/scrape/:id/restart' => "scrapes#restart"
   post '/text' => "sms_blasts#text"
 
+  get '/email_lookup/' => 'webhook#emails'
+  post '/webhook/clearbit' => 'webhook#clearbit'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

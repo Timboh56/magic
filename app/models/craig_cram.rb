@@ -1,6 +1,8 @@
 class CraigCram
   include Mongoid::Document
   include ScrapeHelpers
+  include AdHelpers
+  
   field :ad_contact_name, type: String
   field :ad_title, type: String
   field :ad_phone_number, type: String
@@ -36,7 +38,7 @@ class CraigCram
 
   def set_emails
     if textarea_or_db == "db"
-      (1..(cities_a_day - 1)).each do |i|
+      (0..(cities_a_day - 1)).each do |i|
         emails << Email.unused[i]
       end
       save!
@@ -71,16 +73,29 @@ class CraigCram
     return zip_codes.present? ? zip_codes.first : "90065"
   end
 
+  def create_listing_body(listing)
+    p "Creating randomized listing body.."
+
+    listing_body = listing.text + " \n " + sentence_rearranger(listing.randomized_text) + " \n " + random_greeting
+    create_listing_body(listing) if Record.where(text: listing_body).exists?
+    listing_body
+  end
+
   def post_to_city(email_address, listing, city)
     
     agent = mechanize_agent
+
+    set_proxy(agent)
 
     p "Posting to: #{ city[:city_name] }"
     p "Posting to url: #{ city[:url] } "
     p "Posting type: #{ posting_type }"
     p "Email: #{ email_address }"
     p "Title: #{ listing.title }"
-    p "Body: #{ listing.text }"
+
+    listing_body = create_listing_body(listing)
+
+    p "Body: #{ listing_body }"
 
     agent.get(city[:url] )
     agent.click(agent.page.link_with(:text => /post to classifieds/))
@@ -109,8 +124,6 @@ class CraigCram
     sleep_random
 
     p "Filling form.."
-
-    listing_body = listing.text + " \n " + sentence_rearranger(listing.randomized_text) + " \n " + random_greetings
     
     fill_form(agent.page.forms[0], email_address, listing.title || ad_title, city, listing_body, get_ad_postal_code(city[:city_name]) || ad_postal_code,)
   
@@ -122,42 +135,13 @@ class CraigCram
     p agent.page.uri
 
     p "Complete!"
+
+    Record.create!(text: listing_body)
+
     agent.page
   rescue Exception => e
     p "Error: #{ e.inspect }"
     agent.page
-  end
-
-  def sentence_rearranger(txt)
-    if txt.present?
-      sentences = txt.split(/\./)
-      new_txt = ""
-      arr = []
-
-      sentences.each do |s|
-        arr = assign_random_sentence_pos(arr, sentences, s)
-      end
-      return arr.join(".")
-    end
-  end
-
-  def assign_random_sentence_pos(arr, sentences, sentence)
-    sentence_pos = rand(sentences.count)
-
-    unless arr[sentence_pos].present?
-      arr[sentence_pos] = sentence
-    else
-      arr = assign_random_sentence_pos(arr, sentences, sentence)
-    end
-    arr
-  end
-
-  def random_greetings
-    ["Have a good one.", "Thanks.", "Thank you.", "Hope to hear from you soon", "God bless."]
-  end
-
-  def random_compensation
-    " $#{ rand(90) + 20 }/hr "
   end
 
   # recursively clicks on "next/continue/publish" buttons until

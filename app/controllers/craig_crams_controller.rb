@@ -10,13 +10,13 @@ class CraigCramsController < ApplicationController
   end
 
   def edit
-    @cram_job = CraigCram.find(params[:id])
+    @cram_job = CraigCram.includes(:messages).find(params[:id])
   end
 
   def update
     @craig_cram = CraigCram.find(params[:id])
     create_or_update_emails
-    @craig_cram.update_attributes(craig_cram_params)
+    @craig_cram.update_attributes!(craig_cram_params)
     redirect_to craig_crams_path
   end
 

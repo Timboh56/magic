@@ -79,6 +79,14 @@ gem 'area'
 
 gem 'deathbycaptcha'
 
+gem 'engtagger'
+
+gem 'wordnik'
+
+gem 'clearbit'
+
+gem "koala", "~> 1.10.0rc"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
