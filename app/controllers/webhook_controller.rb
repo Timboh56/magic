@@ -2,20 +2,17 @@
 class WebhookController < ApplicationController
 
   def emails
-    
+
   end
-  
+
   def clearbit
     if params[:type] == 'person' && params[:body]
       email  = params[:body][:email]
-      person = Person.where(email: email).first
-
-      if person
-        person.clearbit = params[:body]
-        person.save
-      end
+      person = (person = Person.where(email: email).first).present? ? person : Person.new(email: email)
+      person.clearbit = params[:body]
+      person.save
     end
 
-    head 200
+    head :created
   end
 end
