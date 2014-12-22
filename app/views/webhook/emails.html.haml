@@ -1,8 +1,0 @@
-%h1 Clearbit Form
-.container-fluid
-	= form_for "/webhook/clearbit" do |f|
-		.row
-			.col-xs-3
-				= f.label "Clearbit"
-			.col-xs-9
-				= text_area_tag :emails, "", { placeholder: "Enter emails here" }

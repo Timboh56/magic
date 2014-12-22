@@ -1,0 +1,11 @@
+%h1 Clearbit Form
+.container-fluid
+	= form_for "/persons/lookup", { remote: true } do |f|
+		.row
+			.col-xs-3
+				= label_tag "Emails to lookup"
+			.col-xs-9
+				= text_area_tag :emails, "", { placeholder: "Enter emails here ,separated by commas or new lines", class: "full-width" }
+		.row
+			.col-xs-9.col-xs-offset-3
+				= f.submit "Lookup"
