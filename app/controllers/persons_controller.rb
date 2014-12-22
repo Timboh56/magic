@@ -4,7 +4,7 @@ class PersonsController < ApplicationController
 
   end
   def lookup
-    params[:emails].split(/\,|\/n/).each do |email|
+    params[:emails].split(/\,|\/n|\/r/).each do |email|
     	Clearbit.key = ENV["CLEARBIT_API_KEY"]
       person = Clearbit::Person[email: email, subscribe: true]
       if person && !person.pending?
