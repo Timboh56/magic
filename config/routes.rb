@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 
   post '/webhook/clearbit' => 'webhook#clearbit'
 
+  get '/tutor/' => 'persons#tutor_lookup'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
