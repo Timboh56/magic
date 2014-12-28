@@ -1,5 +1,5 @@
 class PersonsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, only: [ :tutor_lookup ]
+  skip_before_filter :verify_authenticity_token, only: [ :tutor_lookup, :tutor_create ]
 
   def emails
 
