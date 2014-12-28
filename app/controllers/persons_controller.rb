@@ -16,11 +16,13 @@ class PersonsController < ApplicationController
   end
 
   def tutor_create
-    p = Person.create!(
-      google_id: params[:google_id],
-      email: params[:email],
-      name: params[:name]
-    )
+    unless (p = Person.where(google_id: params[:google_id]).first).present?
+      p = Person.create!(
+        google_id: params[:google_id],
+        email: params[:email],
+        name: params[:name]
+      )
+    end
     render json: p
   end
 end
