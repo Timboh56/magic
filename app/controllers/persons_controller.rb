@@ -12,6 +12,15 @@ class PersonsController < ApplicationController
 
   def tutor_lookup
   	p = Person.where(available: true).first
-  	render :json => p.to_json
+  	render json: p
+  end
+
+  def tutor_create
+    p = Person.create!(
+      google_id: params[:google_id],
+      email: params[:email],
+      name: params[:name]
+    )
+    render json: p
   end
 end
