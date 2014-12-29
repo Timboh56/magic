@@ -56,17 +56,17 @@ function set_bounce() {
 	setInterval(function () {
 		setTimeout( function () {
 				bounce();
-			}, 2000);
-	}, 2000);
+			}, 4000);
+	}, 4000);
 }
 
 function bounce() {
 	$(".bounce").animate({
 		height: "+=10px"
-	}, 1000);
+	}, 2000);
 	$(".bounce").animate({
 		height: "-=10px"
-	}, 1000);
+	}, 2000);
 }
 
 function getElementFontColor(elm) {
