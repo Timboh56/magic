@@ -16,25 +16,25 @@
     = fa_icon "magic", text: "DopeMagic "
     do for you?
   .row-f
-    .col-xs-12.col-md-offset-3.col-md-6.form-container.nopadding
+    .col-xs-12.col-md-offset-3.col-md-6.form-container
       = form_tag "/send_email", { method: :post, remote: true } do
         .flash-messages-email
-        .row-f
+        .row
           .col-xs-3
             = label_tag "Name: "
           .col-xs-9
             = text_field_tag :name, "", { class: "form-control" }
-        .row-f
+        .row
           .col-xs-3
             = label_tag "Your Email: "
           .col-xs-9
             = text_field_tag :email, "", { class: "form-control" }
-        .row-f
+        .row
           .col-xs-3
             = label_tag "Message: "
           .col-xs-9
             = text_area_tag :body, "", { class: "form-control" }
-        .row
+        .full-width.margin-top-22
           = submit_tag "Send", { class: "btn btn-submit full-width"}
 
 :javascript
