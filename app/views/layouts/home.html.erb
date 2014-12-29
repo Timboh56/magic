@@ -11,6 +11,7 @@
     <link href='http://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <!-- For third-generation iPad with high-resolution Retina display: -->
     <!-- Size should be 144 x 144 pixels -->
     <%= favicon_link_tag 'apple-touch-icon-144x144-precomposed.png', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
@@ -81,15 +82,12 @@
         </div>
       </div>
     </div>
-
-    <div class="layout-container">
-      <div>
-        <div class="col-lg-10 col-lg-offset-1" style="text-align: center;">
-          <%= bootstrap_flash %>
-          <div class="flash-messages"></div>
-          <%= yield %>
-        </div>
-      </div><!--/row-->
+    <div class="full-width">
+      <div class="col-lg-10 col-lg-offset-1 nopadding" style="text-align: center;">
+        <%= bootstrap_flash %>
+        <div class="flash-messages"></div>
+        <%= yield %>
+      </div>
     </div> <!-- /container -->
     <footer>
       <p>&copy; DopeMagic! 2014 Courtesy of <a href="http://www.timboh.menocu.com"> Tim</a></p>

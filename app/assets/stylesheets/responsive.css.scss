@@ -1,0 +1,25 @@
+@media (max-width: 780px) {
+	.wizard-bg {
+		max-width: 400px;
+		background-size: 100%;
+		min-height:205px;
+	}
+	h1.bounce {
+		margin-top: 0px;
+		font-size: 25px;
+	}
+
+	.section1 {
+		padding: 0 15px;
+		min-width: 320px !important;
+		.section1-right { margin-top: 45px; }
+		.section1-right, .section1-left { width: 100%; }
+	}
+	.clouds-bg {
+		background-image: url("/assets/clouds.png");
+		background-size: 51%;
+		background-repeat: repeat-x;
+		position: relative;
+		top: -56px;
+	}
+}

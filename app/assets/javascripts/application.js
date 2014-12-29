@@ -121,7 +121,7 @@ function calculateIncrement(distance) {
 }
 
 var iteration = Math.round(1000 / (incrementStops/2));
-function createTransition(id) {
+function createTransition(id, bg_or_font) {
 	var elm				= document.getElementById(id);
 	var currentColor	= getElementFontColor(elm);
 	var randomColor		= generateRGB();
@@ -165,11 +165,15 @@ function createTransition(id) {
 				increment[2] = 0;
 			}
 		}
-		elm.style.color = rgb2hex(currentColor);
+
+		if (bg_or_font == "font")
+			elm.style.color = rgb2hex(currentColor);
+		else
+			elm.style.backgroundColor = rgb2hex(currentColor);
 		
 		if (increment[0] == 0 && increment[1] == 0 && increment[2] == 0) {
 			clearInterval(handler);
-			createTransition(id);
+			createTransition(id, bg_or_font);
 		}
 	}
 	var handler = setInterval(transition, iteration);

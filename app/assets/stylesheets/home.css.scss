@@ -5,30 +5,48 @@
 
 // font overrides
 h1, .brand {
-	font-family: 'Ubuntu';
-	margin: 12px 0;
+  font-family: 'Montserrat', sans-serif;
+  margin: 12px 0;
 }
 .description {
-	font-style: italic;
+  font-style: italic;
 }
 .active {
-	background: #eee;
+  background: #eee;
 }
 .bounce-container{
-	top: 50px;
-	 height: 220px;
-	 width: 100%;
-	 position: relative;
-	 color: #00000;
+  top: 50px;
+   height: 250px;
+   width: 100%;
+   position: relative;
+   color: #00000;
+   text-align: left;
+}
+.navbar { margin-bottom: 0px; }
+.clouds-bg {
+  background-image: url("/assets/clouds.png");
+  background-size: 20%;
+  background-repeat: repeat-x;
+  height: 65px;
+  position: relative;
+  top: -45px;
+}
+.clouds-img { height: 300px; }
+.wizard-bg {
+  background-image: url('/assets/wizardpipe.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 280px;
+  background-position: center bottom;
 }
 a:hover {
-	color: gray !important;
-	background: none !important;
+  color: gray !important;
+  background: none !important;
 }
 
 // override bootsrap
 table, td {
-	font-size: 0.9em !important;
+  font-size: 0.9em !important;
 }
 .word-wrap {
   white-space: pre-wrap; /* css-3 */
@@ -38,31 +56,30 @@ table, td {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 .bottom-table {
-	margin-top: 30px !important;
+  margin-top: 30px !important;
 }
 .bounce {
-	width: 100%;
-	bottom: 0px;
-	position: absolute;
-	background: none !important;
+  //width: 100%;
+  //bottom: 0px;
+  //position: absolute;
+  //background: none !important;
+  //margin-top: 50px;
+  //height: 60px;
+  //text-align: left;
 }
 .brand {
-	margin: 14px 0;
-}
-.home-container {
-	margin-top: 10px !important;
-	position: relative;
+  margin: 14px 0;
 }
 .field_with_errors {
-	width: 100%;
+  width: 100%;
 }
 #user_nav {
-	margin: 12px 0;
+  margin: 12px 0;
 }
 body {
   background-color: #00ff00;
-	//background-image: url("/assets/ape.jpg");
-	background-repeat: no-repeat;
+  //background-image: url("/assets/ape.jpg");
+  background-repeat: no-repeat;
   -webkit-background-size: 200%;
   -moz-background-size: 200%;
   -o-background-size: 200%;
@@ -76,56 +93,96 @@ margin: 10px 5%;
 
 textarea { resize: none; min-height: 100px; }
 .static-page-container, .home-container, .scrapeape_container, .twitter_blaster_container, .recent-blasts-container, .recent-scrapes-container {
-	//background-color: rgba(244,244,244,.8);
-	padding: 0 20px;
-	border-radius: 10px;
-	width: 100%;
-	margin: 20px auto;
-	textarea, input[type="number"], input[type="text"] {
-			width: 100%;
-			resize: none;
-	}
+  //background-color: rgba(244,244,244,.8);
+  padding: 0 20px;
+  border-radius: 10px;
+  width: 100%;
+  margin: 0 auto;
+  textarea, input[type="number"], input[type="text"] {
+      width: 100%;
+      resize: none;
+  }
 }
 
 .right-aligned {
-	text-align: right !important;
+  text-align: right !important;
 }
 .left-aligned {
-	text-align: left !important;
+  text-align: left !important;
 }
-ul li {
-	margin: 1em 0;
-	text-decoration: none;
-	list-style-type: none;
+ul, li {
+  margin: 1em 0;
+  text-decoration: none;
+  list-style-type: none;
+  padding: 0px !important;
 }
 footer {
-	background: white;
-	width: 100%;
-	position: relative;
-	bottom: 0px;
-	text-align: center;
+  background: white;
+  width: 100%;
+  position: relative;
+  bottom: 0px;
+  text-align: center;
+}
+.section-heading {
+  font-weight: bold;
+  font-size: 50px;
+  color: #aaa;
+  line-height: 65px;
+}
+section {
+  //position: absolute;
+  min-height: 100%;
+  overflow: auto;
+  margin: 0 -15px;
+}
+.section1 {
+  vertical-align: bottom;
+  bottom: 0px;
+  min-width: 780px;
+  background: #DAF0FF;
+  color: #323347;
+  .section1-right {
+    width: 300px;
+    float: right;
+  }
+  .section1-left {
+    min-width: 0px;
+    width: 50%;
+    float: left;
+  }
+}
+.section2 {
+  //background-color: #9b59b6;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
 }
 .layout-container {
-	margin-bottom: 30px !important;
-	height: auto;
-	position: relative;
-	overflow: auto;
+  margin-bottom: 30px !important;
+  height: auto;
+  position: relative;
+  overflow: auto;
 }
 
 .fields {
-	margin: 10px 0;
+  margin: 10px 0;
 }
 
 label {
-	font-size: .9em;
+  font-size: .9em;
 }
 
 .row {
-	margin: 10px 0;
+  margin: 10px 0;
+}
+
+.row-f {
+  margin: 0px -15px;
 }
 
 .full-width {
-	width: 100%;
+  width: 100%;
 }
-
+.home-description { position: relative;  }
 .margin-top-45 { margin-top: 45px; }
+.pb45 { padding-bottom: 45px; }
+.pt45 { padding-top: 45px; }
