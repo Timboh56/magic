@@ -8,7 +8,9 @@
 		margin-top: 0px;
 		font-size: 25px;
 	}
-
+	.section-heading {
+		font-size: 35px;
+	}
 	.section1 {
 		padding: 0 15px;
 		min-width: 320px !important;
@@ -21,5 +23,8 @@
 		background-repeat: repeat-x;
 		position: relative;
 		top: -56px;
+	}
+	.navbar-toggle {
+		margin-top: 22px !important;
 	}
 }
