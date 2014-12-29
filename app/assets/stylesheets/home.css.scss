@@ -23,14 +23,13 @@ h1, .brand {
    color: #00000;
    text-align: left;
 }
-.navbar { margin-bottom: 0px; }
+.navbar { margin-bottom: 0px; background-color: white !important; }
 .clouds-bg {
   background-image: url("/assets/clouds.png");
   background-size: 20%;
   background-repeat: repeat-x;
   height: 85px;
   position: relative;
-  top: -45px;
 }
 .btn-submit {
   background: #DAF0FF;
@@ -41,7 +40,7 @@ h1, .brand {
   background-image: url('/assets/wizardpipe.png');
   background-size: 100%;
   background-repeat: no-repeat;
-  height: 280px;
+  height: 320px;
   background-position: center bottom;
   position: relative !important;
   overflow: hidden !important;
@@ -174,6 +173,8 @@ section {
   //background-color: #9b59b6;
   color: #2c3e50;
   font-family: 'Montserrat', sans-serif;
+  position: relative;
+  top: -45px;
 }
 .layout-container {
   margin-bottom: 30px !important;
