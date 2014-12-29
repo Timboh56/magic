@@ -58,12 +58,12 @@
             <% if current_user %>
               <li><a href="/scrape_ape">Scrape Ape</a></li>
               <li><a href="/craig_crammer">Craig Crammer</a></li>
-              <% if current_user.twitter_user? %>
+              <% if current_user.twitter_user? && current_user.admin? %>
                 <li><a href="/twitter_blaster">Twitter Blaster</a></li>
                 <li><a href="/rss_retweeter">RSS Tweeter</a></li>
               <% end %>
               <li><a href="/sms_blaster">SMS Blaster</a></li>
-              <% if current_user.facebook_user? %>
+              <% if current_user.facebook_user? && current_user.admin? %>
                 <li><a href="/tinder_bot">Tinder bot</a></li>
               <% end %>
               <li>

@@ -27,7 +27,7 @@ h1, .brand {
   background-image: url("/assets/clouds.png");
   background-size: 20%;
   background-repeat: repeat-x;
-  height: 65px;
+  height: 85px;
   position: relative;
   top: -45px;
 }
@@ -42,6 +42,9 @@ h1, .brand {
   background-repeat: no-repeat;
   height: 280px;
   background-position: center bottom;
+  position: relative !important;
+  overflow: hidden !important;
+  margin: auto !important;
 }
 a:hover {
   color: gray !important;
@@ -159,7 +162,6 @@ section {
   color: #2c3e50;
   .section1-right {
     width: 300px;
-    float: right;
   }
   .section1-left {
     min-width: 0px;
