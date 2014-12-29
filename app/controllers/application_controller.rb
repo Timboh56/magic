@@ -22,6 +22,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def send_email
+    e = Email.new(
+      email_type: "Client",
+      body: params[:body],
+      name: params[:name],
+      email: params[:email]
+    )
+    
+    if e.save
+      UserMailer.send_email(e).deliver!
+      render partial: "shared/success.js"
+    else
+      @errors = e.errors.full_messages.join(", ")
+      render partial: "shared/errors.js", locals: { flash_container: ".flash-messages-email"}
+    end
+  end
+
   private
 
   def show_errors(e)

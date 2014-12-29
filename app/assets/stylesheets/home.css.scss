@@ -31,6 +31,12 @@ h1, .brand {
   position: relative;
   top: -45px;
 }
+.btn-submit {
+  background: #DAF0FF;
+}
+.form-container {
+  padding: 0px;
+}
 .clouds-img { height: 300px; }
 .wizard-bg {
   background-image: url('/assets/wizardpipe.png');
@@ -84,6 +90,7 @@ body {
   -moz-background-size: 200%;
   -o-background-size: 200%;
   background-size: 200%;
+  color: #2c3e50;
 }
 
 #recent-scrapes-table, #recent-blasts-table {
@@ -111,10 +118,10 @@ textarea { resize: none; min-height: 100px; }
   text-align: left !important;
 }
 ul, li {
-  margin: 1em 0;
+  margin: 2px 0;
   text-decoration: none;
   list-style-type: none;
-  padding: 0px !important;
+  padding: 6px !important;
 }
 footer {
   background: white;
@@ -123,12 +130,13 @@ footer {
   bottom: 0px;
   text-align: center;
 }
-.section-heading {
+.section-heading, h2 {
   font-weight: bold;
-  font-size: 50px;
-  color: #aaa;
+  color: #2c3e50;
   line-height: 65px;
 }
+.section-heading { font-size: 50px; }
+h2 { font-size: 30px; margin: 0px; }
 section {
   //position: absolute;
   min-height: 100%;
@@ -140,7 +148,7 @@ section {
   bottom: 0px;
   min-width: 780px;
   background: #DAF0FF;
-  color: #323347;
+  color: #2c3e50;
   .section1-right {
     width: 300px;
     float: right;
@@ -153,7 +161,7 @@ section {
 }
 .section2 {
   //background-color: #9b59b6;
-  color: #aaa;
+  color: #2c3e50;
   font-family: 'Montserrat', sans-serif;
 }
 .layout-container {
@@ -183,6 +191,7 @@ label {
   width: 100%;
 }
 .home-description { position: relative;  }
+.margin-top-22 { margin-top: 22px; }
 .margin-top-45 { margin-top: 45px; }
 .pb45 { padding-bottom: 45px; }
 .pt45 { padding-top: 45px; }

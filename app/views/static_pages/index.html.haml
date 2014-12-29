@@ -2,26 +2,45 @@
   .section1-left.col-sm-offset-1.margin-top-45
     .section-heading.left-aligned{ id: "b" }
       = fa_icon "magic", text: "DopeMagic!"
-    .home-description.text-left.margin-top-45
-      DopeMagic! Web tools is your ultimate source for scraping, email blasting, SMS gateway and other great growth hacking tools. Email tim@wrent.it for more info.
+    .home-description.text-left.margin-top-22
+      Market your business/brand with social media automation.
+      %br
+      Produce awesome content.
+      %br
+      Create attractive, colorful and successful landing pages.
+      %br
+      Produce great marketing strategies.
+      %br
+      Control the web from the cloud.
   .section1-right.wizard-bg.float-left.bounce
 .clouds-bg.row-f
 %section.section2.row-f{ id: "section2" }
-  .section-heading.pb45
+  %h2
     What can
     = fa_icon "magic", text: "DopeMagic "
     do for you?
-  %ul
-    %li
-      Market your business/brand with social media automation
-    %li
-      Produce awesome content
-    %li
-      Create attractive, colorful and successful landing pages.
-    %li
-      Produce great marketing strategies
-    %li
-      Control the web
+  .row-f
+    .col-xs-12.col-md-offset-3.col-md-6.form-container
+      = form_tag "/send_email", { method: :post, remote: true } do
+        .flash-messages-email
+        .row
+          .col-xs-3
+            = label_tag "Name: "
+          .col-xs-9
+            = text_field_tag :name, "", { class: "form-control" }
+        .row
+          .col-xs-3
+            = label_tag "Your Email: "
+          .col-xs-9
+            = text_field_tag :email, "", { class: "form-control" }
+        .row
+          .col-xs-3
+            = label_tag "Message: "
+          .col-xs-9
+            = text_area_tag :body, "", { class: "form-control" }
+        .full-width.margin-top-22
+          = submit_tag "Send", { class: "btn btn-submit full-width"}
+
 :javascript
   $(document).ready( function () {
     bounce();

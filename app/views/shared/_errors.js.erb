@@ -1,2 +1,2 @@
-var error_messages = $('<div />').addClass('alert alert-danger').html('<%= @errors %>');
-$('.flash-messages').html(error_messages);
+var error_messages = $('<div />').addClass('alert alert-danger').html('<%= escape_javascript @errors %>');
+$('<%= defined?(flash_container) ? flash_container : ".flash-messages" %>').html(error_messages);

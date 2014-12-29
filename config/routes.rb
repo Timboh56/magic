@@ -31,6 +31,8 @@ Rails.application.routes.draw do
   get '/tutor/get' => 'persons#tutor_lookup'
   post '/tutor/new' => 'persons#tutor_create'
 
+  post '/send_email' => 'application#send_email'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
