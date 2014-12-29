@@ -35,6 +35,7 @@ h1, .brand {
   background: #DAF0FF;
 }
 .clouds-img { height: 300px; }
+.wizard-back { width: 100%; max-width: 200px; }
 .wizard-bg {
   background-image: url('/assets/wizardpipe.png');
   background-size: 100%;
@@ -46,7 +47,13 @@ a:hover {
   color: gray !important;
   background: none !important;
 }
-
+.alert {
+  margin-bottom: 0px !important;
+}
+.container-fluid .alert {
+  margin-right: -15px;
+  margin-left: -15px;
+}
 // override bootsrap
 table, td {
   font-size: 0.9em !important;

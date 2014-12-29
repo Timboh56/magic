@@ -11,31 +11,25 @@
   .section1-right.wizard-bg.float-left.bounce
 .clouds-bg.row-f
 %section.section2.row-f{ id: "section2" }
-  %h2
-    What can
-    = fa_icon "magic", text: "DopeMagic "
-    do for you?
+  .col-xs-12.col-md-6.col-md-offset-3.form-container
+    %h2
+      What can DopeMagic do for you?
   .row-f
-    .col-xs-12.col-md-offset-3.col-md-6.form-container
+    .col-xs-12.col-md-12.form-container
       = form_tag "/send_email", { method: :post, remote: true } do
         .flash-messages-email
         .row
-          .col-xs-3
-            = label_tag "Name: "
-          .col-xs-9
-            = text_field_tag :name, "", { class: "form-control" }
-        .row
-          .col-xs-3
-            = label_tag "Your Email: "
-          .col-xs-9
-            = text_field_tag :email, "", { class: "form-control" }
-        .row
-          .col-xs-3
-            = label_tag "Message: "
-          .col-xs-9
-            = text_area_tag :body, "", { class: "form-control" }
-        .full-width.margin-top-22
-          = submit_tag "Send", { class: "btn btn-submit full-width"}
+          .col-sm-8.col-sm-offset-2
+            = text_field_tag :name, "", { placeholder: "Name", class: "form-control" }
+            %br
+            = text_field_tag :email, "", { placeholder: "Email", class: "form-control" }
+            %br
+            = text_area_tag :body, "", { placeholder: "Email body", class: "form-control" }
+            %br
+            = submit_tag "Send", { class: "btn btn-submit full-width"}
+  .row-f
+    %img{ src: "#{image_path('wizardback.png')}", class: "wizard-back"}
+    %br
 
 :javascript
   $(document).ready( function () {

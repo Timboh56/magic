@@ -6,7 +6,7 @@ class UserMailer < ActionMailer::Base
   		@email = email.email
   		@body = email.body
   		@name = email.name
-  		mail(to: "tim@colab.la", from: @email, subject: 'New Email from #{ @name }')
+  		mail(to: "tim@colab.la", from: @email, subject: "New Email from #{ @name }")
   	else
   		raise "You did not pass an email object."
   	end
