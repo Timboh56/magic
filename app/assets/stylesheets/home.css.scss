@@ -14,6 +14,7 @@ h1, .brand {
 .active {
   background: #eee;
 }
+.nopadding { padding: 0 !important; }
 .bounce-container{
   top: 50px;
    height: 250px;
@@ -147,7 +148,7 @@ footer {
   line-height: 65px;
 }
 .section-heading { font-size: 50px; }
-h2 { font-size: 30px; margin: 0px; }
+h2 { font-size: 25px; margin: 0px; }
 section {
   //position: absolute;
   min-height: 100%;

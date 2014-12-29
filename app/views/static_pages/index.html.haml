@@ -27,10 +27,6 @@
             = text_area_tag :body, "", { placeholder: "Email body", class: "form-control" }
             %br
             = submit_tag "Send", { class: "btn btn-submit full-width"}
-  .row-f
-    %img{ src: "#{image_path('wizardback.png')}", class: "wizard-back"}
-    %br
-
 :javascript
   $(document).ready( function () {
     bounce();
