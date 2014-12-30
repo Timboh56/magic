@@ -37,10 +37,15 @@ h1, .brand {
 .clouds-img { height: 300px; }
 .wizard-back { width: 100%; max-width: 200px; }
 .wizard-bg {
-  background-image: url('/assets/wizard.gif');
+  background-image: url('/assets/wizardpipe.gif');
+}
+.wizard-bg-alt {
+  background-image: url('/assets/wizard.gif'); 
+}
+.wizard-bg, .wizard-bg-alt {
   background-size: 100%;
   background-repeat: no-repeat;
-  height: 320px;
+  height: 340px;
   background-position: center bottom;
   position: relative !important;
   overflow: hidden !important;
@@ -174,7 +179,7 @@ section {
   color: #2c3e50;
   font-family: 'Montserrat', sans-serif;
   position: relative;
-  top: -55px;
+  top: -57px;
 }
 .layout-container {
   margin-bottom: 30px !important;
