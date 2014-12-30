@@ -20,7 +20,9 @@ class PersonsController < ApplicationController
       p = Person.create!(
         google_id: params[:google_id],
         email: params[:email],
-        name: params[:name]
+        name: params[:name],
+        phone: params[:number],
+        person_type: "Tutor"
       )
     end
     render json: p
