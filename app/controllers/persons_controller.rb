@@ -11,7 +11,7 @@ class PersonsController < ApplicationController
   end
 
   def tutor_lookup
-  	p = Person.where(available: true).first
+  	p = Person.where(available: true, person_type: "Tutor").first
   	render json: p
   end
 
