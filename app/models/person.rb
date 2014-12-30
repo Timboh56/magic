@@ -7,6 +7,6 @@ class Person
 	field :google_id, type: String
 	field :available, type: Boolean, default: true
 	field :clearbit
-
+	field :person_type, type: String # tutor
 	validates_uniqueness_of :google_id
 end
