@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
     
     if e.save
       UserMailer.send_email(e).deliver!
-      render partial: "shared/success.js"
+      render partial: "shared/email_success.js"
     else
       @errors = e.errors.full_messages.join(", ")
       render partial: "shared/errors.js", locals: { flash_container: ".flash-messages-email"}

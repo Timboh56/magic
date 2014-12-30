@@ -14,7 +14,7 @@
   .col-xs-12.col-md-6.col-md-offset-3.form-container
     %h2
       What can DopeMagic do for you?
-  .row-f
+  .row
     .col-xs-12.col-md-12.form-container
       = form_tag "/send_email", { method: :post, remote: true } do
         .flash-messages-email
@@ -26,7 +26,7 @@
             %br
             = text_area_tag :body, "", { placeholder: "Email body", class: "form-control" }
             %br
-            = submit_tag "Send", { class: "btn btn-submit full-width"}
+            = submit_tag "Send", { class: "btn btn-submit full-width form-control"}
 :javascript
   $(document).ready( function () {
     bounce();
