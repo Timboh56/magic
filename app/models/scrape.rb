@@ -41,35 +41,13 @@ class Scrape
     data_sets.select { |d| d.link_selector.present? }
   end
 
-  def open_proxies_csv
-    p "Opening proxies csv"
-
-    Dir["proxy_lists/*.csv"].each do |csv_file_path|
-
-      p csv_file_path
-      CSV.foreach(csv_file_path) do |row|
-        p "csv"
-        if row[0].include? ";"
-          ip = row[0].split(';')[0]
-          port = row[0].split(';')[1]
-        else
-          ip = row[0].split(':')[0]
-          port = row[0].split(':')[1]
-        end
-        ProxyHost.create!(ip: ip, port: port) unless ProxyHost.where(ip: ip).exists?
-      end
-    end
-    p "Done with proxies csv."
-  end
 
   def run
-    open_proxies_csv if use_proxies
     puts id.inspect
     Resque.enqueue(ScraperWorker, id.to_s, last_scanned_url.present?)
   end
 
   def restart
-    open_proxies_csv if use_proxies
     record_sets.destroy_all
     Resque.enqueue(ScraperWorker, id.to_s)
   end
