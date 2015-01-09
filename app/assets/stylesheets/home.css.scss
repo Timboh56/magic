@@ -11,6 +11,9 @@ h1, .brand {
 .description {
   font-style: italic;
 }
+.social-link {
+  font-size: 23px !important;
+}
 .active {
   background: #eee;
 }
@@ -45,15 +48,19 @@ h1, .brand {
 .wizard-bg, .wizard-bg-alt {
   background-size: 100%;
   background-repeat: no-repeat;
-  height: 340px;
+  height: 360px;
   background-position: center bottom;
   position: relative !important;
   overflow: hidden !important;
   margin: auto !important;
 }
 a:hover {
-  color: gray !important;
+  color: #2c3e50 !important;
   background: none !important;
+  text-decoration: none !important;
+}
+a:visited {
+  color: #2c3e50 !important;
 }
 .alert {
   margin-bottom: 0px !important;

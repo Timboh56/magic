@@ -59,7 +59,10 @@ class ScrapesController < ApplicationController
   def create
     begin
       @scrape = Scrape.new(scrape_params)
-      
+      if params[:list_url_params]
+        params[:list_url_params].split("\n")
+
+      end
       respond_to do |format|
         if @scrape.save!
 
@@ -126,7 +129,7 @@ class ScrapesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def scrape_params
       params.require(:scrape).permit(
-        :url, :id, :_id, :pagination_type, :url_parameterization_type, :parameterized_record_list_id, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
+        :url, :id, :_id, :pagination_type, :parameterized_textarea, :url_parameterization_type, :parameterized_record_list_id, :page_parameterized_url, :page_interval, :filename, :next_selector, :use_proxies, :_destroy,
         :data_sets_attributes => [
           :id, :_id, :link_selector, :_destroy, :parameters_attributes => [
             :id, :_id, :name, :text_to_remove, :include_whitespace, :selector, :_destroy

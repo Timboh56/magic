@@ -14,7 +14,7 @@ class Scrape
   field :use_proxies, :type => Boolean, :default => false
   field :last_scanned_url, :type => String
   field :status, :type => String
-
+  field :parameterized_textarea, :type => String # if using textarea for list of url params to scrape
   has_many :data_sets
 
   # record set is a "row" of data, scraped from individual page
@@ -28,7 +28,6 @@ class Scrape
   
   accepts_nested_attributes_for :data_sets, allow_destroy: true
   before_create :generate_record_list
-  validate :check_parameterized_record_list
 
   def records_count
     scraped_record_list.records_count rescue 0
@@ -196,9 +195,14 @@ class Scrape
     p e.inspect
   end
 
+  def url_parameter_array
+    @url_parameter ||= parameterized_textarea.present? ? parameterized_textarea.split("\n") : parameterized_record_list.records
+  end
+
   def next_page(current_page, page_interval)
 
-    
+    url_params = url_parameter_array
+
     if pagination_type === "PageLink"
       next_link = node_to_uri(current_page.search(next_selector).last) rescue nil
     else
@@ -211,9 +215,9 @@ class Scrape
         url_param = (page_interval * @page_index).to_s
       
       else
-
+  
         # use next record in record list for parameter in URL
-        url_param = (parameterized_record_list.records[@page_index].text) rescue nil
+        url_param = (url_params[@page_index].text) rescue nil
       
       end
 
