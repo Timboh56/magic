@@ -11,9 +11,19 @@ class ScrapesController < ApplicationController
       post_id = collection[:property1][:href].match(/(\d{10})/m)[0]
       post_ids << post_id
     end
+
+    message = "Hey there! I saw your ad! I just thought you could probably also rent it out to other people on www.film.wrent.com and make money by renting to other people. Theres a whole community of film and photography students who are interested."
+    
+    p "Generating craigslist scrape..."
     cl_scrape = Scrape.generate_craigslist_scrape(post_ids)
-    p cl_scrape.parameterized_textarea
-    cl_scrape.run
+
+    p "Scraping craigslist! The hard part.."
+    scraped_phones_emails = cl_scrape.scrape_cl
+
+    p "Done! Sending emails to scraped emails"
+    cl_scrape.email_cl_emails(scraped_phones_emails[:emails], message ,30)
+    
+
     render nothing: true
   end
 

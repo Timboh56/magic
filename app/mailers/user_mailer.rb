@@ -11,4 +11,10 @@ class UserMailer < ActionMailer::Base
   		raise "You did not pass an email object."
   	end
   end
+
+  def cl_email(from, to, message, title = nil)
+    @message = message
+    title ||= "Your craigslist ad"
+    mail(to: to, from: from, subject: title)
+  end
 end

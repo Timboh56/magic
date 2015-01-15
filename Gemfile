@@ -87,6 +87,8 @@ gem 'clearbit'
 
 gem "koala", "~> 1.10.0rc"
 
+gem "ruby-gmail"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

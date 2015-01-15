@@ -9,7 +9,7 @@ class Email
 	belongs_to :craig_cram
 
 	scope :unused, lambda { where(used: false) }
-
+  scope :dummies, lambda { where(email_type: "Dummy") }
   validates_format_of :email, :with => /\A(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})\z/i
   validates_presence_of :email
   validate :check_name_and_body

@@ -1,9 +1,10 @@
+# encoding: utf-8
+
 class Scrape
   include Mongoid::Document
   include Mongoid::Timestamps
   require "mechanize"
   require "pathname"
-
   field :url, :type => String
   field :page_parameterized_url, :type => String
   field :pagination_type, :type => String, :default => "PageLink" # "PageLink" or "URL"
@@ -181,6 +182,51 @@ class Scrape
     retry
   rescue Exception => e
     p e.inspect
+  end
+
+  def email_cl_emails(cl_emails, message, limit = nil)
+    dummies = Email.dummies
+    count = dummies.count
+    limit ||= 50
+    cl_emails.take(limit).each_with_index do |cl_email, i|
+      begin
+        GmailSender::send_email(dummies[i % count].email,dummies[i % count].password, cl_email, "saw your ad", message) if cl_email.present?
+      rescue Exception => e
+        p e.inspect
+      end
+    end
+  end
+
+  def scrape_cl(ids = nil, partial_url = "http://losangeles.craigslist.org/reply/lax/pho/", limit = nil)
+    a = Mechanize.new
+    ids ||= parameterized_textarea.split("\n")
+    emails = []
+    phones = []
+    limit ||= 50
+    count = ProxyHost.all.count
+    ids.take(limit).each_with_index do |cl_id, index|
+      begin
+        selected_proxy = ProxyHost.all[index % count]
+        a.set_proxy selected_proxy.ip, selected_proxy.port
+        page = a.get(partial_url + cl_id)
+        page_text = page.search("ul").text
+        phone_number = page_text.match(/(☎\s*\d{10})/m)[0] rescue nil
+        email = page_text.match(/(\S{5}-\d{10}@sale.craigslist.org)/)[0] rescue nil
+        p cl_id.inspect
+        p phone_number.inspect
+        p email.inspect
+        emails << email if email
+        phones << phone if phone
+        sleep(rand(10))
+      rescue Mechanize::ResponseCodeError => e
+        p e.inspect
+      rescue Exception::NoMethodError => e
+        p e.inspect
+      rescue Net::HTTP::Persistent::Error => e
+        p e.inspect
+      end
+    end
+    {emails: emails phones: phones}
   end
 
   def url_parameter_array
