@@ -8,7 +8,7 @@ class ScrapesController < ApplicationController
   def craigslist_scrape
     post_ids = []
     params[:results][:collection1].each do |collection|
-      post_id = collection[:property1][:href].to_s.gsub("http://losangeles.craigslist.org/sfv/pho/", "").gsub(".html", "")
+      post_id = collection[:property1][:href].match(/(\d{10})/m)[0]
       post_ids << post_id
     end
     cl_scrape = Scrape.generate_craigslist_scrape(post_ids)
