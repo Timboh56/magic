@@ -6,10 +6,16 @@ class ScrapesController < ApplicationController
 
 
   def craigslist_scrape
+    p params[:results]
+    post_ids = []
     params[:results][:collection1].each do |collection|
       post_id = collection[:property1][:href].gsub("http://losangeles.craigslist.org/sfv/pho/", "").gsub(".html")
-      puts post_id
+      p post_id.inspect
+      post_ids << post_id
     end
+    craigslist_scrape = Scrape.generate_craigslist_scrape(post_ids)
+    craigslist_scrape.run
+    render nothing: true
   end
 
   # GET /scrapes
