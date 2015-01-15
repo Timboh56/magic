@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
   post '/send_email' => 'application#send_email'
 
+  post '/craigslist/scrape' => 'scrapes#craigslist_scrape'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

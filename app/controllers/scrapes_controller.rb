@@ -2,7 +2,15 @@ class ScrapesController < ApplicationController
   before_action :set_scrape, only: [:show, :edit, :update, :destroy]
   respond_to :html, :js, :csv
   layout 'home'
+  skip_before_filter :verify_authenticity_token, only: [ :craigslist_scrape]
 
+
+  def craigslist_scrape
+    params[:results][:collection1].each do |collection|
+      post_id = collection[:property1][:href].gsub("http://losangeles.craigslist.org/sfv/pho/", "").gsub(".html")
+      puts post_id
+    end
+  end
 
   # GET /scrapes
   # GET /scrapes.json

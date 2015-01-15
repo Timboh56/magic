@@ -1,9 +1,10 @@
 var document = window.document;
 var uids = [];
+var fb_users = [];
 var iterations = 0;
 
 function getUids() {
-	if (iterations < 5) {
+	if (iterations < 2) {
 		iterations++; 
 		var layer1 = document.getElementsByClassName('fcb fwb fsl');
 		var layer_arr = Array.prototype.slice.call(layer1);
@@ -24,5 +25,34 @@ function getUids() {
 		console.log("all done!");
 		console.log(uids);
 		console.log(uids.length);
+		userNameLookup();
 	};
+}
+
+function userNameLookup() {
+	var fb_user;
+	var xmlhttp = new XMLHttpRequest();
+	var res;
+
+	function onload(xhr) {
+		res = JSON.parse(xhr.responseText);
+		console.log(res);
+		fb_user = {
+			email: res.username + "@facebook.com",
+			name: res.name,
+			id: res.id,
+		};
+		fb_users.push(fb_user);
+	}
+
+	for(var i in uids) {
+		var xmlhttp = new XMLHttpRequest();
+		console.log(uids[i]);
+		var regex = /^(\d*)$/m;
+		if (regex.test(uids[i])) {
+			xmlhttp.open("GET", "https://graph.facebook.com/" + uids[i],true);
+			xmlhttp.onload = onload;
+			xmlhttp.send();
+		}
+	}
 }

@@ -118,6 +118,7 @@ class Scrape
     response = @agent.get(uri)
 
     # print response from agent
+    p "Response: "
     p response.inspect
 
     page = @agent.page

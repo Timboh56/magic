@@ -37,6 +37,7 @@ class CraigCram
   end
 
   def set_emails
+
     if textarea_or_db == "db"
       (0..(cities_a_day - 1)).each do |i|
         emails << Email.unused[i]
