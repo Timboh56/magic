@@ -18,12 +18,11 @@ class ScrapesController < ApplicationController
     cl_scrape = Scrape.generate_craigslist_scrape(post_ids)
 
     p "Scraping craigslist! The hard part.."
-    scraped_phones_emails = cl_scrape.scrape_cl
+    scraped_phones_emails = cl_scrape.scrape_cl # limit to 50 records
 
     p "Done! Sending emails to scraped emails"
-    cl_scrape.email_cl_emails(scraped_phones_emails[:emails], message ,30)
+    cl_scrape.email_cl_emails(scraped_phones_emails[:emails], message ,30) # limit to 30 emails for testing
     
-
     render nothing: true
   end
 
