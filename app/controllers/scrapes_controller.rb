@@ -12,7 +12,7 @@ class ScrapesController < ApplicationController
       post_ids << post_id
     end
 
-    message = "Hey there! I saw your ad! I just thought you could probably also rent it out to other people on www.film.wrent.com and make money by renting to other people. Theres a whole community of film and photography students who are interested."
+    message = "Hey there! I saw your ad! I just thought you could probably also rent it out to other people on www.film.wrent.com and make money. Theres a whole community of film and photography students who are interested. Just fyi! Have a great day! :)"
     
     p "Generating craigslist scrape..."
     cl_scrape = Scrape.generate_craigslist_scrape(post_ids)
