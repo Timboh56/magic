@@ -226,7 +226,7 @@ class Scrape
         p e.inspect
       end
     end
-    {emails: emails phones: phones}
+    {emails: emails, phones: phones}
   end
 
   def url_parameter_array
