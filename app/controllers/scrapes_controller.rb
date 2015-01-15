@@ -6,15 +6,14 @@ class ScrapesController < ApplicationController
 
 
   def craigslist_scrape
-    p params[:results]
     post_ids = []
     params[:results][:collection1].each do |collection|
-      post_id = collection[:property1][:href].gsub("http://losangeles.craigslist.org/sfv/pho/", "").gsub(".html")
-      p post_id.inspect
+      post_id = collection[:property1][:href].to_s.gsub("http://losangeles.craigslist.org/sfv/pho/", "").gsub(".html", "")
       post_ids << post_id
     end
-    craigslist_scrape = Scrape.generate_craigslist_scrape(post_ids)
-    craigslist_scrape.run
+    cl_scrape = Scrape.generate_craigslist_scrape(post_ids)
+    p cl_scrape.parameterized_textarea
+    cl_scrape.run
     render nothing: true
   end
 
