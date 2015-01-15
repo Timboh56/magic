@@ -32,8 +32,8 @@ class Scrape
   def self.generate_craigslist_scrape(post_ids)
     cl_scrape = create!(
       name: "Scrape craigslist job",
-      url: "http://losangeles.craigslist.org/reply/lax/pho/"
-      url_parameterization_type: "Data"
+      url: "http://losangeles.craigslist.org/reply/lax/pho/",
+      url_parameterization_type: "Data",
       use_proxies: true,
       parameterized_textarea: post_ids.join("\n")
     )
