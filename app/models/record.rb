@@ -1,6 +1,8 @@
 class Record
 	include Mongoid::Document
 	include Mongoid::Timestamps
+	include Mongoid::MagicCounterCache
+
 
 	field :text, type: String
 	field :to, type: String
@@ -18,6 +20,9 @@ class Record
 	belongs_to :record_list
 
 	validates_presence_of :text
+
+	counter_cache :handle_list
+	counter_cache :twitter_blast
 
   scope :handles, lambda { where(record_type: "Handle") }
   scope :follows, lambda { where(record_type: "Friendship") }

@@ -89,6 +89,8 @@ gem "koala", "~> 1.10.0rc"
 
 gem "ruby-gmail"
 
+gem 'mongoid_magic_counter_cache'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

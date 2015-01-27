@@ -10,6 +10,8 @@ class TwitterBlast
   field :twitter_handles, type: String
   field :follow_index, type: Integer, default: 0
 
+  field :record_count
+
   # get_followers, tweet_to_handles, follow_handles, unfollow_handles
   field :blast_type, type: String # followers or handles
   
@@ -232,7 +234,7 @@ class TwitterBlast
 
   # number of handles retrieved from blast
   def handle_records_count
-    handle_list ? handle_list.handles_count : 0
+    handle_list ? handle_list.handle_count : 0
   end
 
   # a twitter blast can use a handle list
