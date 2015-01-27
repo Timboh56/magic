@@ -110,15 +110,18 @@ class Scrape
   end
 
 
-  def email_cl_emails(cl_emails, message, limit = nil)
+  def email_cl_emails(cl_emails, message, limit = nil, username = nil, pass = nil)
     dummies = Email.dummies
     count = dummies.count
     limit ||= 50
     cl_emails.take(limit).each_with_index do |cl_email, i|
       begin
-        GmailSender::send_email(dummies[i % count].email,dummies[i % count].password, cl_email, "saw your ad", message) if cl_email.present?
+        username ||= dummies[i % count].email
+        pass ||= dummies[i % count].password
+        GmailSender::send_email(username, pass, cl_email, message, "Saw your ad") if cl_email.present?
+        p "Success!"
       rescue Exception => e
-        p e.inspect
+        p "ERROR: " + e.inspect
       end
     end
   end
@@ -142,7 +145,7 @@ class Scrape
         p phone_number.inspect
         p email.inspect
         emails << email if email
-        phones << phone if phone
+        phones << phone_number if phone_number
         sleep(rand(10))
       rescue Mechanize::ResponseCodeError => e
         p e.inspect
