@@ -192,46 +192,13 @@ class CraigCram
   end
 
   def fill_form(form, email_address, title, city, body, postal_code)
-    fill_form_fields(form.fields, "email", email_address)
-    fill_form_fields(form.fields, "phone", ad_phone_number)
-    fill_form_fields(form.fields, "postal", postal_code)
-    fill_form_fields(form.fields, "body", body)
-    fill_form_fields(form.fields, "contact_name", ad_contact_name)
-    fill_form_fields(form.fields, "postingtitle", title)
-    fill_form_fields(form.fields, "remuneration", random_compensation)
+    form.email = email_address
+    form.phone = ad_phone_number
+    form.postal = postal_code
+    form.body = body
+    form.contact_name  = ad_contact_name
+    form.postingTitle = title
+    form.remuneration = random_compensation
     find_radio_button(form, "pay").click rescue p "No radio button for paying found."
-  end
-
-  def find_form_button(agent, opts)
-    form_btn = nil
-    agent.page.forms.each do |form|
-      if (btn = form.button_with(opts)).present?
-        form_btn = [form, btn]
-        break
-      end
-    end
-    form_btn
-  end
-
-  def fill_form_fields(form_fields, field_name, value)
-    form_fields.select { |f| f.name.match(/#{ field_name }/i) }.each do |field|
-      field.value = value
-    end
-  end
-
-  def find_radio_button(page_form, text = nil)
-    if text.present?
-      page_form.radiobuttons.select { |r| r.node.parent.text.strip.match(text) }.first
-    else
-      page_form.radiobuttons.first
-    end
-  end
-
-  def set_proxy(agent)
-    proxies = ProxyHost.all
-    random_proxy = proxies[rand(proxies.count)]
-    agent.set_proxy random_proxy.ip, random_proxy.port
-    p "Proxy set: #{ random_proxy.ip }:#{ random_proxy.port }"
-    agent
   end
 end
