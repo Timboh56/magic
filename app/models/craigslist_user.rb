@@ -5,6 +5,8 @@ class CraigslistUser
 
 	field :email, type: String
 	field :password, type: String
+	field :city, type: String
+	field :city_url, type: String
 
 	CRAIGSLIST_LOGIN_URL = "https://accounts.craigslist.org/login"
 

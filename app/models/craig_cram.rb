@@ -28,16 +28,7 @@ class CraigCram
     Resque.enqueue(CramJob, id)
   end
 
-  def mechanize_agent
-    @agent ||= lambda {
-      agent = Mechanize.new
-      set_proxy(agent)
-      agent
-    }.call
-  end
-
   def set_emails
-
     if textarea_or_db == "db"
       (0..(cities_a_day - 1)).each do |i|
         emails << Email.unused[i]
@@ -57,13 +48,16 @@ class CraigCram
     set_emails
     cl_uris = []
     if emails.present? && messages.present?
-      us_cities = get_us_cities
-      (0..(cities_a_day - 1)).each do |i|
-        p = post_to_city(emails[(city_index + i) % emails.length].email, messages[i % messages.length], us_cities[(i + city_index) % us_cities.length])
+
+      # us_cities = CRAIGSLIST_CITIES_URLS
+      craigslist_users = CraigslistUser.all
+      cities_post_to = cities_a_day > craigslist_users.length ? craigslist_users.length : cities_a_day
+      (0..(cities_post_to - 1)).each do |i|
+        p = post_to_city(emails[(city_index + i) % emails.length].email, messages[i % messages.length], craigslist_users[i])
         emails[(city_index + i) % emails.length].update_attributes!(used: true)
         cl_uris << p.uri
       end
-      self.city_index += cities_a_day
+      self.city_index += cities_post_to
     end
     save!
     cl_uris
@@ -82,14 +76,12 @@ class CraigCram
     listing_body
   end
 
-  def post_to_city(email_address, listing, city)
+  def post_to_city(email_address, listing, cl_user)
     
-    agent = mechanize_agent
+    agent = cl_user.login
 
-    set_proxy(agent)
-
-    p "Posting to: #{ city[:city_name] }"
-    p "Posting to url: #{ city[:url] } "
+    p "Posting to: #{ cl_user.city }"
+    p "Posting to url: #{ cl_user.city_url } "
     p "Posting type: #{ posting_type }"
     p "Email: #{ email_address }"
     p "Title: #{ listing.title }"
@@ -98,7 +90,7 @@ class CraigCram
 
     p "Body: #{ listing_body }"
 
-    agent.get(city[:url] )
+    agent.get(cl_user.city_url)
     agent.click(agent.page.link_with(:text => /post to classifieds/))
 
     p "Selecting posting type.."
@@ -126,7 +118,7 @@ class CraigCram
 
     p "Filling form.."
     
-    fill_form(agent.page.forms[0], email_address, listing.title || ad_title, city, listing_body, get_ad_postal_code(city[:city_name]) || ad_postal_code,)
+    fill_form(agent.page.forms[0], email_address, listing.title || ad_title, cl_user, listing_body, get_ad_postal_code(cl_user.city))
   
     sleep_random
 
@@ -191,7 +183,7 @@ class CraigCram
     agent.page.forms[0].submit
   end
 
-  def fill_form(form, email_address, title, city, body, postal_code)
+  def fill_form(form, email_address, title, body, postal_code)
     form.email = email_address
     form.phone = ad_phone_number
     form.postal = postal_code

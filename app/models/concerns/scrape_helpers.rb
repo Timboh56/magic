@@ -15,6 +15,14 @@ module ScrapeHelpers
     sleep(rand(8))
   end
 
+  def mechanize_agent
+    @agent ||= lambda {
+      agent = Mechanize.new
+      set_proxy(agent)
+      agent
+    }.call
+  end
+  
   def set_proxy(agent)
     proxies = ProxyHost.all
     random_proxy = proxies[rand(proxies.count)]
