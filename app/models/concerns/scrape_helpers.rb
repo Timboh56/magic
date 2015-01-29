@@ -50,7 +50,7 @@ module ScrapeHelpers
 
   def find_radio_button(page_form, name = nil)
     if name.present?
-      form.radiobuttons_with(:name => text)[0].check
+      page_form.radiobuttons_with(:name => name)[0].check
     else
       page_form.radiobuttons.first
     end

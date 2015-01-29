@@ -78,8 +78,10 @@ class CraigCram
 
   def post_to_city(email_address, listing, cl_user)
     
-    agent = cl_user.login
+    p "Login"
 
+    agent = cl_user.login
+    
     p "Posting to: #{ cl_user.city }"
     p "Posting to url: #{ cl_user.city_url } "
     p "Posting type: #{ posting_type }"
