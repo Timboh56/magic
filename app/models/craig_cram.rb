@@ -53,11 +53,10 @@ class CraigCram
       craigslist_users = CraigslistUser.all
       cities_post_to = cities_a_day > craigslist_users.length ? craigslist_users.length : cities_a_day
       (0..(cities_post_to - 1)).each do |i|
-        p = post_to_city(emails[(city_index + i) % emails.length].email, messages[i % messages.length], craigslist_users[i])
-        emails[(city_index + i) % emails.length].update_attributes!(used: true)
+        p = post_to_city(messages[i % messages.length], craigslist_users[(city_index + i) % craigslist_users.length])
         cl_uris << p.uri
       end
-      self.city_index += cities_post_to
+      self.city_index = cities_post_to
     end
     save!
     cl_uris
@@ -76,7 +75,7 @@ class CraigCram
     listing_body
   end
 
-  def post_to_city(email_address, listing, cl_user)
+  def post_to_city(listing, cl_user)
     
     p "Login"
 
@@ -85,7 +84,7 @@ class CraigCram
     p "Posting to: #{ cl_user.city }"
     p "Posting to url: #{ cl_user.city_url } "
     p "Posting type: #{ posting_type }"
-    p "Email: #{ email_address }"
+    p "Email: #{ cl_user.email }"
     p "Title: #{ listing.title }"
 
     listing_body = create_listing_body(listing)
@@ -120,7 +119,7 @@ class CraigCram
 
     p "Filling form.."
     
-    fill_form(agent.page.forms[0], email_address, listing.title || ad_title, cl_user, listing_body, get_ad_postal_code(cl_user.city))
+    fill_form(agent.page.forms[0], cl_user.email, listing.title || ad_title, listing_body, get_ad_postal_code(cl_user.city))
   
     sleep_random
 
@@ -186,13 +185,13 @@ class CraigCram
   end
 
   def fill_form(form, email_address, title, body, postal_code)
-    form.email = email_address
-    form.phone = ad_phone_number
-    form.postal = postal_code
-    form.body = body
-    form.contact_name  = ad_contact_name
-    form.postingTitle = title
-    form.remuneration = random_compensation
+    fill_form_fields(form.fields, "email", email_address)
+    fill_form_fields(form.fields, "phone", ad_phone_number)
+    fill_form_fields(form.fields, "postal", postal_code)
+    fill_form_fields(form.fields, "body", body)
+    fill_form_fields(form.fields, "contact_name", ad_contact_name)
+    fill_form_fields(form.fields, "postingtitle", title)
+    fill_form_fields(form.fields, "remuneration", random_compensation)
     find_radio_button(form, "pay").click rescue p "No radio button for paying found."
   end
 end
