@@ -7,15 +7,9 @@ namespace :scheduler do
 		end
 	end
 
-	# run every three days
 	task :unfollow_following_not_followers => :environment do
-
-		# run fridays, mondays, wednesdays
-		if Time.now.sunday? || Time.now.monday? || Time.now.wednesday? || Time.now.friday?
-			
-			User.all.each do |user|
-				user.enqueue_unfollow if unfollowing == true
-			end
+		User.all.each do |user|
+			user.enqueue_unfollow if user.unfollowing == true
 		end
 	end
 
