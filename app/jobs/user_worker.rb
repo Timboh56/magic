@@ -5,7 +5,7 @@ class UserWorker
 
   class << self
 
-  	def perform(id, action, access_token)
+  	def perform(id, action)
   		puts id.inspect
   		@user = User.find(id["$oid"])
   		send(action)
