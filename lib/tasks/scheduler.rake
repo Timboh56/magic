@@ -9,7 +9,7 @@ namespace :scheduler do
 
 	task :unfollow_following_not_followers => :environment do
 		User.all.each do |user|
-			user.enqueue_unfollow if user.unfollowing == true
+			user.enqueue_unfollow if user.unfollowing
 		end
 	end
 
