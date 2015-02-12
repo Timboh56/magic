@@ -1,14 +1,18 @@
 class Person
-	include Mongoid::Document
+  include Mongoid::Document
+  include CrunchbaseHelper
 
-	field :name, type: String
-	field :email, type: String
-	field :phone, type: String
-	field :google_id, type: String
-	field :available, type: Boolean, default: true
-	field :clearbit
-	field :twitter_info
-	field :person_type, type: String # tutor
-	validates_uniqueness_of :google_id
-	belongs_to :people_scrape
+  field :name, type: String
+  field :email, type: String
+  field :phone, type: String
+  field :google_id, type: String
+  field :available, type: Boolean, default: true
+  field :clearbit
+  field :twitter_info, type: Hash
+  field :augur_info
+  field :person_type, type: String # tutor
+  field :website, type: String
+  validates_uniqueness_of :name, case_sensitive: false
+  validates_presence_of :name
+  belongs_to :people_scrape
 end

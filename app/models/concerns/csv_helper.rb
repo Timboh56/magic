@@ -1,12 +1,5 @@
-module CSVable
+module CSVHelper
   extend ActiveSupport::Concern
-
-  included do
-    helper_method :get_csv_data_row
-    helper_method :get_csv_header_row
-    helper_method :format_to_downloadable_csv
-  end
-
 
   def get_csv_data_row record_set
     record_set.records.map { |r| r.text }
@@ -18,6 +11,15 @@ module CSVable
       csv_row.push parameter.name
     end
     csv_row
+  end
+
+  def collection_to_csv(collection)
+    CSV.generate do |csv|
+      csv << collection.first.attributes.keys
+      collection.each do |c|
+        csv << c.attributes.values
+      end
+    end
   end
 
   def format_to_downloadable_csv
@@ -35,9 +37,6 @@ module CSVable
             csv << get_csv_data_row(record_set)
           end
         end
-      else
-
-
       end
     end
   end

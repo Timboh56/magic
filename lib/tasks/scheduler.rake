@@ -7,6 +7,12 @@ namespace :scheduler do
 		end
 	end
 
+	task :people_scrape => :environment do
+		PeopleScrape.all.each do |people_scrape|
+			people_scrape.enqueue
+		end
+	end
+
 	task :unfollow_following_not_followers => :environment do
 		User.all.each do |user|
 			user.enqueue_unfollow if user.unfollowing
