@@ -91,6 +91,8 @@ gem "ruby-gmail"
 
 gem 'mongoid_magic_counter_cache'
 
+gem 'crunchbase-api'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

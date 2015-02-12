@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :user_tinder_bots
   resources :craig_crams
   resources :emails
+  resources :people_scrapes
 
   get '/scrape_ape' => "scrapes#index"
   get '/tinder_bot' => "user_tinder_bots#index"
@@ -23,8 +24,9 @@ Rails.application.routes.draw do
   put '/scrape/:id/restart' => "scrapes#restart"
   post '/text' => "sms_blasts#text"
 
-  get '/persons/' => 'persons#emails'
-  post '/persons' => 'persons#lookup'
+  get '/persons/' => 'people#emails'
+  post '/persons' => 'people#lookup'
+  get '/people_scrape' => 'people_scrapes#index'
 
   post '/webhook/clearbit' => 'webhook#clearbit'
 

@@ -59,6 +59,7 @@
               <li><a href="/scrape_ape">Scrape Ape</a></li>
               <li><a href="/craig_crammer">Craig Crammer</a></li>
               <% if current_user.twitter_user? %>
+                <li><a href="/people_scrape">People scrape</a></li>
                 <li><a href="/twitter_blaster">Twitter Blaster</a></li>
                 <li><a href="/rss_retweeter">RSS Tweeter</a></li>
               <% end %>
@@ -71,7 +72,7 @@
              </li>
             <% else %>
               <li>
-                <%= link_to "Login to twitter", "/auth/twitter" %>
+                <%= link_to "Login to Twitter", "/auth/twitter" %>
               </li>
               <li>
                 <%= link_to "Login to Facebook", "/auth/facebook", id: "sign_in" %>

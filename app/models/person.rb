@@ -7,6 +7,8 @@ class Person
 	field :google_id, type: String
 	field :available, type: Boolean, default: true
 	field :clearbit
+	field :twitter_info
 	field :person_type, type: String # tutor
 	validates_uniqueness_of :google_id
+	belongs_to :people_scrape
 end

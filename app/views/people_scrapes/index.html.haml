@@ -1,0 +1,27 @@
+.static-page-container
+	.row
+		%h1
+			People Scrape
+	.row
+		%i Scrapes occur everyday. Scrape Twitter handles based off keywords
+.container-fluid.margin-top-45
+	.row
+		.flash_messages
+	= form_for @people_scrape, remote: true do |f|
+		.row
+			.col-xs-3
+				= f.label :keywords
+			.col-xs-9
+				= f.text_field :keywords, class: "form-control full-width"
+		.row
+			.col-xs-3
+				= f.label "Min follower count"
+			.col-xs-3
+				= f.number_field :min_follower_count, class: "form-control full-width"
+			.col-xs-3
+				= f.label "Max follower count"
+			.col-xs-3
+				= f.number_field :max_follower_count, class: "form-control full-width"
+		.row
+			.col-xs-12
+				= f.submit "Save", class: "btn btn-default"

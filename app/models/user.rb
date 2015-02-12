@@ -24,6 +24,7 @@ class User
   has_many :records
   has_many :craig_crams
 
+  has_one :people_scrape
   has_one :user_tinder_bot
 
   default_scope lambda{ includes(:records).order(:created_at => :desc) }
