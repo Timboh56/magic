@@ -7,8 +7,8 @@ class PeopleScrapeWorker
 
     def perform(id, action)
       puts id.inspect
-      @user = PeopleScrape.find(id["$oid"])
-      send(action)
+      @people_scrape = PeopleScrape.find(id["$oid"])
+      @people_scrape.send(action)
     end
   end
 end
