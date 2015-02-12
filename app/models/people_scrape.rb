@@ -6,6 +6,7 @@ class PeopleScrape
   field :keywords, type: String
   field :min_follower_count, type: Integer, default: 0
   field :max_follower_count, type: Integer, default: 10000
+  field :page_index, type: Integer, default: 1
   belongs_to :user
   has_many :people
 
@@ -19,7 +20,7 @@ class PeopleScrape
 
   def scrape_organization_members(organization_name)
     save_team_members(organization_name).each do |team_member|
-     search_twitter(team_member, page_index)
+     search_twitter("#{ organization_name } #{ team_member }")
     end
   end
 
@@ -32,7 +33,6 @@ class PeopleScrape
     # 180 requests every 15 minutes
     while(index < 180) do
       p index
-      p keyword_params
       search_results = search_twitter(keyword_params, index)
 
       # filter search results by min and max follower count
@@ -53,14 +53,17 @@ class PeopleScrape
       index += 1
       sleep(10) # wait 5 seconds for next batch
     end
-
-
+    index
+  rescue Exception => e
+    p "Error: #{ e.inspect }"
+    index
   end
 
   # runs daily
   def run
-    scrape_twitter(keywords)
-    
+    index = scrape_twitter(keywords, page_index)
+    self.page_index = index
+    save!
     # call augur.io
   end
 end

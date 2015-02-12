@@ -9,6 +9,7 @@ class TwitterBlast
   field :messages_sent, type: Integer, default: 0
   field :twitter_handles, type: String
   field :follow_index, type: Integer, default: 0
+  field :finished, type: Boolean, default: false
 
   field :record_count
 
@@ -29,7 +30,9 @@ class TwitterBlast
   belongs_to :handle_list
   belongs_to :user
 
-  scope :follow_handles, lambda { where(blast_type: "follow_handles") }
+  scope :follow_handles, lambda { where(blast_type: "follow_handles", finished: false) }
+  scope :unfinished, lambda { where(finished: false) }
+  scope :finished, lambda { where(finished: true) }
 
   before_create :create_handle_list
 
@@ -141,6 +144,7 @@ class TwitterBlast
       end
     else
       p "All handles followed."
+      update_attributes!(finished: true)
     end
     p "Donezo"
   end

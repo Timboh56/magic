@@ -11,7 +11,15 @@ class PeopleScrapesController < ApplicationController
   end
 
   def update
-  	current_user.people_scrape.update_attributes!(people_scrape_params)
+  	@people_scrape = current_user.people_scrape
+    if params[:people_scrape][:keywords] != @people_scrape.keywords
+      @people_scrape.page_index = 1 # reset page index if
+    end
+
+    @people_scrape.assign_attributes(people_scrape_params)
+
+    @people_scrape.save!
+
   	render "shared/success.js"
   end
 
