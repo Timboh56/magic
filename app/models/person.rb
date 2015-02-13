@@ -14,7 +14,6 @@ class Person
   field :twitter_info, type: Hash
   field :twitter_screen_name, type: String
   field :angellist_info, type: Hash
-  field :augur_info, type: Hash
   field :person_type, type: String # tutor
   field :website, type: String
   field :investor, type: Boolean
