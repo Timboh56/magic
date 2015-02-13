@@ -16,7 +16,7 @@ class AngelScrape
         p "Name: " + angel.name
       end
     end
-    self.user_index += 49
+    self.user_index += 50
     sleep(4) # limited to 1000 requests in an hour
     run
   rescue Exception => e

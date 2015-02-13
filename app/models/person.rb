@@ -17,9 +17,13 @@ class Person
   field :augur_info, type: Hash
   field :person_type, type: String # tutor
   field :website, type: String
+  field :investor, type: Boolean
   validates_uniqueness_of :name, case_sensitive: false
   validates_presence_of :name
   belongs_to :people_scrape
+
+  scope :investors, lambda { where(investor: true) }
+  scope :with_twitter, lambda { where(:twitter_screen_name.exists => true, :twitter_screen_name.ne => "") }
 
   def twitter_screen_name_to_augur!
     if twitter_screen_name.present?
