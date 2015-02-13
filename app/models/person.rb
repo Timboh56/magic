@@ -21,7 +21,7 @@ class Person
   validates_presence_of :name
   belongs_to :people_scrape
 
-  def twitter_screen_name_to_augur
+  def twitter_screen_name_to_augur!
     if twitter_screen_name.present?
       augur_hash = search_with([{ "param_type" => "twitter_handle", "param" => twitter_screen_name }])
       self.augur_info = augur_hash
