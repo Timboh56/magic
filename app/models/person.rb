@@ -20,4 +20,12 @@ class Person
   validates_uniqueness_of :name, case_sensitive: false
   validates_presence_of :name
   belongs_to :people_scrape
+
+  def twitter_screen_name_to_augur
+    if twitter_screen_name.present?
+      augur_hash = search_with([{ "param_type" => "twitter_handle", "param" => twitter_screen_name }])
+      self.augur_info = augur_hash
+      save!
+    end
+  end
 end
