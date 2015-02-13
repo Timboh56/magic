@@ -8,7 +8,7 @@ class AngelScrape
     p self.user_index
     angels.each do |angel|
       begin
-        twitter_screen_name = angel.twitter_url.present? ? angel.twitter_url.gsub!("http://twitter.com/", "").gsub!("#","").gsub!("!","") : ""
+        twitter_screen_name = angel.twitter_url.present? ? angel.twitter_url.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?(?<name>[^\/]+)(\/\w+)*$/i)["name"] : "" rescue nil
         person = Person.create!(twitter_screen_name: twitter_screen_name, bio: angel.bio, name: angel.name, angellist_info: angel.to_hash)
         p person.inspect
 
