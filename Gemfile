@@ -93,6 +93,8 @@ gem 'mongoid_magic_counter_cache'
 
 gem 'crunchbase-api'
 
+gem 'angellist_api', '~> 1.0.7'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

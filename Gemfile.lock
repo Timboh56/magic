@@ -38,6 +38,11 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    angellist_api (1.0.7)
+      faraday (~> 0.7)
+      faraday_middleware (~> 0.7)
+      hashie (>= 1.1.0)
+      multi_json (~> 1.0)
     area (0.10.0)
       fastercsv (~> 1.5)
     arel (5.0.1.20140414130214)
@@ -354,6 +359,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angellist_api (~> 1.0.7)
   area
   clearbit
   coffee-rails (~> 4.0.0)
