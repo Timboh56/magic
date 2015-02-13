@@ -15,6 +15,11 @@
 				= f.text_field :keywords, class: "form-control full-width"
 		.row
 			.col-xs-3
+				= f.label :location
+			.col-xs-9
+				= f.text_field :location, class: "form-control full-width"
+		.row
+			.col-xs-3
 				= f.label "Min follower count"
 			.col-xs-3
 				= f.number_field :min_follower_count, class: "form-control full-width"

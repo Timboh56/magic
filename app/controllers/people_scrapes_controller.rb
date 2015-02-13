@@ -24,6 +24,6 @@ class PeopleScrapesController < ApplicationController
   end
 
   def people_scrape_params
-  	params.require(:people_scrape).permit(:keywords, :min_follower_count, :max_follower_count)
+  	params.require(:people_scrape).permit(:location, :keywords, :min_follower_count, :max_follower_count)
   end
 end
