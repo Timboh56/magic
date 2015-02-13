@@ -1,4 +1,4 @@
-class AugurData
+class AugurProfile
 	include Mongoid::Document
 
 	field :data, type: Hash

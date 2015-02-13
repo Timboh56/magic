@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :craig_crams
   resources :emails
   resources :people_scrapes
-  resources :augur_data
+  resources :augur_profiles
 
   get '/scrape_ape' => "scrapes#index"
   get '/tinder_bot' => "user_tinder_bots#index"
