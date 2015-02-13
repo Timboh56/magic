@@ -13,7 +13,7 @@ module AugurHelper
 	def search_with(params)
 		api_key = 'ejztei8l6y99r1ser9x9rmhbml8mnivm'
 		augur_endpt = params.inject("https://api.augur.io/v2/user?key=#{ api_key }") { |str,p| str += "&#{ p["param_type"] }=#{ p["param"] }" }
-		augur_endpt += "&webhook="
+		augur_endpt += "&webhook=http://dopemagic.com/augur_data"
 		a = Mechanize.new
 		JSON.parse(a.get(augur_endpt).body).to_hash
 	end
