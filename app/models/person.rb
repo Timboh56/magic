@@ -8,6 +8,7 @@ class Person
   field :email, type: String
   field :phone, type: String
   field :google_id, type: String
+  field :organization, type: String
   field :available, type: Boolean, default: true
   field :clearbit
   field :bio, type: String
