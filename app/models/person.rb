@@ -29,5 +29,7 @@ class Person
     if twitter_screen_name.present?
       search_with([{ "param_type" => "twitter_handle", "param" => twitter_screen_name }])
     end
+  rescue Exception => e
+    p e.inspect
   end
 end
