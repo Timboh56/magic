@@ -13,7 +13,7 @@ class AngelScrape
         p person.inspect
 
         if twitter_screen_name.present?
-          augur_json = search_with({ "param_type" => "twitter_handle", "param" => twitter_screen_name })
+          augur_json = search_with([{ "param_type" => "twitter_handle", "param" => twitter_screen_name }])
           person.augur_info = augur_json
           person.save!
         end
