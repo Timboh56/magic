@@ -30,7 +30,8 @@ h1, .brand {
 .clouds-bg {
   background-image: url("/assets/clouds.png");
   background-size: 20%;
-  background-repeat: repeat-x;
+  background-repeat-x: repeat-x;
+  background-repeat-y: no-repeat;
   height: 85px;
   position: relative;
 }
@@ -48,7 +49,7 @@ h1, .brand {
 .wizard-bg, .wizard-bg-alt {
   background-size: 100%;
   background-repeat: no-repeat;
-  height: 360px;
+  height: 400px;
   background-position: center bottom;
   position: relative !important;
   overflow: hidden !important;
