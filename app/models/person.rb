@@ -1,6 +1,10 @@
 class Person
   include Mongoid::Document
   include CrunchbaseHelper
+  include AugurHelper
+  include Mongoid::Elasticsearch
+
+  elasticsearch!
 
   field :name, type: String
   field :email, type: String
@@ -10,6 +14,7 @@ class Person
   field :clearbit
   field :bio, type: String
   field :twitter_info, type: Hash
+  field :twitter_screen_name, type: String
   field :angellist_info, type: Hash
   field :augur_info
   field :person_type, type: String # tutor

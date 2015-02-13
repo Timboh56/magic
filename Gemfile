@@ -95,6 +95,9 @@ gem 'crunchbase-api'
 
 gem 'angellist_api', '~> 1.0.7'
 
+gem 'mongoid-elasticsearch'
+
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -2,6 +2,7 @@ class PeopleScrape
   include Mongoid::Document
   include CrunchbaseHelper
   include CSVHelper
+  include AugurHelper
 
   field :keywords, type: String
   field :min_follower_count, type: Integer, default: 0

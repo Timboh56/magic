@@ -1,0 +1,10 @@
+.static-container
+	= form_tag "/persons", remote: true do
+		.row
+			.col-xs-3
+				People Search:
+			.col-xs-9
+				= text_field_tag :search, "", class: "full-width form-control"
+		.row
+			= submit_tag "Submit", class: "btn btn-default"
+	.row.results-container
