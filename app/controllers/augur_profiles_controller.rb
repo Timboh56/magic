@@ -3,7 +3,15 @@ class AugurProfilesController < ApplicationController
 
 	def create
 		p params.inspect
-		AugurProfile.create!(data: params, person_id: Person.where(twitter_screen_name: params[:PROFILES][:twitter_handle][0][:value]).first.id) rescue nil
+		if params[:PROFILES] && params[:PROFILES][:twitter_handle]
+
+			if params[:PROFILES][:twitter_handle].is_a? Array
+				AugurProfile.create!(data: params, person_id: Person.where(twitter_screen_name: params[:PROFILES][:twitter_handle][0][:value]).first.id) rescue nil
+			else
+				AugurProfile.create!(data: params, person_id: Person.where(twitter_screen_name: params[:PROFILES][:twitter_handle]).first.id) rescue nil
+			end
+
+		end
 		render nothing: true
 	end
 end
