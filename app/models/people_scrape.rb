@@ -22,7 +22,7 @@ class PeopleScrape
 
   def scrape_organization_members(organization_name)
     save_team_members(organization_name).each do |team_member|
-     search_twitter("#{ organization_name } #{ team_member }")
+      search_twitter("#{ organization_name } #{ team_member }")
     end
   end
 

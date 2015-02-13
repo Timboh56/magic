@@ -4,8 +4,6 @@ class Person
   include AugurHelper
   include Mongoid::Elasticsearch
 
-  elasticsearch!
-
   field :name, type: String
   field :email, type: String
   field :phone, type: String
