@@ -3,7 +3,7 @@ class AugurDataController < ApplicationController
 
 	def create
 		p params.inspect
-		AugurData.create!(data: params, person_id: Person.where(twitter_screen_name: params[:PROFILES][:handle]).first.id)
+		AugurData.create!(data: params, person_id: Person.where(twitter_screen_name: params[:PROFILES][:twitter_handle][0][:value]).first.id) rescue nil
 		render nothing: true
 	end
 end
