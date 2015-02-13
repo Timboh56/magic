@@ -1,6 +1,6 @@
 module AugurHelper
 	extend ActiveSupport::Concern
-	require 'Mechanize'
+	require 'mechanize'
 
 	# param_type
 	# "twitter_handle", "email", "facebook_handle", "uid" (augur uid)
