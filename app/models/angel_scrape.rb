@@ -9,7 +9,7 @@ class AngelScrape
     angels.each do |angel|
       begin
         twitter_screen_name = angel.twitter_url.present? ? angel.twitter_url.match(/^https?:\/\/(www\.)?twitter\.com\/(#!\/)?(?<name>[^\/]+)(\/\w+)*$/i)["name"] : "" rescue nil
-        person = Person.create!(twitter_screen_name: twitter_screen_name, bio: angel.bio, name: angel.name, angellist_info: angel.to_hash)
+        person = Person.create!(investor: angel.investor, twitter_screen_name: twitter_screen_name, bio: angel.bio, name: angel.name, angellist_info: angel.to_hash)
         p person.inspect
       rescue Exception => e
         p e.inspect
