@@ -21,6 +21,7 @@ class Person
   validates_uniqueness_of :name, case_sensitive: false
   validates_presence_of :name
   belongs_to :people_scrape
+  has_one :augur_data
 
   scope :investors, lambda { where(investor: true) }
   scope :with_twitter, lambda { where(:twitter_screen_name.exists => true, :twitter_screen_name.ne => "") }
