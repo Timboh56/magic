@@ -14,6 +14,6 @@ module AugurHelper
 		api_key = 'ejztei8l6y99r1ser9x9rmhbml8mnivm'
 		augur_endpt = params.inject("https://api.augur.io/v2/user?key=#{ api_key }") { |str,p| str += "&#{ p["param_type"] }=#{ p["param"] }" }
 		a = Mechanize.new
-		a.get(augur_endpt).to_json
+		JSON.parse(a.get(augur_endpt).body).to_hash
 	end
 end
