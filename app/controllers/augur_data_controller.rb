@@ -1,6 +1,5 @@
 class AugurDataController < ApplicationController
-
 	def create
-		AugurData.create!(params[:augur_data])
+		AugurData.create!(data: params[:augur_data], person_id: Person.where(twitter_screen_name: params[:handle]).first.id)
 	end
 end
