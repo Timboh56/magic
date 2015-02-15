@@ -2,8 +2,8 @@ class Person
   include Mongoid::Document
   include CrunchbaseHelper
   include AugurHelper
-  include Mongoid::Elasticsearch
   include CSVHelper
+  include Mongoid::Search
 
   field :name, type: String
   field :email, type: String
@@ -21,12 +21,14 @@ class Person
   field :angellist_info, type: Hash
 
   has_one :augur_profile
+  belongs_to :people_scrape
 
   validates_uniqueness_of :name, case_sensitive: false
   validates_presence_of :name
 
   scope :investors, lambda { where(investor: true) }
   scope :with_twitter, lambda { where(:twitter_screen_name.exists => true, :twitter_screen_name.ne => "") }
+  search_in :email, :name, :bio, :augur_profile => :data
 
   def twitter_screen_name_to_augur!
     if twitter_screen_name.present?

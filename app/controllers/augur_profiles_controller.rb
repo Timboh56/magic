@@ -13,9 +13,10 @@ class AugurProfilesController < ApplicationController
 				end
 
 			end
+			render nothing: true
 		else
 			p "Received a status of: " + params[:status].to_s
+			render nothing: true, status: 420
 		end
-		render nothing: true
 	end
 end

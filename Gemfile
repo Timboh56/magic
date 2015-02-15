@@ -33,8 +33,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 gem 'spring',        group: :development
 gem 'dalli'
-gem "mongoid", "~> 4.0.0"
-
+gem "mongoid"
 gem 'devise'
 
 gem 'resque'
@@ -95,7 +94,7 @@ gem 'crunchbase-api'
 
 gem 'angellist_api', '~> 1.0.7'
 
-gem 'mongoid-elasticsearch'
+gem 'mongoid_search'
 
 
 # Use ActiveModel has_secure_password

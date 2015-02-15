@@ -43,7 +43,7 @@ class PeopleScrape
           if twitter_user.location.match(/#{ location }/i).present? && twitter_user.followers_count > min_follower_count && twitter_user.followers_count < max_follower_count
             p twitter_user.inspect
             unless Person.where(name: twitter_user.name).exists?
-              person = Person.create!(people_scrape_id: id, name: twitter_user.name, twitter_info: twitter_user.to_hash)
+              person = Person.create!(people_scrape_id: id, twitter_screen_name: twitter_user.handle, name: twitter_user.name, twitter_info: twitter_user.to_hash)
             else
               p "Person with name #{ twitter_user.name } already exists, skipping.."
             end

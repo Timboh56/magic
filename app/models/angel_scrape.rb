@@ -3,7 +3,7 @@ class AngelScrape
   include AugurHelper
   field :user_index, type: Integer, default: 1
 
-  def run
+  def run(limit = 50000)
     angels = AngellistApi.get_users([*user_index..(user_index.to_i + 49)])
     p self.user_index
     angels.each do |angel|
@@ -22,5 +22,9 @@ class AngelScrape
   rescue Exception => e
     save!
     p "Exception: #{ e.inspect }, stopping.."
+  end
+
+  def self.user_search(name)
+    AngellistApi.user_search(name.gsub(" ","-").lowercase)
   end
 end

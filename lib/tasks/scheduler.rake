@@ -41,6 +41,11 @@ namespace :scheduler do
 		end
 	end
 
+	task :scrape_angel_list => :environment do
+		AngelScrape.first.run
+	
+	end
+
 	task :direct_message_tinder_matches => :environment do
 		UserTinderBot.all.each do |utb|
 			utb.dm_matches
