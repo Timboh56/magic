@@ -21,6 +21,10 @@ module CrunchbaseHelper
 		team_members
   end
 
+  def organization_name_to_url
+
+  end
+
   def get_email(name, organization_domain)
     toofr_api_key = "a5faa3fa7ab99f0fad8ca3aef0c87b7e"
     first_name = name.split(" ")[0]

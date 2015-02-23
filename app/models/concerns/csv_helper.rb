@@ -11,6 +11,7 @@ module CSVHelper
     end
 
     def collection_to_csv(collection, new_file = false, file_name = nil)
+      p collection.inspect
       if new_file
         file_name ||= collection.first.class.name.downcase + "_collection.csv"
         CSV.open(file_name, "wb") { |csv| generate_csv(csv, collection) }
@@ -20,6 +21,9 @@ module CSVHelper
     end
 
     def generate_csv(csv, collection)
+      p 1
+      p collection.first.inspect
+      p collection.first.class.inspect
       attributes = collection.first.class.attribute_names
       relational_model_names = collection.first.class.relations.collect { |r| r[1].name.to_s } rescue nil
       csv << attributes

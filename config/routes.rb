@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get '/persons/' => 'people#emails'
   post '/persons' => 'people#lookup'
   get '/people_scrape' => 'people_scrapes#index'
+  get '/investors' => 'people#investors'
 
   post '/webhook/clearbit' => 'webhook#clearbit'
 
