@@ -19,6 +19,7 @@ class Person
   field :investor, type: Boolean
   field :twitter_info, type: Hash
   field :facebook_screen_name, type: String
+  field :linkedin_screen_name, type: String
   field :angellist_info, type: Hash
 
   has_one :augur_profile
@@ -36,12 +37,7 @@ class Person
   end
 
   def self.investors_with_profiles
-    p 'investors with profiles'
-
-    i = Person.investors.with_twitter.select! { |p| p.augur_profile.present? }
-    p i.inspect
-    p ' OK?'
-    i
+    Person.investors.with_twitter.select! { |p| p.augur_profile.present? }
   end
 
   def self.completed_profiles
