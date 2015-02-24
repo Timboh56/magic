@@ -13,9 +13,9 @@ module CSVHelper
     def collection_to_csv(collection, new_file = false, file_name = nil)
       if new_file
         file_name ||= collection.first.class.name.downcase + "_collection.csv"
-        CSV.open(file_name, "wb") { |csv| generate_csv(csv, collection) }
+        FasterCSV.open(file_name, "wb") { |csv| generate_csv(csv, collection) }
       else
-        CSV.generate { |csv| generate_csv(csv, collection) }
+        FasterCSV.generate { |csv| generate_csv(csv, collection) }
       end
     end
 
