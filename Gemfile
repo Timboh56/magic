@@ -98,6 +98,8 @@ gem 'mongoid_search'
 
 gem 'linkedin'
 
+gem 'fastercsv'
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

@@ -377,6 +377,7 @@ DEPENDENCIES
   delayed_job_mongoid
   devise
   engtagger
+  fastercsv
   feedjira
   font-awesome-rails
   foreman
