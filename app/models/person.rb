@@ -17,9 +17,9 @@ class Person
   field :person_type, type: String # tutor
   field :website, type: String
   field :investor, type: Boolean
-  field :twitter_info, type: Hash
   field :facebook_screen_name, type: String
   field :linkedin_screen_name, type: String
+  field :twitter_info, type: Hash
   field :angellist_info, type: Hash
 
   has_one :augur_profile

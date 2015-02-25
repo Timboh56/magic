@@ -3,7 +3,7 @@ module CSVHelper
 
   class << self
     def hash_to_arr(hash)
-      hash.map { |h| h[1] }
+      hash.map { |h| sanitize(h[1]) }
     end
 
     def sanitize(str)
@@ -26,7 +26,7 @@ module CSVHelper
       collection.each do |c|
         csv << attributes.inject([]) do |r,attribute|
           r += (val = c.send(attribute)) && val.is_a?(Hash) ? hash_to_arr(val) : [sanitize(val)]
-          r += relational_model_names.inject([]) { |arr, rel| arr += (rel_m = c.send(rel)) && (rel_m.present?) ? rel_m.attributes.values : [] }
+          #r += relational_model_names.inject([]) { |arr, rel| arr += (rel_m = sanitize(c.send(rel))) && (rel_m.present?) ? rel_m.attributes.values : [] }
           r
         end
       end
