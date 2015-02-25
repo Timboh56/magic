@@ -5,8 +5,6 @@ class AugurProfile
 	belongs_to :person
 
 	def self.set_person_data
-
-		Person.where(facebook_screen_name: nil).with_twitter.each do |person|
 		AugurProfile.all.each do |a|
 			person = a.person
 
