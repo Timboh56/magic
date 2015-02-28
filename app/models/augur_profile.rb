@@ -3,6 +3,7 @@ class AugurProfile
 
 	field :data, type: Hash
 	belongs_to :person
+	validates_presence_of :person_id
 
 	def self.set_person_data
 		AugurProfile.all.each do |a|

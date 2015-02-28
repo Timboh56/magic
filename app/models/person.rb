@@ -40,8 +40,12 @@ class Person
     Person.investors.with_twitter.select! { |p| p.augur_profile.present? }
   end
 
-  def self.completed_profiles
+  def self.complete_profiles
     AugurProfile.ne(person_id: nil).map(&:person)
+  end
+
+  def self.incomplete_profiles
+    AugurProfile.where(person_id: nil).map(&:person)
   end
   
   def twitter_screen_name_to_augur!
