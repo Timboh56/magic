@@ -48,10 +48,10 @@ class Person
     AugurProfile.where(person_id: nil).map(&:person)
   end
   
-  def twitter_screen_name_to_augur!
-    if twitter_screen_name.present?
-      search_with([{ "param_type" => "twitter_handle", "param" => twitter_screen_name }])
-    end
+  def twitter_screen_name_to_augur!(screen_name = nil)
+    screen_name ||= twitter_screen_name
+    if screen_name
+      search_with([{ "param_type" => "twitter_handle", "param" => screen_name }])
   rescue Exception => e
     p e.inspect
   end

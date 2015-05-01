@@ -1,0 +1,63 @@
+New Twitter Follower Strategy
+
+Inputs:
+	- root handles to target followers/followings
+	- desired locations by lat long coordinates
+	- desired radius of location coordinates
+	- desired keywords (optional)
+
+Identify root nodes
+	- handles with followers within interest
+1. Follow following of root nodes
+	- Identify high quality followers
+
+2. Follow followers of root nodes
+	- Identify high quality followers
+
+High Quality Followers
+	- followers are ranked by
+		- Proximity to desired location (+0 to +3 points)
+		- presence of keyword (+5 points)
+		- follower count (+0 to +3 points)
+		- last tweet date (+0 to +3 points)
+	Handle
+		FIELDS
+			- screen_name
+			- following_back?
+			- follower_count
+			- following_count
+			- location
+				-> geocode to lat lng, compare with desired locations + radius
+					 to determine location score
+			- last tweet date ?
+	
+Assumption: The higher the score, the more valuable their followers
+	- handle's followers likelier to convert with higher score
+	- can we test this? Machine learning
+		- high score => conversion rate?
+			- identify ideal score of each score parameter (proximity, presence, follower count, last tweet date)
+		- Recurse, feed algorithm the ideal parameters to look for
+
+Full Algorithm
+	inputs (handle, proximity, keywords, follower_count, last_tweet_date)
+		for each input
+			generate score of handle based off inputs
+			increment input score to Handle's total score
+	GIVE HANDLE 1 DAY TO FOLLOW BACK
+		- check status of follow_back
+		- feed to machine learning algorithm
+
+	In Summary..
+		Weights: 
+			handle_score = preemptive_score(proximity, keywords, follower_count, last_tweet_date) + result_score(follow_back?) (+5 if yes, -5 no) 
+
+	Definitions
+		Preemptive score: Score given to a handle before handle given time to follow back.
+			- consists of proximity, keywords, follower count and last tweet date.
+		
+		Result score: Score dependent on whether the handle followed subject back
+			- Strong indicator of efficacy of input preemptive score paramters.
+
+	Goal is to identify parameters that lead to highest conversion rate, and use parameters to determine who to follow.
+
+	USE K CLUSTER MEANS TO IDENTIFY MEANS OF HANDLE PARAMS
