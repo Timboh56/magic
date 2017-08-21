@@ -52,6 +52,7 @@ class Person
     screen_name ||= twitter_screen_name
     if screen_name
       search_with([{ "param_type" => "twitter_handle", "param" => screen_name }])
+    end
   rescue Exception => e
     p e.inspect
   end
